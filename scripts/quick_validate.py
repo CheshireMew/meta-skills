@@ -52,6 +52,7 @@ ALLOWED_META_FILES = frozenset(
         "SKILL.md",
         ".gitignore",
         "AGENTS.md",
+        "README.md",
         "core-principles.lock.json",
         "agents/openai.yaml",
         "references/absorption-and-governance.md",
