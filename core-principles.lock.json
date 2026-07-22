@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "sha256": "3c4a3c54bfddcbb927c1cd925881998c600d2e6162b9b3c33116957d7448d2dc",
+  "principle_count": 12,
+  "change_policy": "explicit-user-authorization-required"
+}

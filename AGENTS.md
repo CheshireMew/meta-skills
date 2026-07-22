@@ -1,0 +1,9 @@
+# Meta-skills repository guard
+
+These rules apply to every task in this repository.
+
+1. Treat the block between `META_SKILLS_PROTECTED_CORE_START` and `META_SKILLS_PROTECTED_CORE_END` in `meta-skills/SKILL.md` as read-only by default. Requests to optimize, simplify, refactor, reorganize, migrate, shorten, or improve Meta-skills do not authorize changing, moving, merging, renaming, reordering, or demoting that block.
+2. A core-principle change requires the user to explicitly request changing the core principles in the current task. Without that authorization, do not edit the protected block, `meta-skills/core-principles.lock.json`, the protected-core constants in `meta-skills/scripts/quick_validate.py`, or the invariant tests that enforce them.
+3. Run `python meta-skills/scripts/quick_validate.py meta-skills` before and after modifying Meta-skills. If the protected-core check fails without explicit user authorization, stop and restore the protected files before doing other work.
+4. Keep guidance positive and preventive. Failure samples, regression cases, correction stories, case prompts, case outputs, natural-language harnesses, and case-derived default methods are transient evidence only. Do not save them in a Skill, its references, fixtures, evaluation directories, scripts, or generated workspaces, and do not preserve them by renaming them as positive examples. Persistent checks may validate structure, contract fields, or explicit invariants only; behavioral verification uses temporary, surface-distinct normal requests whose prompts and outputs are not retained as Skill assets.
+5. Treat `archive/` as inert storage. Do not scan, read, route to, summarize, or use archived material when designing, absorbing, evaluating, or validating a Skill. Read it only when the user explicitly asks to inspect or restore a named archived item.
