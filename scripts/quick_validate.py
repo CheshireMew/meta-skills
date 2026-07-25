@@ -57,6 +57,7 @@ ALLOWED_META_FILES = frozenset(
         "agents/openai.yaml",
         "references/absorption-and-governance.md",
         "references/evidence-distillation.md",
+        "references/instruction-hygiene.md",
         "references/openai-yaml.md",
         "references/quality-gate.md",
         "references/skill-design-playbook.md",
@@ -65,6 +66,25 @@ ALLOWED_META_FILES = frozenset(
         "scripts/init_skill.py",
         "scripts/quick_validate.py",
     }
+)
+REQUIRED_INSTRUCTION_HYGIENE_ROUTES = (
+    "references/instruction-hygiene.md",
+    "### 4. 清洗与分级约束",
+    "删除是默认等级，候选规则承担保留依据的举证责任",
+    "#### 硬禁止保留门槛",
+    "确认正向合同仍能独立驱动正常请求完成并产出可观察结果",
+)
+REQUIRED_CAPABILITY_MIGRATION_ROUTES = (
+    "逐项处置矩阵：迁移保留、明确退出、需要确认",
+    "退出对象内部承载的独立能力、资源与消费者",
+    "文件共置、同一模块或同一调用栈只说明实现位置相邻",
+    "目标对象已经退出",
+)
+REQUIRED_AUDIENCE_LANGUAGE_ROUTES = (
+    "### 4.1 分开证据语言、工作语言与用户语言",
+    "来源中的术语、README 说法、字段名和实现动词先作为证据保存",
+    "准确核实只证明信息可用，不自动赋予它正文篇幅",
+    "内部字段名和过程标签到达最终消费者前要改写成用户能直接理解的内容",
 )
 
 
@@ -200,6 +220,75 @@ def validate_case_isolation(root: Path, skill_text: str) -> list[str]:
                     f"meta-skills forbidden persistent case route in {label}: {route}"
                 )
 
+    return errors
+
+
+def validate_instruction_hygiene_route(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    for marker in REQUIRED_INSTRUCTION_HYGIENE_ROUTES:
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing instruction hygiene route: {marker}")
+
+    reference = root / "references" / "instruction-hygiene.md"
+    if reference.exists():
+        text = reference.read_text(encoding="utf-8")
+        for heading in ("## 一、先写正向合同", "## 三、四级处理", "## 五、验收"):
+            if heading not in text:
+                errors.append(f"instruction hygiene reference missing section: {heading}")
+    return errors
+
+
+def validate_capability_migration_route(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    for marker in REQUIRED_CAPABILITY_MIGRATION_ROUTES:
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing capability migration route: {marker}")
+
+    absorption = root / "references" / "absorption-and-governance.md"
+    if absorption.exists():
+        text = absorption.read_text(encoding="utf-8")
+        for marker in (
+            "### 4.1 退出载体时的处置矩阵",
+            "正式生产者：",
+            "正式消费者：",
+            "明确退出项不进入新的生产链路",
+        ):
+            if marker not in text:
+                errors.append(f"capability migration reference missing marker: {marker}")
+    return errors
+
+
+def validate_audience_language_route(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    for marker in REQUIRED_AUDIENCE_LANGUAGE_ROUTES:
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing audience language route: {marker}")
+
+    references = {
+        "references/skill-design-playbook.md": (
+            "来源语言：",
+            "内部工作语言：",
+            "最终用户语言：",
+            "不建立禁词表，也不触发自动返修",
+        ),
+        "references/instruction-hygiene.md": (
+            "来源语言、内部工作语言还是最终用户语言",
+            "不会直接替代用户成品语言",
+            "案例库可以继续提供完整案例以及结构、节奏和表达机制",
+        ),
+        "references/quality-gate.md": (
+            "来源语言、内部工作语言和最终用户语言已经分开",
+            "没有只做表面同义词替换",
+        ),
+    }
+    for relative, markers in references.items():
+        path = root / relative
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(f"{relative} missing audience language marker: {marker}")
     return errors
 
 
@@ -346,6 +435,9 @@ def validate(root: Path) -> list[str]:
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
         errors.extend(validate_case_isolation(root, text))
+        errors.extend(validate_instruction_hygiene_route(root, text))
+        errors.extend(validate_capability_migration_route(root, text))
+        errors.extend(validate_audience_language_route(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
         relative = raw_reference.split()[0]

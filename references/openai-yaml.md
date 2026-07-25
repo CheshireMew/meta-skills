@@ -1,6 +1,6 @@
 # `agents/openai.yaml` 生成规则
 
-`agents/openai.yaml` 是产品界面和运行环境读取的元数据，不承载 Skill 行为。创建新 Skill 或修改名称、定位、图标、依赖和调用策略时读取本文件，然后使用 `scripts/generate_openai_yaml.py` 生成；不要手写另一套字段约定。
+`agents/openai.yaml` 是产品界面和运行环境读取的元数据，Skill 行为以 `SKILL.md` 为真源。创建新 Skill 或修改名称、定位、图标、依赖和调用策略时读取本文件，然后使用 `scripts/generate_openai_yaml.py` 生成。
 
 ## 必需界面字段
 
@@ -10,7 +10,7 @@
 - `short_description`：25–64 个字符的简述，说明用户能得到什么。
 - `default_prompt`：一条简短的示范调用，必须明确包含 `$skill-name`。
 
-根据最终 `SKILL.md` 生成这三个值。名称和简述面向用户，不能复制内部行为规则；默认提示只表达一个正常入口，不暗示联网、安装、写入、发送、发布或删除等未获授权动作。
+根据最终 `SKILL.md` 生成这三个值。名称和简述面向用户表达结果；默认提示表达一个正常入口，并保持在默认授权范围内。
 
 ## 可选界面字段
 
@@ -37,4 +37,4 @@ python scripts/init_skill.py <skill-name> --path <parent> --description <descrip
 python scripts/generate_openai_yaml.py <skill-folder> --interface display_name=<name> --interface short_description=<summary> --interface default_prompt=<prompt>
 ```
 
-生成器只更新 `interface`，保留已有 `dependencies` 和 `policy`。生成后重新读取文件，并运行 `scripts/quick_validate.py <skill-folder>`；脚本退出成功不能代替对最终文件内容的检查。
+生成器只更新 `interface`，保留已有 `dependencies` 和 `policy`。生成后重新读取文件，并运行 `scripts/quick_validate.py <skill-folder>`，共同确认最终文件内容。
