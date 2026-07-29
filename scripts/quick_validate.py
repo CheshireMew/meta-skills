@@ -260,6 +260,55 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
     return errors
 
 
+def validate_meta_write_confirmation_contract(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    required_skill_markers = (
+        "### 5. 在写入前让用户确认实际行为",
+        "是否允许写文件不在此处判断，统一由第 5 步决定",
+        "凡本轮将创建、修改、移动、归档或删除任何 Skill 活动文件",
+        "在首次写入前向用户一次性展示",
+        "到此停止并等待用户明确确认",
+        "最初的“创建”“修改”“修复”目标本身",
+        "仅在第 5 步已经取得写入确认后进入本节",
+    )
+    for marker in required_skill_markers:
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing write-confirmation contract: {marker}")
+
+    forbidden_patterns = (
+        re.compile(r"用户(?:已经)?说清[^\n]{0,30}直接(?:执行|修改|写入)"),
+    )
+    for pattern in forbidden_patterns:
+        match = pattern.search(skill_text)
+        if match:
+            errors.append(
+                "meta-skills contains a write-confirmation bypass: "
+                f"{match.group(0)}"
+            )
+
+    required_reference_markers = {
+        "references/skill-design-playbook.md": (
+            "本节只规定确认材料的呈现形式，不判断写入权限",
+            "展示后返回 `SKILL.md` 第 5 步并停止",
+            "只有 `SKILL.md` 的写入确认步骤通过后才执行处置",
+        ),
+        "references/quality-gate.md": (
+            "已经在首次写入前取得用户明确确认",
+            "没有把最初的创建、修改或修复请求",
+            "用户明确要求跳过确认",
+        ),
+    }
+    for relative, markers in required_reference_markers.items():
+        path = root / relative
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(f"{relative} missing write-confirmation marker: {marker}")
+    return errors
+
+
 def validate_metadata(root: Path, skill_name: str) -> list[str]:
     errors: list[str] = []
     metadata = root / "agents" / "openai.yaml"
@@ -403,6 +452,7 @@ def validate(root: Path) -> list[str]:
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
         errors.extend(validate_meta_preservation_contract(root, text))
+        errors.extend(validate_meta_write_confirmation_contract(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
         relative = raw_reference.split()[0]
