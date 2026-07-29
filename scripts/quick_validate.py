@@ -16,75 +16,29 @@ import yaml
 
 NAME_RE = re.compile(r"^[a-z0-9-]+$")
 REF_RE = re.compile(r"`((?:references|scripts|assets|evals)/[^`]+)`")
+REFERENCE_BACK_ROUTE_PATTERNS = (
+    re.compile(
+        r"(?:上层|主流程).{0,16}(?<!不)(?<!不能)(?<!不得)(?:重新选择|重选).{0,16}"
+        r"(?:任务类型|成品类型|内容类型|模板|路线|流程)"
+    ),
+    re.compile(
+        r"(?:改走|切换到|转入).{0,20}(?:其它|其他|另一|对应).{0,12}"
+        r"(?:路线|流程|模板)"
+    ),
+)
 CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
-PROTECTED_CORE_SHA256 = "3c4a3c54bfddcbb927c1cd925881998c600d2e6162b9b3c33116957d7448d2dc"
+PROTECTED_CORE_SHA256 = "ad2fc38bf987345c5b7051a18ceec4eb2de3e36b1fec80920bac0badbaa09ada"
 PROTECTED_CORE_TITLES = (
-    "正面流程必须独立成立",
-    "预防大于治理",
-    "先验收行为，再验收文件",
+    "有效能力先保全，再谈精简",
+    "精准高于复杂，但不能以删能力换简洁",
+    "正面流程要在最早判断点解决问题",
+    "行为验收优先，强度与风险匹配",
     "用户本意优先",
-    "案例只作临时证据",
-    "默认与按需分开",
-    "边界是设计的一部分",
-    "说人话要可验收",
-    "唯一真源",
-    "禁止案例衍生的默认方案",
-    "验收强度与风险匹配",
-    "案例与长期规则严格隔离",
-)
-FORBIDDEN_META_PATHS = (
-    "references/regression-samples.md",
-    "references/behavior-harness.md",
-    "evals",
-    "scripts/run_harness.py",
-    "scripts/test_run_harness.py",
-)
-FORBIDDEN_META_ROUTES = (
-    "regression-samples.md",
-    "behavior-harness.md",
-    "evals/cases.json",
-    "run_harness.py",
-    "test_run_harness.py",
-)
-ALLOWED_META_FILES = frozenset(
-    {
-        "SKILL.md",
-        ".gitignore",
-        "AGENTS.md",
-        "README.md",
-        "core-principles.lock.json",
-        "agents/openai.yaml",
-        "references/absorption-and-governance.md",
-        "references/evidence-distillation.md",
-        "references/instruction-hygiene.md",
-        "references/openai-yaml.md",
-        "references/quality-gate.md",
-        "references/skill-design-playbook.md",
-        "references/skill-maintenance-and-evaluation.md",
-        "scripts/generate_openai_yaml.py",
-        "scripts/init_skill.py",
-        "scripts/quick_validate.py",
-    }
-)
-REQUIRED_INSTRUCTION_HYGIENE_ROUTES = (
-    "references/instruction-hygiene.md",
-    "### 4. 清洗与分级约束",
-    "删除是默认等级，候选规则承担保留依据的举证责任",
-    "#### 硬禁止保留门槛",
-    "确认正向合同仍能独立驱动正常请求完成并产出可观察结果",
-)
-REQUIRED_CAPABILITY_MIGRATION_ROUTES = (
-    "逐项处置矩阵：迁移保留、明确退出、需要确认",
-    "退出对象内部承载的独立能力、资源与消费者",
-    "文件共置、同一模块或同一调用栈只说明实现位置相邻",
-    "目标对象已经退出",
-)
-REQUIRED_AUDIENCE_LANGUAGE_ROUTES = (
-    "### 4.1 分开证据语言、工作语言与用户语言",
-    "来源中的术语、README 说法、字段名和实现动词先作为证据保存",
-    "准确核实只证明信息可用，不自动赋予它正文篇幅",
-    "内部字段名和过程标签到达最终消费者前要改写成用户能直接理解的内容",
+    "临时治理证据与运行资源分开",
+    "默认路径、按需能力和动作权限分开",
+    "路由由上层一次选择，下层只执行",
+    "交付要让用户看见结果",
 )
 
 
@@ -106,16 +60,6 @@ def parse_frontmatter(text: str) -> tuple[dict, list[str]]:
             "SKILL.md frontmatter contains unsupported fields: " + ", ".join(unexpected)
         )
     return data, errors
-
-
-def active_files(root: Path):
-    for current, directories, files in os.walk(root):
-        directories[:] = [
-            name for name in directories if name not in {"archive", ".git", "__pycache__"}
-        ]
-        current_path = Path(current)
-        for name in files:
-            yield current_path / name
 
 
 def find_empty_dirs(root: Path) -> list[Path]:
@@ -172,7 +116,7 @@ def validate_protected_core(root: Path, text: str) -> list[str]:
         errors.append("meta-skills protected core titles or order changed")
     if lock.get("principle_count") != len(PROTECTED_CORE_TITLES):
         errors.append("meta-skills core lock principle_count is incorrect")
-    if lock.get("version") != 2:
+    if lock.get("version") != 9:
         errors.append("meta-skills core lock version is incorrect")
     if lock.get("change_policy") != "explicit-user-authorization-required":
         errors.append("meta-skills core lock change policy is incorrect")
@@ -180,115 +124,139 @@ def validate_protected_core(root: Path, text: str) -> list[str]:
     return errors
 
 
-def validate_case_isolation(root: Path, skill_text: str) -> list[str]:
+def validate_direct_reference_routes(root: Path, skill_text: str) -> list[str]:
+    reference_root = root / "references"
+    if not reference_root.exists():
+        return []
+
+    routed = {
+        raw_reference.split()[0].replace("\\", "/")
+        for raw_reference in REF_RE.findall(skill_text)
+        if raw_reference.startswith("references/")
+    }
     errors: list[str] = []
-
-    for path in active_files(root):
-        relative = path.relative_to(root)
-        normalized_relative = relative.as_posix()
-        if normalized_relative not in ALLOWED_META_FILES:
-            errors.append(
-                "meta-skills unreviewed active file is not allowed: "
-                f"{normalized_relative}"
-            )
-
-    for relative in FORBIDDEN_META_PATHS:
-        if (root / relative).exists():
-            errors.append(f"meta-skills forbidden persistent case asset exists: {relative}")
-
-    for sibling_name in ("harness-results", "harness-workspaces"):
-        if (root.parent / sibling_name).exists():
-            errors.append(
-                f"meta-skills forbidden persistent case output exists: ../{sibling_name}"
-            )
-
-    routed_texts: list[tuple[str, str]] = [("SKILL.md", skill_text)]
-    for folder in (root / "references", root / "agents"):
-        if not folder.exists():
+    for path in reference_root.rglob("*"):
+        if not path.is_file():
             continue
-        for path in folder.rglob("*"):
-            if path.is_file() and path.suffix.lower() in {".md", ".yaml", ".yml", ".json"}:
-                routed_texts.append(
-                    (str(path.relative_to(root)), path.read_text(encoding="utf-8"))
-                )
+        relative_path = path.relative_to(root)
+        if any(part in {"archive", "__pycache__"} for part in relative_path.parts):
+            continue
+        relative = relative_path.as_posix()
+        if relative not in routed:
+            errors.append(
+                "reference is not directly routed by SKILL.md: "
+                f"{relative}"
+            )
+    return errors
 
-    for label, routed_text in routed_texts:
-        normalized = routed_text.replace("\\", "/")
-        for route in FORBIDDEN_META_ROUTES:
-            if route in normalized:
+
+def validate_reference_leaf_nodes(root: Path) -> list[str]:
+    reference_root = root / "references"
+    if not reference_root.exists():
+        return []
+
+    errors: list[str] = []
+    for path in reference_root.rglob("*"):
+        if not path.is_file():
+            continue
+        relative_path = path.relative_to(root)
+        if any(part in {"archive", "__pycache__"} for part in relative_path.parts):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as error:
+            errors.append(f"cannot inspect reference routes in {relative_path.as_posix()}: {error}")
+            continue
+
+        nested_routes = sorted(
+            {
+                raw_reference.split()[0].replace("\\", "/")
+                for raw_reference in REF_RE.findall(text)
+                if raw_reference.startswith("references/")
+            }
+        )
+        for nested_route in nested_routes:
+            errors.append(
+                "reference must not route another reference; route it from SKILL.md instead: "
+                f"{relative_path.as_posix()} -> {nested_route}"
+            )
+        for pattern in REFERENCE_BACK_ROUTE_PATTERNS:
+            match = pattern.search(text)
+            if match:
                 errors.append(
-                    f"meta-skills forbidden persistent case route in {label}: {route}"
+                    "reference must report and stop instead of reselecting an upper route: "
+                    f"{relative_path.as_posix()} -> {match.group(0)}"
                 )
-
     return errors
 
 
-def validate_instruction_hygiene_route(root: Path, skill_text: str) -> list[str]:
+def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str]:
     errors: list[str] = []
-    for marker in REQUIRED_INSTRUCTION_HYGIENE_ROUTES:
+    required_skill_markers = (
+        "### 2. 建立改造前基线",
+        "本轮处置：原位保留 / 迁移保留 / 用户明确退出",
+        "reference 不读取或调用其它 reference",
+        "不能用“新流程通过”证明其它旧能力未丢失",
+        "只有用户新增或改变最终结果、权限",
+        "该合同所需的输入、资源、动作权限、执行顺序、输出、验收和停止条件",
+    )
+    for marker in required_skill_markers:
         if marker not in skill_text:
-            errors.append(f"meta-skills missing instruction hygiene route: {marker}")
+            errors.append(f"meta-skills missing capability-preservation contract: {marker}")
 
-    reference = root / "references" / "instruction-hygiene.md"
-    if reference.exists():
-        text = reference.read_text(encoding="utf-8")
-        for heading in ("## 一、先写正向合同", "## 三、四级处理", "## 五、验收"):
-            if heading not in text:
-                errors.append(f"instruction hygiene reference missing section: {heading}")
-    return errors
-
-
-def validate_capability_migration_route(root: Path, skill_text: str) -> list[str]:
-    errors: list[str] = []
-    for marker in REQUIRED_CAPABILITY_MIGRATION_ROUTES:
-        if marker not in skill_text:
-            errors.append(f"meta-skills missing capability migration route: {marker}")
-
-    absorption = root / "references" / "absorption-and-governance.md"
-    if absorption.exists():
-        text = absorption.read_text(encoding="utf-8")
-        for marker in (
-            "### 4.1 退出载体时的处置矩阵",
-            "正式生产者：",
-            "正式消费者：",
-            "明确退出项不进入新的生产链路",
-        ):
-            if marker not in text:
-                errors.append(f"capability migration reference missing marker: {marker}")
-    return errors
-
-
-def validate_audience_language_route(root: Path, skill_text: str) -> list[str]:
-    errors: list[str] = []
-    for marker in REQUIRED_AUDIENCE_LANGUAGE_ROUTES:
-        if marker not in skill_text:
-            errors.append(f"meta-skills missing audience language route: {marker}")
-
-    references = {
+    required_reference_markers = {
         "references/skill-design-playbook.md": (
-            "来源语言：",
-            "内部工作语言：",
-            "最终用户语言：",
-            "不建立禁词表，也不触发自动返修",
+            "### 改造现有 Skill 前先建立能力基线",
+            "不能先断开消费者，再以资源孤立为理由移除",
+            "reference 不再引用另一个 reference",
+            "只有用户改变目标或权限",
+            "只补充证据、示例、配置、风格或环境信息的资源属于后续输入",
         ),
         "references/instruction-hygiene.md": (
-            "来源语言、内部工作语言还是最终用户语言",
-            "不会直接替代用户成品语言",
-            "案例库可以继续提供完整案例以及结构、节奏和表达机制",
+            "约束清洗只处理同一能力内部怎样表达规则",
+            "不能先删掉路由或消费者",
+            "不重选类型、模板或替代路线",
+        ),
+        "references/absorption-and-governance.md": (
+            "吸收新价值不能覆盖现有价值",
+            "不能先切断旧入口，再以资源失去消费者为理由移除",
+        ),
+        "references/evidence-distillation.md": (
+            "本文件只筛选准备从外部材料新增或迁入的内容",
+            "目标 Skill 已有资源仍按能力台账逐项处置",
+        ),
+        "references/skill-maintenance-and-evaluation.md": (
+            "维护目标只决定本轮重点，不缩小保全范围",
+            "搜索不到引用只说明当前路由可能断裂",
         ),
         "references/quality-gate.md": (
-            "来源语言、内部工作语言和最终用户语言已经分开",
-            "没有只做表面同义词替换",
+            "修改现有 Skill 前已经建立活动能力与运行资源台账",
+            "活动 reference 之间不存在 reference-to-reference 调用",
+            "不重选类型、模板或替代路线",
+            "补充证据、示例、配置、风格或环境信息的共享资源",
         ),
     }
-    for relative, markers in references.items():
+    for relative, markers in required_reference_markers.items():
         path = root / relative
         if not path.exists():
             continue
         text = path.read_text(encoding="utf-8")
         for marker in markers:
             if marker not in text:
-                errors.append(f"{relative} missing audience language marker: {marker}")
+                errors.append(f"{relative} missing capability-preservation marker: {marker}")
+
+    core, marker_errors = extract_protected_core(skill_text)
+    errors.extend(marker_errors)
+    if core is not None:
+        for marker in (
+            "事实、模板、案例、作者声音",
+            "AI 起草的大纲或文章",
+        ):
+            if marker in core:
+                errors.append(
+                    "meta-skills protected core contains target-specific workflow wording: "
+                    f"{marker}"
+                )
     return errors
 
 
@@ -434,10 +402,7 @@ def validate(root: Path) -> list[str]:
 
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
-        errors.extend(validate_case_isolation(root, text))
-        errors.extend(validate_instruction_hygiene_route(root, text))
-        errors.extend(validate_capability_migration_route(root, text))
-        errors.extend(validate_audience_language_route(root, text))
+        errors.extend(validate_meta_preservation_contract(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
         relative = raw_reference.split()[0]
@@ -447,6 +412,9 @@ def validate(root: Path) -> list[str]:
 
     for empty_dir in find_empty_dirs(root):
         errors.append(f"empty directory: {empty_dir.relative_to(root)}")
+
+    errors.extend(validate_direct_reference_routes(root, text))
+    errors.extend(validate_reference_leaf_nodes(root))
 
     if name:
         errors.extend(validate_metadata(root, name))
