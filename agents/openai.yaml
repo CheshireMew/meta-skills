@@ -1,4 +1,4 @@
 interface:
   display_name: "Meta-skills"
-  short_description: "完整创建、改造、审计、迁移和评估 agent skill"
-  default_prompt: "Use $meta-skills 创建或改造一个行为边界清楚、结构与结果都经过验证的 skill。"
+  short_description: "从材料中蒸馏可运行能力，并创建、改造、审计和验证 Agent Skill"
+  default_prompt: "Use $meta-skills 从材料中蒸馏可运行能力并接入目标 Skill，或创建、改造和审计一个 Skill。"
