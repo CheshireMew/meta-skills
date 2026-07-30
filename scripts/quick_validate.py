@@ -195,6 +195,9 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
     required_skill_markers = (
         "### 2. 建立改造前基线",
         "本轮处置：原位保留 / 迁移保留 / 用户明确退出",
+        "当前阶段：临时证据 / 候选资源 / 已注册运行资源 / 固定测试夹具",
+        "Skill 源码保存规则、脚本、schema 和随 Skill 分发的共享只读资源",
+        "从一个全新的 Skill 外部项目调用正式列出或采用入口",
         "reference 不读取或调用其它 reference",
         "不能用“新流程通过”证明其它旧能力未丢失",
         "只有用户新增或改变最终结果、权限",
@@ -211,6 +214,8 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
             "reference 不再引用另一个 reference",
             "只有用户改变目标或权限",
             "只补充证据、示例、配置、风格或环境信息的资源属于后续输入",
+            "已注册只表示可以显式选择，不自动成为默认",
+            "从全新 Skill 外部项目通过公开入口和资源标识冷启动解析",
         ),
         "references/instruction-hygiene.md": (
             "约束清洗只处理同一能力内部怎样表达规则",
@@ -220,10 +225,12 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
         "references/absorption-and-governance.md": (
             "吸收新价值不能覆盖现有价值",
             "不能先切断旧入口，再以资源失去消费者为理由移除",
+            "最终真源、注册标识、生产者、正式消费者、迁移入口和验证证据",
         ),
         "references/evidence-distillation.md": (
             "本文件只筛选准备从外部材料新增或迁入的内容",
             "目标 Skill 已有资源仍按能力台账逐项处置",
+            "通过注册或一次性迁移进入稳定标识、版本、活动索引和正式消费者",
         ),
         "references/skill-maintenance-and-evaluation.md": (
             "维护目标只决定本轮重点，不缩小保全范围",
@@ -234,6 +241,9 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
             "活动 reference 之间不存在 reference-to-reference 调用",
             "不重选类型、模板或替代路线",
             "补充证据、示例、配置、风格或环境信息的共享资源",
+            "临时证据、候选资源、已注册运行资源和固定测试夹具",
+            "Skill 源码、共享只读资源库、可变运行项目、缓存和任务产物",
+            "只凭资源标识读取注册表和唯一真源",
         ),
     }
     for relative, markers in required_reference_markers.items():
