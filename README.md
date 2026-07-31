@@ -6,7 +6,7 @@
 
 Meta-skills 是一个专门为其它 Codex/Agent Skill 蒸馏、迁移和验证能力的元技能。它最突出的作用，是从文本、现有 Skill、规则、历史对话、仓库、压缩包、文档与示例项目中，找出真正产生价值的判断、流程和实现资源，再把它们接入目标 Skill 的正式运行链路。
 
-它也负责从零创建、审计、重写、维护和评估 Skill。整个过程先确定用户真正要得到的结果、目标 Skill 已有的能力、运行资源与动作权限，再生成或迁移文件；完成后不只检查目录和 frontmatter，还会按任务风险验证到当前真实链路的可观察终点。当前没有真实下游时，它会明确说明只验证到了结构可达。
+它也负责从零创建、审计、重写、维护和评估 Skill，包括设计能够从对话中自我进化的 Skill。整个过程先确定用户真正要得到的结果、目标 Skill 已有的能力、运行资源与动作权限，再生成或迁移文件；完成后不只检查目录和 frontmatter，还会按任务风险验证到当前真实链路的可观察终点。当前没有真实下游时，它会明确说明只验证到了结构可达。
 
 ## 核心特色：把材料蒸馏成可运行能力
 
@@ -19,6 +19,14 @@ Meta-skills 所说的“蒸馏”不是给材料写摘要，也不是抽出几�
 实际迁移内容会按价值因果链决定，可能包括触发条件、判断标准、步骤、输出合同、停止位置，以及生产需要的模板、完整示范、schema、脚本或资产。来源中的一次性人物、事实、数字、措辞、失败记录和纠偏过程不会被误升为长期默认；目标 Skill 原有的有效能力也会先进入台账并得到保全，蒸馏新能力不能覆盖旧能力。
 
 这条链路分别由 [`references/absorption-and-governance.md`](references/absorption-and-governance.md)、[`references/evidence-distillation.md`](references/evidence-distillation.md) 和 [`references/resource-design.md`](references/resource-design.md) 负责识别可迁移价值、提炼完整能力单元并连接运行资源。
+
+## 自我进化不是另建经验库
+
+当用户要求一个 Skill 从对话中学习时，Meta-skills 会先确定“谁在学习、学完改变什么行为、最终写到哪里、以后由谁读取”。如果学习主体是目标 Skill，经过验证的经验会进入它自己的活动规则、方法、资源合同、脚本、元数据或确定性检查，使它下次处理同类请求时真正换一种判断或做法。当前项目的事实仍由项目自己的代码、测试和文档负责。
+
+完成当前项目任务和改变 Skill 未来行为是两个独立结果。用户同时要求时，先验证项目结果，再迭代目标 Skill；只要求项目任务时不会自动修改 Skill。独立的项目经验区或共享经验库只有在用户明确把它列为结果，并且确实存在持续消费者时才会建立。
+
+一段对话可以包含多项成功经验、失败、纠偏和稳定约束，它们会按性质分别处理，而不是被压成一条问题记录。每项经验分别说明表现或价值、成立机制或根因、采取的动作、验证结果、容易重复的坑和未来最早的预防点。高频、严重、容易误诊或只在特定条件下出现的问题会保留足以识别和治理它的细节，不会为了追求宽泛的通用规则而被抽空。
 
 ## 一分钟开始
 
@@ -34,6 +42,12 @@ Codex 通常会自动发现 Skill；列表中没有出现时，重启 Codex 后�
 
 ```text
 Use $meta-skills 读取 <materials> 和 <target-skill>，先找出目标 Skill 的能力缺口，再把材料中的判断、流程与必要运行资源蒸馏并迁移进去。先展示能力台账、迁移方案、输出骨架和将修改的文件，等我确认后实施。
+```
+
+让一个 Skill 获得或改进自我进化能力：
+
+```text
+Use $meta-skills 改造 <target-skill>，让它在我明确要求学习时，从当前对话的成功经验、失败、纠偏和项目结果中提炼多项经验，并内化到自身会被未来请求读取的行为；项目事实继续留在项目真源，不另建未经要求的经验库。先展示学习落点、行为合同和影响文件，等我确认后实施并验证。
 ```
 
 创建一个新 Skill：
@@ -64,6 +78,7 @@ Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除�
 用户请求
    │
    ├─ 从材料或现有 Skill 蒸馏并迁移能力
+   ├─ 创建或改进能从对话中自我进化的 Skill
    ├─ 新建、重写、更新或审计 Skill
    └─ 维护、评估、分发、默认启用或源码同步
                       ↓
@@ -85,6 +100,7 @@ Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除�
 ## 能做什么
 
 - **蒸馏并迁移完整能力**：从文本、现有 Skill、成功经验、纠偏、旧规则、历史对话、仓库或大量外部材料中，提炼目标 Skill 真正缺少的用户价值、操作结构与实现载体；输出是能够进入正式生产链的完整能力，不是材料摘要。
+- **设计自我进化型 Skill**：先确定学习主体、最终真源和正式消费者，再把多项成功或失败经验转成目标 Skill 自身会执行的判断、动作和验收；普通项目任务不会自动触发 Skill 修改。
 - **从零创建 Skill**：确定名称、触发边界、主流程和界面文案，初始化 `SKILL.md` 与 `agents/openai.yaml`，只在确有正式消费者时增加 references、scripts 或 assets。
 - **审计、重写和迁移现有 Skill**：先盘点每项活动能力与运行资源，判断职责是否过窄、过宽或存在冲突入口，再逐项原位保留、迁移保留或按用户明确要求退出，避免重构后只剩一条新流程，旧能力却悄悄消失。
 - **收敛路由与动作边界**：由顶层 `SKILL.md` 一次选择主路径和互斥子类型；下层 reference、script 与 asset 只执行已经选定的职责，不反向改路线。
@@ -94,7 +110,7 @@ Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除�
 - **维护与评估**：处理触发偏差、流程未执行、路由冲突、输出不稳定、默认启用、源码同步以及与系统 Skill 重叠等问题。
 - **验证最终行为**：结构检查之外，按实际风险追踪生产者、文件或存储边界、消费者和最终可见结果；不会用消费端手写假数据冒充正在验证的正式产物。
 
-## 三个关键边界
+## 四个关键边界
 
 ### 1. 先保全能力，再谈精简
 
@@ -108,6 +124,10 @@ Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除�
 
 `quick_validate.py` 能证明目录、元数据、引用和确定性不变量成立，但不能证明用户结果真的产生。涉及脚本、模板、文件或注册资源时，Meta-skills 会在当前任务具备真实下游的范围内，继续检查正式产物是否被下一步读取和使用；如果只能证明结构可达，也会明确停在哪一层。
 
+### 4. 学习主体决定经验落点
+
+目标 Skill 自我进化、当前项目沉淀和独立共享资源是三种不同结果。Meta-skills 会在设计资源前先确定其中哪一种成立：目标 Skill 学习时直接改变它自身的活动行为；项目沉淀停在项目真源；共享资源需要用户明确要求和独立消费者。名称里出现“项目经验”或内容看起来可以通用，都不能替代这个判断。
+
 ## 自带工具
 
 这些脚本都使用 Python 3 和 PyYAML。当前环境缺少 `yaml` 模块时，可在所使用的 Python 环境中安装 `PyYAML`。
@@ -116,7 +136,7 @@ Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除�
 | --- | --- |
 | [`scripts/init_skill.py`](scripts/init_skill.py) | 把名称规范为小写连字符格式（kebab-case），创建新的 Skill 目录；目标已存在时停止，只生成 `SKILL.md` 与 `agents/openai.yaml` |
 | [`scripts/generate_openai_yaml.py`](scripts/generate_openai_yaml.py) | 从最终 Skill 定位生成或更新界面元数据，同时保留已有 `dependencies` 与 `policy` |
-| [`scripts/quick_validate.py`](scripts/quick_validate.py) | 检查 frontmatter、路径、顶层路由、reference 叶节点、空目录、UI 元数据和 Meta-skills 受保护核心 |
+| [`scripts/quick_validate.py`](scripts/quick_validate.py) | 检查 frontmatter、路径、顶层路由、reference 叶节点、空目录、UI 元数据、Meta-skills 受保护核心和自我进化学习落点合同 |
 
 初始化新 Skill：
 
@@ -141,7 +161,7 @@ python scripts/quick_validate.py <skill-folder>
 - [`SKILL.md`](SKILL.md) 是唯一的顶层路由、动作权限、默认输出和停止条件真源。
 - [`references/skill-design-playbook.md`](references/skill-design-playbook.md) 负责新建、重写、更新和审计时的行为合同、职能边界与实施方法。
 - [`references/instruction-hygiene.md`](references/instruction-hygiene.md) 负责建立正向流程并清洗限制性提示。
-- [`references/absorption-and-governance.md`](references/absorption-and-governance.md) 负责从成功经验、纠偏、旧规则和外部方法中吸收可迁移能力。
+- [`references/absorption-and-governance.md`](references/absorption-and-governance.md) 负责确定学习主体与经验落点，并从多项成功经验、失败、纠偏、旧规则和外部方法中吸收可迁移能力。
 - [`references/evidence-distillation.md`](references/evidence-distillation.md) 负责从仓库、压缩包和大量资料中提炼完整能力单元。
 - [`references/resource-design.md`](references/resource-design.md) 负责模板、完整示范、schema、脚本、资产与索引的身份、生命周期和消费链。
 - [`references/skill-maintenance-and-evaluation.md`](references/skill-maintenance-and-evaluation.md) 负责维护、评估、分发、默认启用和源码同步。

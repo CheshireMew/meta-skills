@@ -1,6 +1,6 @@
 ---
 name: meta-skills
-description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent Skill 的元技能。Use when the user asks to design or scaffold a new skill, generate its SKILL.md and agents/openai.yaml, refactor or audit an existing skill, infer whether its role is too narrow or broad from available conversation history, migrate scattered workflow rules into SKILL.md/references/scripts/assets, separate transient diagnostic evidence from persistent runtime examples and resources, absorb reusable mechanisms without retaining correction history, or validate skill routing, boundaries, resources, metadata, and observable behavior.
+description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent Skill 的元技能。Use when the user asks to design or scaffold a new skill, generate its SKILL.md and agents/openai.yaml, refactor or audit an existing skill, infer whether its role is too narrow or broad from available conversation history, create or improve a self-evolving skill that internalizes validated dialogue lessons into its own behavior, migrate scattered workflow rules into SKILL.md/references/scripts/assets, separate transient diagnostic evidence from persistent runtime examples and resources, absorb reusable mechanisms without retaining correction history, or validate skill routing, boundaries, resources, metadata, and observable behavior.
 ---
 
 # Meta-skills
@@ -32,7 +32,27 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 - 目标是 Meta-skills 自身时，先运行 `scripts/quick_validate.py <meta-skills-folder>`。受保护核心校验失败时立即停止；只有用户在当前任务中明确授权修改核心原则，才同步更新核心、锁文件和校验器。
 - 目标是其它 Skill 时，先读取目标目录的活动 `SKILL.md`、`agents/openai.yaml` 和全部活动运行资源，确认现有行为、消费者与仓库规则。改造、精简、重构或迁移前，先建立临时能力台账；不能先改变路由，再把因此失去消费者的资源判为无用。
 
-### 2. 为每个独立结果选择一条主路径
+### 2. 先分开本次结果与学习结果，再为每个独立结果选择一条主路径
+
+当用户要求目标 Skill 从对话、项目结果或连续使用中学习时，先判断用户是否同时需要两个独立结果：完成当前项目或领域任务，以及改变目标 Skill 未来处理同类请求的行为。两者都被明确要求时分别建立主路径，先完成并验证当前结果，再把其中经过验证的经验交给目标 Skill 的改造路径；只要求其中一个时在该结果完成后停止。
+
+选择吸收方法或设计资源前，先完成学习落点合同：
+
+```text
+学习主体：目标 Skill / 当前项目 / 独立共享资源
+证据来源：对话、用户认可、纠偏、项目结果、独立依据或其它明确材料
+这段材料包含哪些独立经验：
+每项经验会改变哪类未来请求的哪个判断、动作、产物、验收或停止位置：
+最终真源与正式消费者：
+项目专属事实继续由什么项目真源负责：
+用户是否明确要求独立经验库，以及它由谁持续消费：
+```
+
+- 用户明确要求 Skill 自我进化、内化经验或把经验吸收到自己身上时，学习主体是目标 Skill。稳定机制进入目标 Skill 自身的活动规则、方法、资源合同、脚本、元数据或确定性检查；项目事实继续留在项目自身的真实来源。
+- 用户只要求完成、复盘或治理当前项目，而没有要求改变 Skill 时，学习主体是当前项目；在项目结果交付后停止，不自动修改 Skill。
+- 独立共享资源只有在用户把它明确列为结果，并且存在跨任务持续读取它的正式消费者时才成立。没有这个结果时，目标 Skill 自我进化直接落到自身，不另建项目经验区或共享经验库。
+
+设计具有自我进化能力的目标 Skill 时，把这份合同转化到目标 Skill 的顶层路由：普通领域任务独立完成；只有用户明确要求学习、吸收或迭代自身时才进入自我进化路径。材料名称里出现“项目经验”不能替代学习主体和最终消费者判断。
 
 - 新建 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`，完成行为合同、最终目录和实施顺序。
 - 重写、更新或审计 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`，还原现有行为并确定一次性迁移范围。
@@ -44,7 +64,7 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 
 主路径确定后，依次判断以下方面。条件缺失时继续当前主路径：
 
-1. 正常成功经验、用户认可、纠偏、旧规则或历史对话会改变职能、默认行为或能力时，读取 `references/absorption-and-governance.md`。
+1. 正常成功经验、用户认可、纠偏、旧规则或历史对话会改变职能、默认行为或能力，或者正在创建或改造自我进化型 Skill 时，读取 `references/absorption-and-governance.md`。
 2. 压缩包、仓库、文档、示例 Skill 或大量外部材料用于证明专业能力和实现载体时，在吸收规则之外读取 `references/evidence-distillation.md`。
 3. 需要创建、分类、迁移或审计模板、完整示范、schema、脚本、资产、索引或其它运行资源时，读取 `references/resource-design.md`；先按正式消费者确定资源身份和分类依据，再设计生产者、真源、检索与验证链路。
 4. 需要创建或更新 `agents/openai.yaml` 时，读取 `references/openai-yaml.md`，并以 `scripts/generate_openai_yaml.py` 作为唯一更新入口。
@@ -63,9 +83,11 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 什么请求触发，什么相邻请求不触发：
 默认读取什么、允许做什么：
 第一步、主流程和按需分支：
+关键用户结果链路：输入真源、生产者、传输或存储边界、消费者、最终可观察结果，以及各交接点的预期输入与输出：
 默认直接回复什么，何时才写文件：
 做到哪里停止：
 用户怎样看出结果已经完成：
+涉及学习时，谁在学习、改变什么未来行为、写入哪个真源、由谁消费：
 ```
 
 这份判断只在当前任务中使用，不另存计划文件。用户已经说清时不再追问缺口，继续完成只读分析与行为合同；只有缺口会改变 Skill 身份、动作权限、保存位置或主要结果时才问一个关键问题。是否允许写文件不在此处判断，统一由第 5 步决定。
@@ -83,7 +105,8 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 什么请求触发：
 使用什么输入：
 负责什么且不负责什么：
-生产者与消费者：
+生产者、传输或存储边界与消费者：
+各交接点的预期输入与输出：
 当前阶段：临时证据 / 候选资源 / 已注册运行资源 / 固定测试夹具：
 所在边界：Skill 源码 / 共享只读资源库 / 可变运行项目 / 缓存与产物：
 正式入口与资源标识：
@@ -107,6 +130,8 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 
 不满足时留在当前任务。满足但还没有稳定合同、来源确认、资源标识和正式消费者时，只能进入候选区，不能因为文件存在或本次任务成功就成为活动资源。满足全部条件并完成注册、版本、索引和消费入口后，才进入已注册运行资源。把规则放到问题发生前最早会读取的位置；同一行为和同一资源内容各自只保留一个真源。
 
+通用机制与重要特殊问题分别判断。高频发生、后果严重、容易误诊，或者只有在特定平台、版本、边界状态下才出现的问题，只要会改变未来的触发识别、根因定位、修复顺序或验证链路，就保留使它可识别、可处理的构成性细节；不能为了得到更宽泛的治理表述而把这些细节抽掉。通用机制负责共同路径，特殊条件负责在成立时改变动作，两者各自写在最早决策点。
+
 这一步只决定新增内容是否值得进入，以及重复表达怎样收敛，不得绕过上一节删除、降级或合并既有能力和运行资源。
 
 ### 4. 清洗与分级约束
@@ -126,6 +151,7 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 仅在第 5 步已经取得写入确认后进入本节；没有确认时不初始化目录、不生成文件，也不修改、移动、归档或删除现有内容。
 
 - 新建 Skill 时，先确定名称、目标父目录、description 和三项必需 UI 文案。用户给出位置时使用该位置；未给出时使用 `$HOME/.agents/skills`。然后运行 `scripts/init_skill.py <skill-name> --path <parent> --description <description> --interface display_name=... --interface short_description=... --interface default_prompt=...`。初始化器只创建 `SKILL.md` 与 `agents/openai.yaml`，不创建空资源目录、示例文件或辅助文档。
+- 创建或改造自我进化型 Skill 时，先把学习落点合同写进目标 Skill 的顶层路由，再接入经验提炼方法。自我进化的正式消费者是目标 Skill 未来处理同类请求的活动流程；落盘内容必须能在具体判断、动作、产物、验收或停止位置被读取。当前项目的事实、状态和专用结论继续由项目真源负责；独立经验库按用户明确结果和正式消费者另行设计。
 - 初始化后立即用已确认的行为合同替换正文占位内容。已有真实内容并存在明确消费者时再创建 `references/`、`scripts/` 或 `assets/`；新增脚本实际运行，新增资产按已加载的资源验证等级检查并准确报告。资源验证使用当前任务真实存在的生产者和消费者。
 - 每个独立结果的主路径、子类型选择、信息来源、动作权限、方法强度、输出顺序和停止条件写进 `SKILL.md`。先在同一上层完成互斥选择，再进入已选类型的固定执行顺序；同一方面只保留一个生效判断。
 - 职能发生扩大或缩小时，一次性迁移 `description`、第一判断、主流程、reference 路由、默认输出和停止条件，让最终定位成为唯一活动身份。
@@ -145,11 +171,12 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 2. 逐项核对改造前能力台账：原位保留项仍可达，迁移保留项的新入口、生产者和消费者已经接通，只有用户明确退出项不再活动。不能用“文件还在”代替能力可用，也不能用“新流程通过”证明其它旧能力未丢失。
 3. 检查路由方向：`SKILL.md` 完成任务类型和子类型选择；所有 active reference 都由它直接选择，reference 之间没有调用、覆盖或反向分流。触发条件、输出结构或消费者不同的模板保持独立入口。
 4. 按本轮改变的公开路由分别验证，不让一个无关分支的可选依赖失败阻止目标路由执行，也不用目标路由通过掩盖其它失败。至少覆盖本轮实际存在的新建、采用已注册资源、迁移旧资源和最终生产等场景；没有进入本轮范围的场景明确标为未运行。
-5. 沿本次代表性真实请求检查触发、读取、动作、输出和停止位置；不要用消费端手写假数据代替正在验证的生产结果。
+5. 沿本次代表性真实请求逐段核对影响用户结果的关键链路：输入真源、生产者输出、传输或存储边界、消费者输入与输出、停止位置和最终可观察结果。相邻环节使用同一份真实产物交接；出现偏差时，定位第一个输入仍符合预期而输出已经偏离预期的边界。修改任务从该边界修正生产、合同或传输问题并重新验证后续链路；只读审计在说明边界与证据后停止。不要用消费端手写假数据或跳过核心环节的模拟结果代替正在验证的生产结果。
 6. 用户结果涉及已注册资源时，从一个全新的 Skill 外部项目调用正式列出或采用入口，只用资源标识解析资源；证明正式入口读取注册表、定位唯一资源真源并把结果交给下一消费者。旧任务目录里的专用脚本、绝对路径和消费端自造数据都不能充当这条证据。
 7. 用户结果涉及脚本、模板、文件或其它消费者时，证明真实产物已经生成并被下一步读取。用户明确排除昂贵的最终合成时，可以在完成正式资源解析、合同校验和消费者加载后停止，但必须准确说明没有验证最终渲染结果。
 8. 只有高风险、复杂产物、外部写入或用户明确要求时，才增加独立请求和更深验证。
-9. 重读最终用户输出，确认第一段直接回答问题，没有内部字段、无用术语和过程说明。
+9. 自我进化能力发生变化时，分别核对学习条件成立与不成立时的停止位置，确认普通领域任务不会自动改写 Skill，明确的学习结果会进入目标 Skill 自身；一段材料包含多项独立经验时逐项验证归属，独立经验库只在对应用户结果和消费者同时成立时出现。
+10. 重读最终用户输出，确认第一段直接回答问题，没有内部字段、无用术语和过程说明。
 
 ### 8. 完成交付
 

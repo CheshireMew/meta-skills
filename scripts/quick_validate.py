@@ -319,6 +319,64 @@ def validate_meta_write_confirmation_contract(root: Path, skill_text: str) -> li
     return errors
 
 
+def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    required_skill_markers = (
+        "学习主体：目标 Skill / 当前项目 / 独立共享资源",
+        "项目事实继续留在项目自身的真实来源",
+        "不自动修改 Skill",
+        "不另建项目经验区或共享经验库",
+        "普通领域任务独立完成",
+        "通用机制与重要特殊问题分别判断",
+        "一段材料包含多项独立经验时逐项验证归属",
+        "正在创建或改造自我进化型 Skill 时",
+    )
+    for marker in required_skill_markers:
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing self-evolution contract: {marker}")
+
+    required_file_markers = {
+        "references/absorption-and-governance.md": (
+            "自我进化不是把历史保存起来",
+            "一段对话可以产生多项独立经验",
+            "成功经验本身不是问题",
+            "通用机制和重要特殊问题可以同时进入目标 Skill",
+            "普通领域任务与自我进化是独立结果",
+        ),
+        "references/quality-gate.md": (
+            "已经先确定学习主体、最终真源和正式消费者",
+            "项目事实继续留在项目真源",
+            "高频、严重、容易误诊或依赖特定条件的重要特殊问题",
+            "普通领域任务不会自动改写 Skill",
+        ),
+        "references/resource-design.md": (
+            "本文件不根据内容看起来是否通用来选择学习落点",
+            "资源目录不能反向把 Skill 自我进化改成项目沉淀或共享库建设",
+        ),
+        "references/skill-maintenance-and-evaluation.md": (
+            "维护自我进化型 Skill 时",
+            "普通领域任务和学习结果分开",
+            "自我进化落点错误",
+        ),
+        "README.md": (
+            "## 自我进化不是另建经验库",
+            "完成当前项目任务和改变 Skill 未来行为是两个独立结果",
+            "## 四个关键边界",
+            "### 4. 学习主体决定经验落点",
+        ),
+    }
+    for relative, markers in required_file_markers.items():
+        path = root / relative
+        if not path.exists():
+            errors.append(f"meta-skills missing self-evolution contract file: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(f"{relative} missing self-evolution marker: {marker}")
+    return errors
+
+
 def validate_metadata(root: Path, skill_name: str) -> list[str]:
     errors: list[str] = []
     metadata = root / "agents" / "openai.yaml"
@@ -463,6 +521,7 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_protected_core(root, text))
         errors.extend(validate_meta_preservation_contract(root, text))
         errors.extend(validate_meta_write_confirmation_contract(root, text))
+        errors.extend(validate_meta_self_evolution_contract(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
         relative = raw_reference.split()[0]

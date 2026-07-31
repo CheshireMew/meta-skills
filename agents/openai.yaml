@@ -1,4 +1,4 @@
 interface:
   display_name: "Meta-skills"
-  short_description: "从材料中蒸馏可运行能力，并创建、改造、审计和验证 Agent Skill"
-  default_prompt: "Use $meta-skills 从材料中蒸馏可运行能力并接入目标 Skill，或创建、改造和审计一个 Skill。"
+  short_description: "创建、改造并验证 Skill，让自我进化型 Skill 把对话经验内化为自身能力"
+  default_prompt: "Use $meta-skills 创建、改造或审计一个 Skill；需要自我进化时，把对话中的有效经验内化为目标 Skill 自身的行为。"
