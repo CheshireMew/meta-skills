@@ -28,17 +28,17 @@ REFERENCE_BACK_ROUTE_PATTERNS = (
 )
 CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
-PROTECTED_CORE_SHA256 = "ad2fc38bf987345c5b7051a18ceec4eb2de3e36b1fec80920bac0badbaa09ada"
+PROTECTED_CORE_SHA256 = "5956101173b030e25889715829f145809c7c2966c8ee7e61f3375823b66aa4d7"
 PROTECTED_CORE_TITLES = (
-    "有效能力先保全，再谈精简",
-    "精准高于复杂，但不能以删能力换简洁",
+    "先按结果性质和失败代价选择方法",
+    "用户本意和可观察结果优先",
+    "有效能力按用户结果保全，不按实现细节增殖",
+    "简单是默认，复杂度必须证明自己",
     "正面流程要在最早判断点解决问题",
-    "行为验收优先，强度与风险匹配",
-    "用户本意优先",
-    "临时治理证据与运行资源分开",
-    "默认路径、按需能力和动作权限分开",
-    "路由由上层一次选择，下层只执行",
-    "交付要让用户看见结果",
+    "验收服从结果性质和风险",
+    "治理证据、创作参考和机器资源分开管理",
+    "路由只保留真正改变做法的选择",
+    "交付要让用户直接看见结果",
 )
 
 
@@ -116,7 +116,7 @@ def validate_protected_core(root: Path, text: str) -> list[str]:
         errors.append("meta-skills protected core titles or order changed")
     if lock.get("principle_count") != len(PROTECTED_CORE_TITLES):
         errors.append("meta-skills core lock principle_count is incorrect")
-    if lock.get("version") != 9:
+    if lock.get("version") != 10:
         errors.append("meta-skills core lock version is incorrect")
     if lock.get("change_policy") != "explicit-user-authorization-required":
         errors.append("meta-skills core lock change policy is incorrect")
@@ -193,15 +193,16 @@ def validate_reference_leaf_nodes(root: Path) -> list[str]:
 def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str]:
     errors: list[str] = []
     required_skill_markers = (
-        "### 2. 建立改造前基线",
+        "### 1. 先判断结果性质和失败代价",
+        "创作与开放判断",
+        "确定性机器产物",
+        "混合任务逐阶段选择方法",
+        "### 2. 按用户结果建立改造前基线",
         "本轮处置：原位保留 / 迁移保留 / 用户明确退出",
-        "当前阶段：临时证据 / 候选资源 / 已注册运行资源 / 固定测试夹具",
-        "Skill 源码保存规则、脚本、schema 和随 Skill 分发的共享只读资源",
-        "从一个全新的 Skill 外部项目调用正式列出或采用入口",
-        "reference 不读取或调用其它 reference",
-        "不能用“新流程通过”证明其它旧能力未丢失",
-        "只有用户新增或改变最终结果、权限",
-        "该合同所需的输入、资源、动作权限、执行顺序、输出、验收和停止条件",
+        "创作案例与钩子只要来源清楚、能被检索并把全文交给写作上下文",
+        "不要为自然语言成品建立执行记录或采用校验器",
+        "reference、script 和 asset 执行已经选定的职责",
+        "### 7. 按结果性质验证",
     )
     for marker in required_skill_markers:
         if marker not in skill_text:
@@ -211,39 +212,29 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
         "references/skill-design-playbook.md": (
             "### 改造现有 Skill 前先建立能力基线",
             "不能先断开消费者，再以资源孤立为理由移除",
-            "reference 不再引用另一个 reference",
-            "只有用户改变目标或权限",
-            "只补充证据、示例、配置、风格或环境信息的资源属于后续输入",
-            "已注册只表示可以显式选择，不自动成为默认",
-            "从全新 Skill 外部项目通过公开入口和资源标识冷启动解析",
+            "创作时可以同时读取多个完整示范和钩子",
+            "创作验证只需证明多个相关参考的全文确实一起进入上下文",
         ),
         "references/instruction-hygiene.md": (
             "约束清洗只处理同一能力内部怎样表达规则",
             "不能先删掉路由或消费者",
-            "不重选类型、模板或替代路线",
+            "正面措辞不等于简单",
+            "多个相关完整示范和钩子一起交给模型",
         ),
         "references/absorption-and-governance.md": (
             "吸收新价值不能覆盖现有价值",
-            "不能先切断旧入口，再以资源失去消费者为理由移除",
-            "最终真源、注册标识、生产者、正式消费者、迁移入口和验证证据",
+            "创作与开放判断的经验",
+            "为什么充分上下文、多个好例子或一条自然语言规则不足",
         ),
-        "references/evidence-distillation.md": (
-            "本文件只筛选准备从外部材料新增或迁入的内容",
-            "目标 Skill 已有资源仍按能力台账逐项处置",
-            "通过注册或一次性迁移进入稳定标识、版本、活动索引和正式消费者",
-        ),
-        "references/skill-maintenance-and-evaluation.md": (
-            "维护目标只决定本轮重点，不缩小保全范围",
-            "搜索不到引用只说明当前路由可能断裂",
+        "references/resource-design.md": (
+            "管理边界与使用边界不同",
+            "多个相关候选的全文一起放进同一写作上下文",
+            "不要求逐项采用记录",
         ),
         "references/quality-gate.md": (
-            "修改现有 Skill 前已经建立活动能力与运行资源台账",
-            "活动 reference 之间不存在 reference-to-reference 调用",
-            "不重选类型、模板或替代路线",
-            "补充证据、示例、配置、风格或环境信息的共享资源",
-            "临时证据、候选资源、已注册运行资源和固定测试夹具",
-            "Skill 源码、共享只读资源库、可变运行项目、缓存和任务产物",
-            "只凭资源标识读取注册表和唯一真源",
+            "混合任务逐阶段检查",
+            "多个相关完整案例、钩子或风格参考可以一起进入上下文",
+            "没有固定候选数量、唯一参考、逐项采用记录、机器评分、执行记录或过程校验器",
         ),
     }
     for relative, markers in required_reference_markers.items():
@@ -304,7 +295,6 @@ def validate_meta_write_confirmation_contract(root: Path, skill_text: str) -> li
         ),
         "references/quality-gate.md": (
             "已经在首次写入前取得用户明确确认",
-            "没有把最初的创建、修改或修复请求",
             "用户明确要求跳过确认",
         ),
     }
@@ -328,7 +318,10 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
         "不另建项目经验区或共享经验库",
         "普通领域任务独立完成",
         "通用机制与重要特殊问题分别判断",
-        "一段材料包含多项独立经验时逐项验证归属",
+        "同一项经验和同一个用户结果可以同时进入两层",
+        "一个结果可以同时叠加多个特殊维度",
+        "不能让专项症状缩窄共同机制的适用范围",
+        "没有特殊动作差异时不为形式完整虚构专项维度",
         "正在创建或改造自我进化型 Skill 时",
     )
     for marker in required_skill_markers:
@@ -341,13 +334,29 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
             "一段对话可以产生多项独立经验",
             "成功经验本身不是问题",
             "通用机制和重要特殊问题可以同时进入目标 Skill",
+            "共同机制及其适用请求",
+            "特殊条件改变的识别、观测、动作、产物、验收或停止位置",
+            "两层共同消费顺序",
+            "各自唯一真源和正式消费者",
+            "同一个结果可以同时叠加多个特殊维度",
+            "只有共同机制成立时是否没有虚构特殊维度",
             "普通领域任务与自我进化是独立结果",
         ),
+        "references/skill-design-playbook.md": (
+            "共同机制与特殊维度不是多个主路径",
+            "由 `SKILL.md` 写清检测与共同消费顺序",
+            "同一结果可以同时叠加多个维度",
+        ),
+        "references/instruction-hygiene.md": (
+            "可叠加特殊维度",
+            "不能把它们强制改成互斥分支",
+            "只有共同机制成立时没有虚构特殊维度",
+        ),
         "references/quality-gate.md": (
-            "已经先确定学习主体、最终真源和正式消费者",
+            "已确定学习主体、最终真源和正式消费者",
             "项目事实继续留在项目真源",
-            "高频、严重、容易误诊或依赖特定条件的重要特殊问题",
             "普通领域任务不会自动改写 Skill",
+            "创作 Skill 的用户纠正优先变成更好的材料选择",
         ),
         "references/resource-design.md": (
             "本文件不根据内容看起来是否通用来选择学习落点",
@@ -361,6 +370,9 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
         "README.md": (
             "## 自我进化不是另建经验库",
             "完成当前项目任务和改变 Skill 未来行为是两个独立结果",
+            "同一项经验可以同时产生共同机制和多个特殊维度",
+            "共同路径不会被一个醒目的专项症状缩窄",
+            "共同机制与可叠加特殊维度分别落位",
             "## 四个关键边界",
             "### 4. 学习主体决定经验落点",
         ),
