@@ -1,4 +1,4 @@
 interface:
   display_name: "Meta-skills"
-  short_description: "创建、改造并验证 Skill，让自我进化型 Skill 把对话经验内化为自身能力"
-  default_prompt: "Use $meta-skills 创建、改造或审计一个 Skill；需要自我进化时，把对话中的有效经验内化为目标 Skill 自身的行为。"
+  short_description: "创建、学习、改造、迁移、审计并可视化 Skill 的能力与真实运行链路"
+  default_prompt: "Use $meta-skills 完整学习、创建、改造、审计或迁移一个 Skill；需要时画出详细流程与生产—消费链，并按真实来源和验证等级交付。"

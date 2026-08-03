@@ -6,7 +6,7 @@
 
 Meta-skills 是一个专门为其它 Codex/Agent Skill 蒸馏、迁移和验证能力的元技能。它最突出的作用，是从文本、现有 Skill、规则、历史对话、仓库、压缩包、文档与示例项目中，找出真正产生价值的判断、流程和实现资源，再把它们接入目标 Skill 的正式运行链路。
 
-它也负责从零创建、审计、重写、维护和评估 Skill，包括设计能够从对话中自我进化的 Skill。整个过程先确定用户真正要得到的结果、目标 Skill 已有的能力、运行资源与动作权限，再生成或迁移文件；完成后不只检查目录和 frontmatter，还会按任务风险验证到当前真实链路的可观察终点。当前没有真实下游时，它会明确说明只验证到了结构可达。
+它也负责从零创建、审计、重写、维护和评估 Skill，包括设计能够从对话中自我进化的 Skill，以及把 Skill 的控制流、数据流、资源消费和验证闭环画成详细流程与链路图。整个过程先确定用户真正要得到的结果、目标 Skill 已有的能力、运行资源与动作权限，再生成或迁移文件；完成后不只检查目录和 frontmatter，还会按任务风险验证到当前真实链路的可观察终点。当前没有真实下游时，它会明确说明只验证到了结构可达。
 
 ## 核心特色：把材料蒸馏成可运行能力
 
@@ -19,6 +19,8 @@ Meta-skills 所说的“蒸馏”不是给材料写摘要，也不是抽出几�
 实际迁移内容会按价值因果链决定，可能包括触发条件、判断标准、步骤、输出合同、停止位置，以及生产需要的模板、完整示范、schema、脚本或资产。来源中的一次性人物、事实、数字、措辞、失败记录和纠偏过程不会被误升为长期默认；目标 Skill 原有的有效能力也会先进入台账并得到保全，蒸馏新能力不能覆盖旧能力。
 
 这条链路分别由 [`references/absorption-and-governance.md`](references/absorption-and-governance.md)、[`references/evidence-distillation.md`](references/evidence-distillation.md) 和 [`references/resource-design.md`](references/resource-design.md) 负责识别可迁移价值、提炼完整能力单元并连接运行资源。
+
+学习其它 Skill 时，Meta-skills 还会先追溯原始上游并区分两种关系：代码、模板、示例、数据或其它资源被直接复制或改编后随目标分发，目标 Skill 的 README 必须增加“第三方资源与致谢”，说明原始仓库、许可证、复用范围和修改；只学习方法、视觉锚点、动作关系或工作流，并在没有复制来源 IP、示例、资源和原实现的前提下独立重做，则不会把来源写成目标依赖。用户提供的是 fork 时，只有确实复用了 fork 的独有改动才另谢 fork，不能用 fork 链接替代原始上游。
 
 ## 自我进化不是另建经验库
 
@@ -68,6 +70,12 @@ Use $meta-skills 改造 <skill-folder>，先盘点全部活动能力与运行资
 Use $meta-skills 审计 <skill-folder>，说明现有能力、主要问题和建议，不修改文件。
 ```
 
+画出一个 Skill 的详细流程与链路图：
+
+```text
+Use $meta-skills 读取 <skill-folder> 的全部活动入口和运行资源，画出当前状态、拟议状态或实施后状态的详细 Mermaid 链路图，覆盖路由判断、生产者、真源、边界、消费者、验证回路和用户可见结果，并标出未确认连接；不要修改文件。
+```
+
 Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除都采用这个确认边界：先把实际行为方案讲清楚，再等待明确批准。纯分析、审计和答疑会直接交付结论，不为了输出报告额外写文件。
 
 目标 Skill 位于已有 Git 远端仓库时，确认后的创建、改造或迭代默认继续完成本轮获准改动的验证、精确提交、推送和远端 HEAD 核对；用户明确要求只改本地时才停在本地验证。现有工作区中的其它修改不会被夹带，Meta-skills 也不会借此创建远端、改变可见性、删除文件或强制推送。
@@ -106,6 +114,7 @@ Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除�
 - **从零创建 Skill**：确定名称、触发边界、主流程和界面文案，初始化 `SKILL.md` 与 `agents/openai.yaml`，只在确有正式消费者时增加 references、scripts 或 assets。
 - **审计、重写和迁移现有 Skill**：先盘点每项活动能力与运行资源，判断职责是否过窄、过宽或存在冲突入口，再逐项原位保留、迁移保留或按用户明确要求退出，避免重构后只剩一条新流程，旧能力却悄悄消失。
 - **收敛路由与动作边界**：由顶层 `SKILL.md` 一次选择主路径和互斥子类型；下层 reference、script 与 asset 只执行已经选定的职责，不反向改路线。
+- **画出详细流程与链路图**：按当前、拟议或实施后状态展示触发入口、控制流、数据与资源流、生产者、消费者、外部副作用、验证返回位置和用户结果；一张图不能同时保证完整性与可读性时，自动拆成总览图和多张局部详图，总览中每个隐藏实质步骤的聚合节点都要展开，并把关键节点映射回活动真源。
 - **把原则落实为目标行为**：区分哪些原则只约束当前设计与验收，哪些会改变目标 Skill 的长期行为；后者会被转换成具体判断、动作、产物和停止条件，而不是把原则名称原样复制过去。
 - **设计运行资源**：为模板、完整示范、schema、脚本、资产和索引确定生产者、唯一真源、选择条件、正式消费者、注册状态与停止位置。
 - **清洗提示词**：先建立能够独立完成正常请求的正向流程，再把限制性内容分成删除、正向改写、条件边界和少量真正必要的硬禁止。
@@ -166,6 +175,7 @@ python scripts/quick_validate.py <skill-folder>
 - [`references/absorption-and-governance.md`](references/absorption-and-governance.md) 负责确定学习主体与经验落点，并从多项成功经验、失败、纠偏、旧规则和外部方法中吸收可迁移能力。
 - [`references/evidence-distillation.md`](references/evidence-distillation.md) 负责从仓库、压缩包和大量资料中提炼完整能力单元。
 - [`references/resource-design.md`](references/resource-design.md) 负责模板、完整示范、schema、脚本、资产与索引的身份、生命周期和消费链。
+- [`references/skill-flow-diagram.md`](references/skill-flow-diagram.md) 负责把当前、拟议或实施后的 Skill 路由、生产消费链和验证闭环画成可追溯的 Mermaid 图。
 - [`references/skill-maintenance-and-evaluation.md`](references/skill-maintenance-and-evaluation.md) 负责维护、评估、分发、默认启用和源码同步。
 - [`references/openai-yaml.md`](references/openai-yaml.md) 定义 `agents/openai.yaml` 的界面字段、依赖和调用策略。
 - [`references/quality-gate.md`](references/quality-gate.md) 是交付前的行为、资源、结构和用户结果检查清单。
@@ -189,6 +199,7 @@ meta-skills/
 │   ├── absorption-and-governance.md
 │   ├── evidence-distillation.md
 │   ├── resource-design.md
+│   ├── skill-flow-diagram.md
 │   ├── skill-maintenance-and-evaluation.md
 │   ├── openai-yaml.md
 │   └── quality-gate.md

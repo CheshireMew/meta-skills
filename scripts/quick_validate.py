@@ -16,6 +16,8 @@ import yaml
 
 NAME_RE = re.compile(r"^[a-z0-9-]+$")
 REF_RE = re.compile(r"`((?:references|scripts|assets|evals)/[^`]+)`")
+MAX_SKILL_LINES = 220
+MAX_SKILL_CHARACTERS = 14_000
 REFERENCE_BACK_ROUTE_PATTERNS = (
     re.compile(
         r"(?:上层|主流程).{0,16}(?<!不)(?<!不能)(?<!不得)(?:重新选择|重选).{0,16}"
@@ -60,6 +62,23 @@ def parse_frontmatter(text: str) -> tuple[dict, list[str]]:
             "SKILL.md frontmatter contains unsupported fields: " + ", ".join(unexpected)
         )
     return data, errors
+
+
+def validate_main_file_budget(text: str) -> list[str]:
+    errors: list[str] = []
+    line_count = len(text.splitlines())
+    character_count = len(text)
+    if line_count > MAX_SKILL_LINES:
+        errors.append(
+            "SKILL.md exceeds the main-file line budget: "
+            f"{line_count} > {MAX_SKILL_LINES}"
+        )
+    if character_count > MAX_SKILL_CHARACTERS:
+        errors.append(
+            "SKILL.md exceeds the main-file character budget: "
+            f"{character_count} > {MAX_SKILL_CHARACTERS}"
+        )
+    return errors
 
 
 def find_empty_dirs(root: Path) -> list[Path]:
@@ -202,6 +221,7 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
         "创作案例与钩子只要来源清楚、能被检索并把全文交给写作上下文",
         "不要为自然语言成品建立执行记录或采用校验器",
         "reference、script 和 asset 执行已经选定的职责",
+        "同时不超过 220 行和 14,000 个字符",
         "### 7. 按结果性质验证",
     )
     for marker in required_skill_markers:
@@ -214,6 +234,7 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
             "不能先断开消费者，再以资源孤立为理由移除",
             "创作时可以同时读取多个完整示范和钩子",
             "不要建立案例采用矩阵、唯一钩子限制、固定候选数量、机器打分或过程校验器",
+            "最终必须同时不超过 220 行和 14,000 个字符",
         ),
         "references/instruction-hygiene.md": (
             "约束清洗只处理同一能力内部怎样表达规则",
@@ -235,6 +256,7 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
             "混合任务逐阶段检查",
             "多个相关完整案例、钩子或风格参考可以一起进入上下文",
             "没有固定候选数量、唯一参考、逐项采用记录、机器评分、执行记录或过程校验器",
+            "最终同时不超过 220 行和 14,000 个字符",
         ),
     }
     for relative, markers in required_reference_markers.items():
@@ -317,12 +339,10 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
         "不自动修改 Skill",
         "不另建项目经验区或共享经验库",
         "普通领域任务独立完成",
-        "通用机制与重要特殊问题分别判断",
-        "同一项经验和同一个用户结果可以同时进入两层",
-        "一个结果可以同时叠加多个特殊维度",
-        "不能让专项症状缩窄共同机制的适用范围",
-        "没有特殊动作差异时不为形式完整虚构专项维度",
         "正在创建或改造自我进化型 Skill 时",
+        "没有合适所有者且确属通过价值门槛的新能力时",
+        "最小的新唯一真源和正式消费者",
+        "不追加纠正历史、案例专用规则或同义提醒",
     )
     for marker in required_skill_markers:
         if marker not in skill_text:
@@ -341,6 +361,11 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
             "同一个结果可以同时叠加多个特殊维度",
             "只有共同机制成立时是否没有虚构特殊维度",
             "普通领域任务与自我进化是独立结果",
+            "最早有证据且可控的主要原因",
+            "绕行和残留不能抢占主要原因",
+            "没有合适所有者且确属通过价值门槛的新能力时",
+            "最小的新唯一真源、活动入口和正式消费者",
+            "不追加同义提醒、纠正历史或案例专用规则",
         ),
         "references/skill-design-playbook.md": (
             "共同机制与特殊维度不是多个主路径",
@@ -356,7 +381,11 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
             "已确定学习主体、最终真源和正式消费者",
             "项目事实继续留在项目真源",
             "普通领域任务不会自动改写 Skill",
+            "异常材料已经先完成因果排序",
+            "只对有效机制和独立结果逐项恢复",
             "创作 Skill 的用户纠正优先变成更好的材料选择",
+            "没有合适所有者且确属新能力时",
+            "主文件预算只触发同次收敛",
         ),
         "references/resource-design.md": (
             "本文件不根据内容看起来是否通用来选择学习落点",
@@ -366,6 +395,12 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
             "维护自我进化型 Skill 时",
             "普通领域任务和学习结果分开",
             "自我进化落点错误",
+            "含失败、纠偏、保护拦截、绕行或残留时先确定主要原因及独立次级结果",
+        ),
+        "references/evidence-distillation.md": (
+            "应已完成主要原因、独立次级结果、绕行和残留的因果排序",
+            "只对经过主流程确认的有效机制和独立结果逐项回答",
+            "不因醒目而自动成为能力",
         ),
         "README.md": (
             "## 自我进化不是另建经验库",
@@ -386,6 +421,27 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
         for marker in markers:
             if marker not in text:
                 errors.append(f"{relative} missing self-evolution marker: {marker}")
+
+    absorption_path = root / "references/absorption-and-governance.md"
+    if absorption_path.exists():
+        absorption_text = absorption_path.read_text(encoding="utf-8")
+        absorption_order = (
+            "材料含失败、纠偏、保护拦截、临时绕行或残留时",
+            "经过因果判断的有效机制和独立结果中",
+            "本文件是“目标是否已经具备这项具体判断”的唯一判断规则",
+            "通用机制和重要特殊问题可以同时进入目标 Skill",
+            "## 2. 完成经验提取后再判断当前目标与持久化价值",
+        )
+        try:
+            positions = [absorption_text.index(marker) for marker in absorption_order]
+        except ValueError:
+            pass
+        else:
+            if positions != sorted(positions):
+                errors.append(
+                    "absorption order must be causal ranking, detail recovery, "
+                    "concrete comparison, abstraction, then persistence value"
+                )
     return errors
 
 
@@ -427,9 +483,59 @@ def validate_meta_diagnostic_resolution_contract(root: Path, skill_text: str) ->
     return errors
 
 
+def validate_meta_third_party_attribution_contract(
+    root: Path,
+    skill_text: str,
+) -> list[str]:
+    errors: list[str] = []
+    for marker in (
+        "追溯原始上游",
+        "区分直接复用与独立方法学习",
+        "目标 Skill README 的第三方资源与致谢责任",
+    ):
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing third-party attribution route: {marker}")
+
+    required_file_markers = {
+        "references/evidence-distillation.md": (
+            "### 先追溯原始上游，再判断是否属于直接复用",
+            "实际采用了 fork 的独有改动",
+            "直接复用或改编后再分发",
+            "方法学习后的独立实现",
+            "目标 Skill 的根 README 必须新增或更新“第三方资源与致谢”",
+            "没有复制来源 IP、代码、资源、示例、原 Skill 实现",
+        ),
+        "references/skill-design-playbook.md": (
+            "目标 Skill 根 README 的“第三方资源与致谢”属于分发责任",
+        ),
+        "references/quality-gate.md": (
+            "真正产生被采用内容的原始上游",
+            "没有虚构第三方依赖或强制致谢",
+        ),
+        "README.md": (
+            "学习其它 Skill 时",
+            "只有确实复用了 fork 的独有改动才另谢 fork",
+        ),
+    }
+    for relative, markers in required_file_markers.items():
+        path = root / relative
+        if not path.exists():
+            errors.append(f"meta-skills missing third-party attribution file: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(
+                    f"{relative} missing third-party attribution marker: {marker}"
+                )
+    return errors
+
+
 def validate_meta_validation_intensity_contract(root: Path, skill_text: str) -> list[str]:
     errors: list[str] = []
     for marker in (
+        "按改动风险选择验证层级",
+        "先做直接覆盖本次改动和验收主张的目标检查",
         "只改路由、触发、停止位置或文字合同",
         "不为了验证路由生成完整下游创作成品",
         "创作类修改默认检查指令、参考输入和上下文组合是否正确",
@@ -472,6 +578,93 @@ def validate_meta_validation_intensity_contract(root: Path, skill_text: str) -> 
                 errors.append(
                     f"{relative} missing validation-intensity marker: {marker}"
                 )
+    return errors
+
+
+def validate_meta_workflow_topology_contract(
+    root: Path,
+    skill_text: str,
+) -> list[str]:
+    errors: list[str] = []
+    for marker in (
+        "多阶段 Skill、路由修改或执行顺序纠偏先建立临时链路拓扑",
+        "执行顺序由前置、生产者、消费者、副作用和验证对象推导",
+        "适用请求、活动入口和正式消费者",
+        "流程、调用、数据、资源或验证链路",
+    ):
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing workflow-topology contract: {marker}")
+
+    required_file_markers = {
+        "references/skill-design-playbook.md": (
+            "### 先推导链路次序，再冻结路由",
+            "最早合法位置",
+            "规则文字仍存在但从共同入口被移到较窄分支",
+            "修改前后的适用请求、上层入口、正式消费者和停止位置",
+        ),
+        "references/absorption-and-governance.md": (
+            "学习链路固定把理解和持久化判断分开",
+            "不取消候选经验的学习资格",
+            "适用请求、上层入口和正式消费者",
+        ),
+        "references/instruction-hygiene.md": (
+            "不能把上游用于筛选的反例",
+            "事实核实以成品实际采用的主张为范围",
+            "上游风险与排除信息没有污染创作成品",
+        ),
+        "references/quality-gate.md": (
+            "按前置输入、中间产物、生产者、消费者、副作用和验证对象推导次序",
+            "共享规则没有在文字仍存在的情况下被搬进较窄分支",
+            "昂贵事实核实只覆盖成品实际采用的主张",
+            "未启用只影响责任归属，没有取消候选经验",
+        ),
+        "references/skill-maintenance-and-evaluation.md": (
+            "由这些依赖推导出的实际次序",
+            "链路次序错误",
+            "没有被缩进较窄分支",
+        ),
+        "references/skill-flow-diagram.md": (
+            "当前状态、拟议状态还是实施后状态",
+            "每个关键节点都能追溯到活动真源",
+            "控制流、数据与资源流、验证回路",
+            "Mermaid 总览图",
+            "一张图能否同时完整、清楚地展示全部实质步骤",
+            "每个隐藏实质步骤的聚合节点都要有对应局部详图",
+            "全部图的并集必须覆盖本次承诺的完整链路",
+        ),
+        "references/quality-gate.md": (
+            "## 流程与链路图",
+            "不把尚未实现的节点画成活动链路",
+            "每个隐藏实质步骤的聚合节点都有对应展开",
+            "全部图的并集覆盖承诺的完整链路",
+            "关键来源映射和证据缺口",
+        ),
+        "README.md": (
+            "详细流程与链路图",
+            "当前状态、拟议状态或实施后状态",
+            "一张图不能同时保证完整性与可读性",
+        ),
+    }
+    for relative, markers in required_file_markers.items():
+        path = root / relative
+        if not path.exists():
+            errors.append(f"meta-skills missing workflow-topology file: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(f"{relative} missing workflow-topology marker: {marker}")
+
+    fixed_sequence = (
+        "信息来源 → 专项模板或方法 → 共享输入 → 动作权限 → "
+        "方法强度 → 输出 → 停止条件"
+    )
+    if fixed_sequence in (root / "references/skill-design-playbook.md").read_text(
+        encoding="utf-8"
+    ):
+        errors.append(
+            "skill-design-playbook retains an unqualified fixed workflow sequence"
+        )
     return errors
 
 
@@ -631,6 +824,7 @@ def validate(root: Path) -> list[str]:
         return [f"missing {skill_path}"]
 
     text = skill_path.read_text(encoding="utf-8")
+    errors.extend(validate_main_file_budget(text))
     fm, fm_errors = parse_frontmatter(text)
     errors.extend(fm_errors)
 
@@ -664,8 +858,10 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_meta_preservation_contract(root, text))
         errors.extend(validate_meta_write_confirmation_contract(root, text))
         errors.extend(validate_meta_self_evolution_contract(root, text))
+        errors.extend(validate_meta_third_party_attribution_contract(root, text))
         errors.extend(validate_meta_diagnostic_resolution_contract(root, text))
         errors.extend(validate_meta_validation_intensity_contract(root, text))
+        errors.extend(validate_meta_workflow_topology_contract(root, text))
         errors.extend(validate_meta_target_publication_contract(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
