@@ -389,6 +389,50 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
     return errors
 
 
+def validate_meta_target_publication_contract(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    for marker in (
+        "确认材料默认把本轮获准依赖闭包的精确提交、推送与远端核对列入完成链",
+        "确认合同未选择只改本地",
+        "核对远端 HEAD 后才完成",
+    ):
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing target-publication contract: {marker}")
+
+    required_file_markers = {
+        "references/skill-design-playbook.md": (
+            "验证后的获准依赖闭包、精确提交、推送和远端核对",
+            "提供只改本地选项",
+        ),
+        "references/skill-maintenance-and-evaluation.md": (
+            "## 9. 完成目标 Skill 的仓库发布",
+            "获准改动依赖闭包",
+            "不创建远端、不改变可见性、不强制推送",
+            "远端 HEAD 已核对",
+        ),
+        "references/quality-gate.md": (
+            "提交只覆盖获准依赖闭包",
+            "重新读取的远端 HEAD",
+        ),
+        "README.md": (
+            "确认后的创建、改造或迭代默认继续完成",
+            "精确提交、推送和远端 HEAD 核对",
+        ),
+    }
+    for relative, markers in required_file_markers.items():
+        path = root / relative
+        if not path.exists():
+            errors.append(f"meta-skills missing target-publication file: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(
+                    f"{relative} missing target-publication marker: {marker}"
+                )
+    return errors
+
+
 def validate_metadata(root: Path, skill_name: str) -> list[str]:
     errors: list[str] = []
     metadata = root / "agents" / "openai.yaml"
@@ -534,6 +578,7 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_meta_preservation_contract(root, text))
         errors.extend(validate_meta_write_confirmation_contract(root, text))
         errors.extend(validate_meta_self_evolution_contract(root, text))
+        errors.extend(validate_meta_target_publication_contract(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
         relative = raw_reference.split()[0]
