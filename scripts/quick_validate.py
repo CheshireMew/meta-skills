@@ -213,7 +213,7 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
             "### 改造现有 Skill 前先建立能力基线",
             "不能先断开消费者，再以资源孤立为理由移除",
             "创作时可以同时读取多个完整示范和钩子",
-            "创作验证只需证明多个相关参考的全文确实一起进入上下文",
+            "不要建立案例采用矩阵、唯一钩子限制、固定候选数量、机器打分或过程校验器",
         ),
         "references/instruction-hygiene.md": (
             "约束清洗只处理同一能力内部怎样表达规则",
@@ -427,6 +427,54 @@ def validate_meta_diagnostic_resolution_contract(root: Path, skill_text: str) ->
     return errors
 
 
+def validate_meta_validation_intensity_contract(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    for marker in (
+        "只改路由、触发、停止位置或文字合同",
+        "不为了验证路由生成完整下游创作成品",
+        "创作类修改默认检查指令、参考输入和上下文组合是否正确",
+        "不要求“用一条真实请求完整跑一遍”",
+        "隔离会话不是默认验证工具",
+    ):
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing validation-intensity contract: {marker}")
+
+    required_file_markers = {
+        "references/skill-design-playbook.md": (
+            "路由合同已经得到证明后就停止",
+            "创作类修改默认不完整跑一条真实请求",
+            "隔离会话不是默认验证工具",
+            "用户可见的新任务只有在用户明确要求时创建",
+            "外部 CLI 只在 CLI、协议或命令行兼容性本身是验证对象时启动",
+            "复用已经存在的上游产物和项目根目录",
+        ),
+        "references/skill-maintenance-and-evaluation.md": (
+            "隔离会话与相邻边界请求不是同一级动作",
+            "创作类修改默认检查指令、参考输入和上下文组合",
+            "外部 CLI 只在 CLI、协议或命令行兼容性本身是验证对象时使用",
+            "复用现有上游产物和项目根目录",
+        ),
+        "references/quality-gate.md": (
+            "没有为了验证路由生成完整下游创作成品",
+            "创作类修改默认检查指令、参考输入和上下文组合",
+            "隔离会话有“用户明确要求”或“必须证明不依赖当前会话且没有更低强度办法”的具体证据",
+            "外部 CLI 没有在 CLI、协议或命令行兼容性并非验证对象时启动",
+        ),
+    }
+    for relative, markers in required_file_markers.items():
+        path = root / relative
+        if not path.exists():
+            errors.append(f"meta-skills missing validation-intensity file: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(
+                    f"{relative} missing validation-intensity marker: {marker}"
+                )
+    return errors
+
+
 def validate_meta_target_publication_contract(root: Path, skill_text: str) -> list[str]:
     errors: list[str] = []
     for marker in (
@@ -617,6 +665,7 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_meta_write_confirmation_contract(root, text))
         errors.extend(validate_meta_self_evolution_contract(root, text))
         errors.extend(validate_meta_diagnostic_resolution_contract(root, text))
+        errors.extend(validate_meta_validation_intensity_contract(root, text))
         errors.extend(validate_meta_target_publication_contract(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
