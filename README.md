@@ -234,6 +234,14 @@ python scripts/quick_validate.py .
 - 所有分流都留在 `SKILL.md`；正在使用的 reference 保持为叶节点。
 - 结构检查和真实行为验收分别记录，不能用其中一个代替另一个。
 
+## Star History
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/CheshireMew/meta-skills/star-history/star-history-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/CheshireMew/meta-skills/star-history/star-history.svg">
+  <img alt="CheshireMew/meta-skills GitHub Star History" src="https://raw.githubusercontent.com/CheshireMew/meta-skills/star-history/star-history.svg">
+</picture>
+
 ## 许可证
 
 本仓库原创的源代码、Agent/Codex Skill 指令、脚本和可复用 reference 文档采用 [Mozilla Public License 2.0](LICENSE)。Meta-skills 检查、迁移或生成的用户 Skill 继续受其作者自己的条款约束；第三方组件与引入内容也保留各自的授权边界。完整范围见 [`LICENSING.md`](LICENSING.md) 和 [`NOTICE`](NOTICE)。
