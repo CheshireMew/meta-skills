@@ -68,7 +68,7 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 设计具有自我进化能力的目标 Skill 时，把这份合同转化到目标 Skill 的顶层路由：普通领域任务独立完成；只有用户明确要求学习、吸收或迭代自身时才进入自我进化路径。材料名称里出现“项目经验”不能替代学习主体和最终消费者判断。
 
 - 新建 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`，完成行为合同、最终目录和实施顺序。
-- 重写、更新或审计 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`，还原现有行为并确定一次性迁移范围；本轮会修改目标 Skill 时同时读取 `references/skill-maintenance-and-evaluation.md`，把验证后的目标仓库发布纳入完成链。
+- 重写、更新或审计 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`，还原现有行为并确定一次性迁移范围；用户指出错误行为或本轮会修改目标 Skill 时，同时读取 `references/skill-maintenance-and-evaluation.md`，把诊断决定和验证后的目标仓库发布纳入完成链。
 - 维护、评估、分发、默认启用或源码同步：读取 `references/skill-maintenance-and-evaluation.md`；任务同时改变 Skill 行为时，再读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`。
 
 一个请求包含多个独立结果时，分别建立主路径并分别验收；同一个结果不并列保留多个主路径。
@@ -110,6 +110,8 @@ description: 用于完整创建、改造、审计、迁移和评估 Codex/Agent 
 这份判断只在当前任务中使用，不另存计划文件。用户已经说清时不再追问缺口，继续完成只读分析与行为合同；只有缺口会改变 Skill 身份、动作权限、保存位置或主要结果时才问一个关键问题。是否允许写文件不在此处判断，统一由第 5 步决定。
 
 改造现有 Skill 且材料包含纠偏时，再补一句“本次明确改变什么、哪些现有用户可见结果继续沿用”。这用于限定改动范围，不把纠偏过程保存成长期案例。
+
+用户要求诊断或解释一次 Skill 错误行为时，不能以归因或“我做错了”结束。按已加载的维护规则把结论收口为“需要修复”“无需持久修复”或“目前无法判断”，并交付对应的正确行为、修法或不修改理由、唯一所有者、影响范围、验证方法和当前停止位置。
 
 创建或优化 Skill 时，结合当前对话、现有定位和真实使用判断职能是否过宽或过窄。相邻能力只在结果、权限、风险或必要做法确实不同时分开；仅仅来源、文件、字段或中间步骤不同，不另建分支。
 

@@ -389,6 +389,44 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
     return errors
 
 
+def validate_meta_diagnostic_resolution_contract(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    for marker in (
+        "用户指出错误行为",
+        "不能以归因或“我做错了”结束",
+        "“需要修复”“无需持久修复”或“目前无法判断”",
+        "正确行为、修法或不修改理由、唯一所有者、影响范围、验证方法和当前停止位置",
+    ):
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing diagnostic-resolution contract: {marker}")
+
+    required_reference_markers = {
+        "references/skill-maintenance-and-evaluation.md": (
+            "### 2.1 将行为诊断收口为决定",
+            "诊断不能停在责任归因",
+            "规则缺失、彼此冲突、优先顺序错误",
+            "问题是本次执行没有遵循规则",
+            "现有证据不足以区分执行偏差和持久缺陷",
+            "结论；证据与根因；正确行为；最终修法或不修改的理由；影响范围与唯一所有者；验证方式与当前停止位置",
+            "不能被“我做错了”",
+        ),
+        "references/quality-gate.md": (
+            "行为诊断已经明确落在“需要修复”“无需持久修复”或“目前无法判断”之一",
+            "没有停在承认错误或责任解释",
+        ),
+    }
+    for relative, markers in required_reference_markers.items():
+        path = root / relative
+        if not path.exists():
+            errors.append(f"meta-skills missing diagnostic-resolution file: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(f"{relative} missing diagnostic-resolution marker: {marker}")
+    return errors
+
+
 def validate_meta_target_publication_contract(root: Path, skill_text: str) -> list[str]:
     errors: list[str] = []
     for marker in (
@@ -578,6 +616,7 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_meta_preservation_contract(root, text))
         errors.extend(validate_meta_write_confirmation_contract(root, text))
         errors.extend(validate_meta_self_evolution_contract(root, text))
+        errors.extend(validate_meta_diagnostic_resolution_contract(root, text))
         errors.extend(validate_meta_target_publication_contract(root, text))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
