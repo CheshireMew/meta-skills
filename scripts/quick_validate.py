@@ -18,6 +18,8 @@ NAME_RE = re.compile(r"^[a-z0-9-]+$")
 REF_RE = re.compile(r"`((?:references|scripts|assets|evals)/[^`]+)`")
 MAX_SKILL_LINES = 220
 MAX_SKILL_CHARACTERS = 14_000
+ACTIVE_RESOURCE_ROOTS = ("agents", "references", "scripts", "assets", "evals")
+IGNORED_RESOURCE_DIR_NAMES = {"archive", ".git", "__pycache__"}
 REFERENCE_BACK_ROUTE_PATTERNS = (
     re.compile(
         r"(?:上层|主流程).{0,16}(?<!不)(?<!不能)(?<!不得)(?:重新选择|重选).{0,16}"
@@ -83,13 +85,17 @@ def validate_main_file_budget(text: str) -> list[str]:
 
 def find_empty_dirs(root: Path) -> list[Path]:
     empty: list[Path] = []
-    for current, directories, files in os.walk(root):
-        directories[:] = [
-            name for name in directories if name not in {"archive", ".git", "__pycache__"}
-        ]
-        path = Path(current)
-        if path != root and not directories and not files:
-            empty.append(path)
+    for resource_name in ACTIVE_RESOURCE_ROOTS:
+        resource_root = root / resource_name
+        if not resource_root.is_dir():
+            continue
+        for current, directories, files in os.walk(resource_root):
+            directories[:] = [
+                name for name in directories if name not in IGNORED_RESOURCE_DIR_NAMES
+            ]
+            path = Path(current)
+            if not directories and not files:
+                empty.append(path)
     return empty
 
 
@@ -280,6 +286,53 @@ def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str
                     "meta-skills protected core contains target-specific workflow wording: "
                     f"{marker}"
                 )
+    return errors
+
+
+def validate_meta_prompt_input_contract(root: Path, skill_text: str) -> list[str]:
+    errors: list[str] = []
+    for marker in (
+        "冻结真正会进入目标生产提示词的内容",
+        "治理材料只改变设计决定",
+        "完整案例、模板、精确事实和机器合同继续按原职责保留",
+    ):
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing prompt-input contract: {marker}")
+
+    required_file_markers = {
+        "references/instruction-hygiene.md": (
+            "## 三、冻结实际提示词输入",
+            "生成模型不会把说明性清单自动视为旁注",
+            "治理材料可以改变设计决定",
+            "检索标签、效果解释、采用理由、失败归因和候选分析停在选择层",
+            "不通过禁词表或一律缩短提示词实现",
+        ),
+        "references/skill-design-playbook.md": (
+            "沿目标正式调用点冻结实际提示词输入",
+            "设计理由、检索标注、效果解释和候选分析只影响上游决定",
+        ),
+        "references/skill-maintenance-and-evaluation.md": (
+            "提示词污染或过度防御",
+            "不建立禁词表或统一删减有效输入",
+        ),
+        "references/quality-gate.md": (
+            "已沿正式调用点核对真正进入目标生产提示词的内容",
+            "没有建立禁词门禁",
+        ),
+        "README.md": (
+            "沿正式调用点冻结实际提示词输入",
+            "生产模型只收到完成任务需要的事实、要求、参考与协议",
+        ),
+    }
+    for relative, markers in required_file_markers.items():
+        path = root / relative
+        if not path.exists():
+            errors.append(f"meta-skills missing prompt-input file: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in markers:
+            if marker not in text:
+                errors.append(f"{relative} missing prompt-input marker: {marker}")
     return errors
 
 
@@ -536,6 +589,9 @@ def validate_meta_validation_intensity_contract(root: Path, skill_text: str) -> 
     for marker in (
         "按改动风险选择验证层级",
         "先做直接覆盖本次改动和验收主张的目标检查",
+        "验证范围和证据深度分别决定",
+        "仓库共置、全量入口名称和发布本身不是扩展理由",
+        "scripts/self-test-quick-validate.py",
         "只改路由、触发、停止位置或文字合同",
         "不为了验证路由生成完整下游创作成品",
         "创作类修改默认检查指令、参考输入和上下文组合是否正确",
@@ -547,6 +603,10 @@ def validate_meta_validation_intensity_contract(root: Path, skill_text: str) -> 
 
     required_file_markers = {
         "references/skill-design-playbook.md": (
+            "### 先冻结验证范围，再选择证据深度",
+            "这组等级描述证据深度，不决定测试范围",
+            "命令名叫 `full`",
+            "发布增加暂存差异、提交、推送和远端核对，不自动增加产品运行回归",
             "路由合同已经得到证明后就停止",
             "创作类修改默认不完整跑一条真实请求",
             "隔离会话不是默认验证工具",
@@ -555,16 +615,25 @@ def validate_meta_validation_intensity_contract(root: Path, skill_text: str) -> 
             "复用已经存在的上游产物和项目根目录",
         ),
         "references/skill-maintenance-and-evaluation.md": (
+            "验证范围膨胀",
+            "全量入口、仓库共置、重要文件名称和发布动作不能代替消费者证据",
             "隔离会话与相邻边界请求不是同一级动作",
             "创作类修改默认检查指令、参考输入和上下文组合",
             "外部 CLI 只在 CLI、协议或命令行兼容性本身是验证对象时使用",
             "复用现有上游产物和项目根目录",
         ),
         "references/quality-gate.md": (
+            "每条验证命令都能对应本次验收主张、改动位置和实际消费者",
+            "先冻结验证范围，再在范围内选择证据深度",
+            "仓库共置、全量入口名称、重要文件或发布本身没有成为运行无关子系统的理由",
             "没有为了验证路由生成完整下游创作成品",
             "创作类修改默认检查指令、参考输入和上下文组合",
             "隔离会话有“用户明确要求”或“必须证明不依赖当前会话且没有更低强度办法”的具体证据",
             "外部 CLI 没有在 CLI、协议或命令行兼容性并非验证对象时启动",
+        ),
+        "README.md": (
+            "先把检查范围限定在本次改动及其实际消费者",
+            "不会因为仓库提供全量入口就运行无关生产链",
         ),
     }
     for relative, markers in required_file_markers.items():
@@ -856,6 +925,7 @@ def validate(root: Path) -> list[str]:
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
         errors.extend(validate_meta_preservation_contract(root, text))
+        errors.extend(validate_meta_prompt_input_contract(root, text))
         errors.extend(validate_meta_write_confirmation_contract(root, text))
         errors.extend(validate_meta_self_evolution_contract(root, text))
         errors.extend(validate_meta_third_party_attribution_contract(root, text))
