@@ -25,114 +25,101 @@
 
 <!-- readme-header:end -->
 
-Meta-skills is a Skill-engineering meta-skill for Codex and other agent runtimes. Give it a goal, source material, or an existing Skill: it first identifies the result you actually need, preserves working capabilities, designs the final behavior, migrates the required resources, and verifies the result as far as the current environment can genuinely observe.
+Meta-skills is a Skill for creating and improving Codex/Agent Skills. Give it an idea, some source material, or an existing Skill. It can build a complete new Skill, explain why an old one behaves badly, or move a proven way of working into the target without discarding features that still matter.
 
-Use it to create, audit, rewrite, migrate, and evaluate Skills; teach a target Skill to learn from conversations only when explicitly requested; or draw traceable diagrams of control flow, data flow, resource consumption, and verification.
+If Skills are new to you, think of a Skill as a set of instructions that Codex keeps using for a particular kind of work. Meta-skills helps you write, inspect, and upgrade those instructions.
 
-Before any active Skill file changes, you receive the proposed behavior, preservation inventory, representative output, and affected files for approval.
+## What it can do for you
 
-## Complete one real task first
+| Your situation | What Meta-skills delivers |
+| --- | --- |
+| You have an idea but no Skill yet | A usable Skill with its required files and a clear way to invoke it |
+| A Skill works sometimes but misses steps or misunderstands requests | A diagnosis, a proposed fix, and an implementation after you approve it |
+| A Skill has become hard to maintain | The useful behavior is kept, duplicate rules are combined, and replaced paths are retired |
+| Another Skill or project contains a useful method | The result-producing parts are moved over, with licensing and attribution handled correctly |
+| You want a Skill to improve from real use | Validated lessons are written back only when you explicitly ask the Skill to learn |
+| You want to understand how a Skill works | A diagram from the incoming request to the final user result |
 
-### 1. Install
+## Quick start
 
-Codex discovers user Skills from `$HOME/.agents/skills`:
+Install it:
 
 ```bash
-git clone https://github.com/CheshireMew/meta-skills.git "$HOME/.agents/skills/meta-skills"
+npx skills add CheshireMew/meta-skills
 ```
 
-Codex normally discovers the Skill automatically. If it does not appear, restart Codex and check again.
+If Codex does not show it immediately, restart Codex and check the Skill list again.
 
-### 2. Describe the result to migrate
-
-This request asks Meta-skills to inspect the source and target, then propose the change before writing files:
+Then ask:
 
 ```text
-Use $meta-skills to read <materials> and <target-skill>, identify the result-producing capability the target lacks, and distill the source judgments, workflow, and necessary runtime resources into it. Show me the capability inventory, migration plan, output shape, and affected files first; wait for my approval before implementing and verifying.
+Use $meta-skills to inspect <skill-folder> and explain why it is not working well. Show me the problem, the proposed behavior, and the files you would change. Wait for my approval before editing and verifying it.
 ```
 
-You first receive:
+Meta-skills first reads the current Skill and explains the plan in ordinary language. It does not change active files before you approve the plan. After approval, it makes the change and runs the relevant checks.
 
-- the target Skill's current results and the capabilities and resources that must survive;
-- what should migrate from the source and what belongs only to the current task;
-- the future default behavior, conditional branches, outputs, and stopping point;
-- the exact files affected and the evidence needed to show that users can consume the result.
+If the target already lives in a remote Git repository, it normally commits and pushes the approved change as part of the same job. Say “local changes only” if you do not want that.
 
-After approval, Meta-skills connects the new entry point, migrates every active consumer, and retires the replaced path.
+## Common requests
 
-Structural validation proves that files and routes are coherent. When scripts, templates, or registered resources are involved, verification continues through the official producer, transfer or storage boundary, consumer, and user-visible result.
+```text
+Use $meta-skills to create a new Skill from these materials. Show me how it will behave before writing files.
+```
 
-## Choose an entry point by outcome
+```text
+Use $meta-skills to audit this Skill. Tell me what it currently does and what is wrong, without modifying anything.
+```
 
-| Outcome | Example request |
-| --- | --- |
-| Create a Skill from scratch | `Use $meta-skills to create <skill-name> from <goal and materials>. Show the behavior contract, directory structure, and affected files first; implement and verify after I approve.` |
-| Audit an existing Skill without edits | `Use $meta-skills to audit <skill-folder>. Explain its current capabilities, main problems, and recommendations without modifying files.` |
-| Rewrite, simplify, or migrate a Skill | `Use $meta-skills to refactor <skill-folder>. Inventory every active capability and runtime resource, then mark each as keep in place, migrate and preserve, or exit with an explicit reason before proposing the final design.` |
-| Let a Skill learn from conversations | `Use $meta-skills to update <target-skill> so it internalizes validated lessons only when I explicitly ask it to learn; keep project facts in the project's own source of truth.` |
-| Draw the full operating chain | `Use $meta-skills to read <skill-folder> and draw detailed Mermaid diagrams covering routing, producers, sources of truth, boundaries, consumers, verification loops, user results, and any unconfirmed connection.` |
-| Maintain, evaluate, or synchronize a Skill | `Use $meta-skills to inspect <skill-folder> for triggering, routing, output, default activation, or source synchronization problems and verify them at the appropriate risk level.` |
+```text
+Use $meta-skills to move the proven method from this project into the target Skill without losing the target's current features.
+```
 
-These entries can be combined, but each independent result gets one main path. Completing a project task and changing how a Skill behaves in the future are separate outcomes; Meta-skills performs both only when you request both.
+```text
+Use $meta-skills to improve the target Skill from this real result so it handles similar requests correctly next time.
+```
 
-## From material to a runnable capability
+```text
+Use $meta-skills to diagram this Skill from the incoming request to the final result, and mark any connection that is not yet proven.
+```
+
+## A concrete example
+
+Suppose you have a writing Skill. It can draft an article, but it sometimes skips source checks, and every attempted fix breaks the output format that already worked. Give that Skill and one real failure to Meta-skills.
+
+It first tells you which existing results must remain, where the problem begins, and what should happen in the future. After you approve the plan, it puts the fix where the Skill will actually use it and updates every affected entry point.
+
+It then checks that the original format still works and that the old rule no longer causes the failure. The failed conversation itself does not become a permanent template.
+
+## How it handles source material
 
 <p align="center">
-  <img src="./assets/readme/distillation-workflow.en.svg" width="100%" alt="Source material is distilled into judgment, workflow, runtime resources, and acceptance boundaries, connected to a target Skill, then verified through the official production and consumption chain">
+  <img src="./assets/readme/distillation-workflow.en.svg" width="100%" alt="Meta-skills reads source material and the current Skill, identifies the missing capability, implements the change, and verifies the user-visible result">
 </p>
 
-Distillation is not summarization and not a list of generic principles. Meta-skills first identifies the user result missing from the target, reconstructs the judgment, steps, resources, and stopping point that make it work, then migrates the smallest complete capability unit that can independently produce that result.
+You do not need to learn this diagram. The process is simple: understand what the target already does, decide what to keep and change, implement the approved design, and verify the result the user actually needs. One-off failures, temporary discussion, and internal review labels do not get copied into the new Skill just because they appeared during the work.
 
-| Boundary | What Meta-skills does |
-| --- | --- |
-| Preserve before refactoring | Inventory triggers, input roles, outputs, producers, consumers, and observable results. Old paths stay until the new entry is connected; compatibility layers leave after migration. |
-| Separate evidence from resources | Failures, corrections, and one-off cases remain governance evidence. A template, full example, schema, script, or asset becomes a runtime resource only when the normal production path consumes it. |
-| Route once at the top | `SKILL.md` selects the main result and exclusive subtype. References, scripts, and assets execute that choice without rerouting the task. |
-| Match verification to risk | Contracts verify routing, research verifies facts, deterministic artifacts verify the real production chain, and external actions verify permission and outcome. Structure never masquerades as completed behavior. |
+## Boundaries it keeps
 
-When learning from another repository or Skill, Meta-skills also traces the original upstream. Directly copied or adapted code, templates, examples, data, and assets carry their license, reuse scope, and attribution into the target project. Learning a method and implementing it independently does not turn the source into a runtime dependency.
+- “Simplify this Skill” does not mean silently removing useful behavior.
+- An ordinary project task does not automatically become a Skill rewrite. Meta-skills writes lessons back only when you ask it to improve or teach a Skill.
+- Copied third-party code, templates, examples, or assets retain their licenses and attribution. Learning a method and implementing it independently does not invent a runtime dependency.
+- A file existing, a structural check passing, and a user receiving the desired result are different levels of evidence. Meta-skills reports only what was actually checked.
+- Creating a remote repository, changing visibility, force-pushing, and deleting files still require separate permission.
 
-## When to use it
+## When you do not need it
 
-Use Meta-skills when:
+If you only want to complete a one-off task—write an article, analyze data, or fix one function—and you are not creating or changing a Skill, use the Skill for that domain or ask Codex directly.
 
-- the target is a Codex/Agent Skill's identity, routing, capability, resource model, verification, or maintenance;
-- complete capability must move from text, a conversation, a repository, an archive, an example, or another Skill;
-- you need to decide whether a Skill is too broad or too narrow, or prove that an old architecture has fully exited;
-- a script, template, schema, or asset must be shown to reach a real consumer and result.
+## For maintainers
 
-You probably do not need Meta-skills when:
+Most users never need the internal documentation. Maintainers can start with [`SKILL.md`](SKILL.md), read the contribution workflow in [`CONTRIBUTING.md`](CONTRIBUTING.md), and follow the repository rules in [`AGENTS.md`](AGENTS.md).
 
-- you only want to complete an ordinary domain task without changing a Skill;
-- project knowledge should remain in the project and you did not ask to change future Skill behavior;
-- the deliverable is a one-off content artifact rather than a reusable Skill capability.
-
-## Maintainer entry points
-
-Active methods are grouped by responsibility; the README does not duplicate their full rules:
-
-- Design and prompting: [`skill-design-playbook.md`](references/skill-design-playbook.md), [`instruction-hygiene.md`](references/instruction-hygiene.md), [`openai-yaml.md`](references/openai-yaml.md)
-- Learning, distillation, and resources: [`absorption-and-governance.md`](references/absorption-and-governance.md), [`evidence-distillation.md`](references/evidence-distillation.md), [`resource-design.md`](references/resource-design.md)
-- Flow diagrams, maintenance, and acceptance: [`skill-flow-diagram.md`](references/skill-flow-diagram.md), [`skill-maintenance-and-evaluation.md`](references/skill-maintenance-and-evaluation.md), [`quality-gate.md`](references/quality-gate.md)
-
-Every active reference is selected directly by [`SKILL.md`](SKILL.md). The repository includes four deterministic tools:
-
-| Tool | Purpose |
-| --- | --- |
-| [`scripts/init_skill.py`](scripts/init_skill.py) | Normalize a Skill name and initialize `SKILL.md` plus `agents/openai.yaml` |
-| [`scripts/generate_openai_yaml.py`](scripts/generate_openai_yaml.py) | Generate or update Codex UI metadata from the final Skill identity |
-| [`scripts/quick_validate.py`](scripts/quick_validate.py) | Check frontmatter, routing, active resources, UI metadata, and deterministic invariants |
-| [`scripts/self-test-quick-validate.py`](scripts/self-test-quick-validate.py) | Regression-test the validator's own scanning boundary |
-
-Run this before and after modifying the project:
+The repository includes four tools: [`init_skill.py`](scripts/init_skill.py) initializes a Skill, [`generate_openai_yaml.py`](scripts/generate_openai_yaml.py) writes its UI metadata, [`quick_validate.py`](scripts/quick_validate.py) checks its structure, and [`self-test-quick-validate.py`](scripts/self-test-quick-validate.py) regression-tests the validator. Run both checks after a change:
 
 ```bash
 python scripts/quick_validate.py .
+python scripts/self-test-quick-validate.py
 ```
-
-See [`AGENTS.md`](AGENTS.md) for repository rules. The protected core in `SKILL.md` is read-only by default; README work does not modify it, its lock file, or validator invariants. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution workflow.
-
-When maintaining the source elsewhere, keep this repository as the single source of truth and link it into `$HOME/.agents/skills/meta-skills` instead of maintaining a second copy. See [source synchronization](references/skill-maintenance-and-evaluation.md#8-本地默认启用与源码同步).
 
 ## Star History
 

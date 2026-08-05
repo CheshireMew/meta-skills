@@ -344,10 +344,6 @@ def validate_meta_prompt_input_contract(root: Path, skill_text: str) -> list[str
             "已沿正式调用点核对真正进入目标生产提示词的内容",
             "没有建立禁词门禁",
         ),
-        "README.md": (
-            "沿正式调用点冻结实际提示词输入",
-            "生产模型只收到完成任务需要的事实、要求、参考与协议",
-        ),
     }
     for relative, markers in required_file_markers.items():
         path = root / relative
@@ -480,15 +476,6 @@ def validate_meta_self_evolution_contract(root: Path, skill_text: str) -> list[s
             "只对经过主流程确认的有效机制和独立结果逐项回答",
             "不因醒目而自动成为能力",
         ),
-        "README.md": (
-            "## 自我进化不是另建经验库",
-            "完成当前项目任务和改变 Skill 未来行为是两个独立结果",
-            "同一项经验可以同时产生共同机制和多个特殊维度",
-            "共同路径不会被一个醒目的专项症状缩窄",
-            "共同机制与可叠加特殊维度分别落位",
-            "## 四个关键边界",
-            "### 4. 学习主体决定经验落点",
-        ),
     }
     for relative, markers in required_file_markers.items():
         path = root / relative
@@ -590,10 +577,6 @@ def validate_meta_third_party_attribution_contract(
             "真正产生被采用内容的原始上游",
             "没有虚构第三方依赖或强制致谢",
         ),
-        "README.md": (
-            "学习其它 Skill 时",
-            "只有确实复用了 fork 的独有改动才另谢 fork",
-        ),
     }
     for relative, markers in required_file_markers.items():
         path = root / relative
@@ -655,10 +638,6 @@ def validate_meta_validation_intensity_contract(root: Path, skill_text: str) -> 
             "创作类修改默认检查指令、参考输入和上下文组合",
             "隔离会话有“用户明确要求”或“必须证明不依赖当前会话且没有更低强度办法”的具体证据",
             "外部 CLI 没有在 CLI、协议或命令行兼容性并非验证对象时启动",
-        ),
-        "README.md": (
-            "先把检查范围限定在本次改动及其实际消费者",
-            "不会因为仓库提供全量入口就运行无关生产链",
         ),
     }
     for relative, markers in required_file_markers.items():
@@ -733,11 +712,6 @@ def validate_meta_workflow_topology_contract(
             "全部图的并集覆盖承诺的完整链路",
             "关键来源映射和证据缺口",
         ),
-        "README.md": (
-            "详细流程与链路图",
-            "当前状态、拟议状态或实施后状态",
-            "一张图不能同时保证完整性与可读性",
-        ),
     }
     for relative, markers in required_file_markers.items():
         path = root / relative
@@ -787,10 +761,6 @@ def validate_meta_target_publication_contract(root: Path, skill_text: str) -> li
             "提交只覆盖获准依赖闭包",
             "重新读取的远端 HEAD",
         ),
-        "README.md": (
-            "确认后的创建、改造或迭代默认继续完成",
-            "精确提交、推送和远端 HEAD 核对",
-        ),
     }
     for relative, markers in required_file_markers.items():
         path = root / relative
@@ -803,6 +773,48 @@ def validate_meta_target_publication_contract(root: Path, skill_text: str) -> li
                 errors.append(
                     f"{relative} missing target-publication marker: {marker}"
                 )
+    return errors
+
+
+def validate_meta_public_readme_contract(root: Path) -> list[str]:
+    errors: list[str] = []
+    page_links = {
+        "README.md": ("./README.en.md", "./README.ja.md"),
+        "README.en.md": ("./README.md", "./README.ja.md"),
+        "README.ja.md": ("./README.md", "./README.en.md"),
+    }
+    shared_markers = (
+        "<!-- readme-header:start -->",
+        "<!-- readme-header:end -->",
+        "./CONTRIBUTING.md",
+        "npx skills add CheshireMew/meta-skills",
+        "$meta-skills",
+        "https://x.com/0xCheshire",
+        "https://t.me/CheshireBTC",
+        "https://blog.blacknico.com/",
+        "https://blacknico.com/",
+        "https://github.com/CheshireMew/meta-skills/stargazers",
+        "https://github.com/CheshireMew/meta-skills/forks",
+        "https://github.com/CheshireMew/meta-skills/blob/main/LICENSE",
+        "## Star History",
+        "star-history-dark.svg",
+        "star-history.svg",
+        "LICENSE",
+    )
+
+    for relative in ("CONTRIBUTING.md", "LICENSE"):
+        if not (root / relative).is_file():
+            errors.append(f"meta-skills missing public repository file: {relative}")
+
+    for relative, language_links in page_links.items():
+        path = root / relative
+        if not path.is_file():
+            errors.append(f"meta-skills missing public README page: {relative}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        for marker in (*language_links, *shared_markers):
+            if marker not in text:
+                errors.append(f"{relative} missing public README marker: {marker}")
     return errors
 
 
@@ -965,6 +977,7 @@ def validate(root: Path) -> list[str]:
         errors.extend(validate_meta_validation_intensity_contract(root, text))
         errors.extend(validate_meta_workflow_topology_contract(root, text))
         errors.extend(validate_meta_target_publication_contract(root, text))
+        errors.extend(validate_meta_public_readme_contract(root))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
         relative = raw_reference.split()[0]
