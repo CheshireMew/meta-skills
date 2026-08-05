@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="400" viewBox="0 0 1200 400"
+     role="img" aria-labelledby="hero-title hero-desc">
+  <title id="hero-title">Meta-skills</title>
+  <desc id="hero-desc">Meta-skills distills text, existing Skills, and repository material into judgment, workflow, and resources for a target Skill.</desc>
+
+  <defs>
+    <marker id="hero-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#7D8997"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="1198" height="398" rx="28"
+        fill="#0B1118" stroke="#263340" stroke-width="2"/>
+
+  <g id="title-block"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <rect x="64" y="54" width="4" height="30" rx="2" fill="#53C6B2"/>
+    <text x="82" y="76" fill="#53C6B2" font-size="18" font-weight="700"
+          letter-spacing="2.4">CODEX / AGENT SKILL ENGINEERING</text>
+
+    <text x="64" y="164" fill="#F3EFE7" font-size="72" font-weight="760"
+          letter-spacing="-2">Meta-skills</text>
+
+    <text x="64" y="228" fill="#F3EFE7" font-size="30" font-weight="560">
+      Turn text, Skills, and complex material
+    </text>
+    <text x="64" y="270" fill="#F3EFE7" font-size="30" font-weight="560">
+      into runnable, verifiable capabilities
+    </text>
+
+    <g transform="translate(64 330)"
+       font-family="Consolas, 'SFMono-Regular', 'Liberation Mono', monospace"
+       font-size="15" font-weight="700" letter-spacing="1.3">
+      <circle cx="6" cy="-5" r="5" fill="#F2B84B"/>
+      <text x="20" y="0" fill="#A7B1BE">DISTILL</text>
+      <circle cx="122" cy="-5" r="5" fill="#F2B84B"/>
+      <text x="136" y="0" fill="#A7B1BE">MIGRATE</text>
+      <circle cx="254" cy="-5" r="5" fill="#53C6B2"/>
+      <text x="268" y="0" fill="#A7B1BE">VERIFY</text>
+    </g>
+  </g>
+
+  <g id="project-proof"
+     font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <rect x="650" y="42" width="498" height="316" rx="24"
+          fill="#101821" stroke="#263746" stroke-width="2"/>
+
+    <g id="source-material">
+      <rect x="682" y="78" width="126" height="58" rx="13"
+            fill="#151F29" stroke="#344351" stroke-width="2"/>
+      <rect x="682" y="171" width="126" height="58" rx="13"
+            fill="#151F29" stroke="#344351" stroke-width="2"/>
+      <rect x="682" y="264" width="126" height="58" rx="13"
+            fill="#151F29" stroke="#344351" stroke-width="2"/>
+
+      <text x="745" y="114" text-anchor="middle" fill="#F3EFE7"
+            font-size="18" font-weight="720">TEXT</text>
+      <text x="745" y="207" text-anchor="middle" fill="#F3EFE7"
+            font-size="18" font-weight="720">SKILL</text>
+      <text x="745" y="300" text-anchor="middle" fill="#F3EFE7"
+            font-size="18" font-weight="720">REPO</text>
+
+      <path d="M808 107 C830 107 836 123 852 137" fill="none"
+            stroke="#7D8997" stroke-width="2.5" marker-end="url(#hero-arrow)"/>
+      <path d="M808 200 H850" fill="none"
+            stroke="#7D8997" stroke-width="2.5" marker-end="url(#hero-arrow)"/>
+      <path d="M808 293 C830 293 836 277 852 263" fill="none"
+            stroke="#7D8997" stroke-width="2.5" marker-end="url(#hero-arrow)"/>
+    </g>
+
+    <g id="distillation-core">
+      <path d="M850 88 H976 L950 150 V242 L918 270 L886 242 V150 Z"
+            fill="#1B1D1D" stroke="#F2B84B" stroke-width="3"/>
+      <path d="M866 126 H960 M879 162 H947 M889 198 H937"
+            fill="none" stroke="#F2B84B" stroke-width="3" stroke-linecap="round"
+            opacity="0.78"/>
+      <text x="918" y="232" text-anchor="middle" fill="#F3EFE7"
+            font-size="18" font-weight="760">DISTILL</text>
+      <circle cx="918" cy="284" r="7" fill="#53C6B2"/>
+      <path d="M925 284 H986" fill="none" stroke="#53C6B2"
+            stroke-width="3" marker-end="url(#hero-arrow)"/>
+    </g>
+
+    <g id="target-skill">
+      <rect x="990" y="70" width="138" height="252" rx="20"
+            fill="#101C1C" stroke="#53C6B2" stroke-width="2.5"/>
+      <rect x="1006" y="92" width="106" height="54" rx="11"
+            fill="#172925" stroke="#316A61" stroke-width="2"/>
+      <rect x="1006" y="169" width="106" height="54" rx="11"
+            fill="#172925" stroke="#316A61" stroke-width="2"/>
+      <rect x="1006" y="246" width="106" height="54" rx="11"
+            fill="#172925" stroke="#316A61" stroke-width="2"/>
+
+      <text x="1059" y="124" text-anchor="middle" fill="#F3EFE7"
+            font-size="15" font-weight="720">JUDGMENT</text>
+      <text x="1059" y="201" text-anchor="middle" fill="#F3EFE7"
+            font-size="16" font-weight="720">WORKFLOW</text>
+      <text x="1059" y="278" text-anchor="middle" fill="#F3EFE7"
+            font-size="15" font-weight="720">RESOURCES</text>
+    </g>
+
+    <g font-family="Consolas, 'SFMono-Regular', 'Liberation Mono', monospace"
+       font-size="13" font-weight="700" letter-spacing="1.1" fill="#7D8997">
+      <text x="682" y="346">SOURCE MATERIAL</text>
+      <text x="882" y="346">DISTILL</text>
+      <text x="1000" y="346" fill="#53C6B2">TARGET SKILL</text>
+    </g>
+  </g>
+</svg>

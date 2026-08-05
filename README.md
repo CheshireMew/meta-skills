@@ -1,253 +1,155 @@
 # Meta-skills
 
 <p align="center">
-  <img src="./assets/readme/hero.svg" width="100%" alt="Meta-skills 将文本、现有 Skill 与仓库材料蒸馏为判断、流程和资源，再接入目标 Skill">
+  <img src="./assets/readme/hero.svg" width="100%" alt="Meta-skills 将文本、现有 Skill 与仓库材料蒸馏为可运行、可验证的目标 Skill 能力">
 </p>
 
-Meta-skills 是一个专门为其它 Codex/Agent Skill 蒸馏、迁移和验证能力的元技能。它最突出的作用，是从文本、现有 Skill、规则、历史对话、仓库、压缩包、文档与示例项目中，找出真正产生价值的判断、流程和实现资源，再把它们接入目标 Skill 的正式运行链路。
-
-它也负责从零创建、审计、重写、维护和评估 Skill，包括设计能够从对话中自我进化的 Skill，以及把 Skill 的控制流、数据流、资源消费和验证闭环画成详细流程与链路图。整个过程先确定用户真正要得到的结果、目标 Skill 已有的能力、运行资源与动作权限，再生成或迁移文件；完成后不只检查目录和 frontmatter，还会按任务风险验证到当前真实链路的可观察终点。当前没有真实下游时，它会明确说明只验证到了结构可达。
-
-## 核心特色：把材料蒸馏成可运行能力
-
-Meta-skills 所说的“蒸馏”不是给材料写摘要，也不是抽出几条放进任何 Skill 都差不多的通用原则。它先确定目标 Skill 缺少什么结果能力，再从来源材料中还原这项能力为什么有效、怎样执行、依赖什么资源，最后迁移能够独立产生结果的最小完整能力单元。
+<!-- readme-header:start -->
 
 <p align="center">
-  <img src="./assets/readme/distillation-workflow.svg" width="100%" alt="文本、现有 Skill、仓库和经验经过能力缺口判断，蒸馏为专业判断、操作流程、运行资源与验收边界，再接入目标 Skill 并通过正式生产者和消费者形成用户可见结果">
+  <strong>中文</strong> · <a href="./README.en.md">English</a> · <a href="./README.ja.md">日本語</a> | <a href="./SKILL.md">文档</a> | <a href="./CONTRIBUTING.md">贡献</a> | <a href="https://github.com/CheshireMew/meta-skills/issues">反馈</a>
 </p>
 
-实际迁移内容会按价值因果链决定，可能包括触发条件、判断标准、步骤、输出合同、停止位置，以及生产需要的模板、完整示范、schema、脚本或资产。来源中的一次性人物、事实、数字、措辞、失败记录和纠偏过程不会被误升为长期默认；目标 Skill 原有的有效能力也会先进入台账并得到保全，蒸馏新能力不能覆盖旧能力。
+<p align="center">
+  <a href="https://x.com/0xCheshire" title="X"><img src="https://img.shields.io/badge/X-%400xCheshire-000000?logo=x&amp;logoColor=white" alt="X：@0xCheshire"></a>
+  <a href="https://t.me/CheshireBTC" title="Telegram"><img src="https://img.shields.io/badge/Telegram-CheshireBTC-26A5E4?logo=telegram&amp;logoColor=white" alt="Telegram：CheshireBTC"></a>
+  <a href="https://blog.blacknico.com/" title="Blog"><img src="https://img.shields.io/badge/Blog-blog.blacknico.com-2E7D32?logo=rss&amp;logoColor=white" alt="博客：blog.blacknico.com"></a>
+  <a href="https://blacknico.com/" title="Homepage"><img src="https://img.shields.io/badge/Home-blacknico.com-1F6FEB?logo=googlechrome&amp;logoColor=white" alt="个人主页：blacknico.com"></a>
+</p>
 
-这条链路分别由 [`references/absorption-and-governance.md`](references/absorption-and-governance.md)、[`references/evidence-distillation.md`](references/evidence-distillation.md) 和 [`references/resource-design.md`](references/resource-design.md) 负责识别可迁移价值、提炼完整能力单元并连接运行资源。
+<p align="center">
+  <a href="https://github.com/CheshireMew/meta-skills/stargazers"><img src="https://img.shields.io/github/stars/CheshireMew/meta-skills?style=flat" alt="GitHub Stars"></a>
+  <a href="https://github.com/CheshireMew/meta-skills/forks"><img src="https://img.shields.io/github/forks/CheshireMew/meta-skills?style=flat" alt="GitHub Forks"></a>
+  <a href="https://github.com/CheshireMew/meta-skills/blob/main/LICENSE"><img src="https://img.shields.io/github/license/CheshireMew/meta-skills?style=flat" alt="Repository License"></a>
+</p>
 
-学习其它 Skill 时，Meta-skills 还会先追溯原始上游并区分两种关系：代码、模板、示例、数据或其它资源被直接复制或改编后随目标分发，目标 Skill 的 README 必须增加“第三方资源与致谢”，说明原始仓库、许可证、复用范围和修改；只学习方法、视觉锚点、动作关系或工作流，并在没有复制来源 IP、示例、资源和原实现的前提下独立重做，则不会把来源写成目标依赖。用户提供的是 fork 时，只有确实复用了 fork 的独有改动才另谢 fork，不能用 fork 链接替代原始上游。
+<!-- readme-header:end -->
 
-## 自我进化不是另建经验库
+Meta-skills 是给 Codex/Agent 使用的一套 Skill 工程元技能。把目标、材料或现有 Skill 交给它，它会先确认你真正要得到的结果，再保全已有能力、设计最终行为、迁移必要资源，并按风险验证到当前能够观察的终点。
 
-当用户要求一个 Skill 从对话中学习时，Meta-skills 会先确定“谁在学习、学完改变什么行为、最终写到哪里、以后由谁读取”。如果学习主体是目标 Skill，经过验证的经验会进入它自己的活动规则、方法、资源合同、脚本、元数据或确定性检查，使它下次处理同类请求时真正换一种判断或做法。当前项目的事实仍由项目自己的代码、测试和文档负责。
+它适合创建、审计、重写、迁移和评估 Skill，也能让目标 Skill 在你明确要求时从对话中学习，或把控制流、数据流、资源消费和验证闭环画成可追溯的流程图。写入前，你会先看到行为方案、保全台账、代表性输出和影响文件；确认后才会修改活动文件。
 
-完成当前项目任务和改变 Skill 未来行为是两个独立结果。用户同时要求时，先验证项目结果，再迭代目标 Skill；只要求项目任务时不会自动修改 Skill。独立的项目经验区或共享经验库只有在用户明确把它列为结果，并且确实存在持续消费者时才会建立。
+## 先完成一次真实任务
 
-一段对话可以包含多项成功经验、失败、纠偏和稳定约束，它们会按性质分别处理，而不是被压成一条问题记录。每项经验分别说明表现或价值、成立机制或根因、采取的动作、验证结果、容易重复的坑和未来最早的预防点。同一项经验可以同时产生共同机制和多个特殊维度：共同机制进入不同表面请求共享的路径，特殊维度只在平台、版本、规模、顺序、生命周期或其它条件确实改变动作时叠加。共同路径不会被一个醒目的专项症状缩窄，高频、严重、容易误诊或只在特定条件下出现的问题也会保留足以识别和治理它的细节，不会为了追求宽泛的通用规则而被抽空。
+### 1. 安装
 
-## 一分钟开始
-
-Codex 的用户级 Skill 目录是 `$HOME/.agents/skills`。直接安装：
+Codex 的用户级 Skill 目录是 `$HOME/.agents/skills`：
 
 ```bash
 git clone https://github.com/CheshireMew/meta-skills.git "$HOME/.agents/skills/meta-skills"
 ```
 
-Codex 通常会自动发现 Skill；列表中没有出现时，重启 Codex 后再检查。
+Codex 通常会自动发现 Skill；如果列表中没有出现，重启 Codex 后再检查。
 
-把一组材料蒸馏给目标 Skill：
+### 2. 直接描述要迁移的结果
 
-```text
-Use $meta-skills 读取 <materials> 和 <target-skill>，先找出目标 Skill 的能力缺口，再把材料中的判断、流程与必要运行资源蒸馏并迁移进去。先展示能力台账、迁移方案、输出骨架和将修改的文件，等我确认后实施。
-```
-
-让一个 Skill 获得或改进自我进化能力：
+下面这条请求会让 Meta-skills 读取材料和目标 Skill，先交付方案，不立即改文件：
 
 ```text
-Use $meta-skills 改造 <target-skill>，让它在我明确要求学习时，从当前对话的成功经验、失败、纠偏和项目结果中提炼多项经验，并内化到自身会被未来请求读取的行为；项目事实继续留在项目真源，不另建未经要求的经验库。先展示学习落点、行为合同和影响文件，等我确认后实施并验证。
+Use $meta-skills 读取 <materials> 和 <target-skill>，找出目标 Skill 缺少的结果能力，把材料中真正产生结果的判断、流程与必要运行资源蒸馏进去。先展示能力台账、迁移方案、输出骨架和影响文件，等我确认后实施并验证。
 ```
 
-创建一个新 Skill：
+你会先看到：
 
-```text
-Use $meta-skills 根据 <目标与材料> 创建 <skill-name>。先确定触发边界、默认流程、输出合同和必要运行资源，展示行为合同、目录结构与将创建的文件，等我确认后实施并验证。
-```
+- 目标 Skill 当前能完成什么，哪些能力和资源必须保留；
+- 来源材料中哪些内容值得迁移，哪些只应留在当前任务；
+- 未来默认行为、按需分支、输出与停止位置；
+- 将修改哪些文件，以及怎样验证用户最终能用到结果。
 
-改造或迁移一个现有 Skill：
+确认方案后，Meta-skills 才会接通新入口、迁移调用点并退出被替代的旧路径。结构校验只证明文件和路由成立；涉及脚本、模板或注册资源时，它还会沿正式生产者、传输或存储边界、消费者和用户可见结果继续验证。
 
-```text
-Use $meta-skills 改造 <skill-folder>，先盘点全部活动能力与运行资源，说明哪些原位保留、哪些迁移保留，以及新的行为合同、实施方案和将修改的文件，等我确认后实施并验证。
-```
+目标 Skill 位于已有 Git 远端仓库时，确认后的创建、改造或迭代默认继续完成本轮获准改动的验证、精确提交、推送和远端 HEAD 核对。你可以在确认方案时明确选择只改本地；这条默认也不会创建远端、改变可见性、强制推送或夹带其它工作区修改。
 
-只读审计一个现有 Skill：
+## 按你要的结果选择入口
 
-```text
-Use $meta-skills 审计 <skill-folder>，说明现有能力、主要问题和建议，不修改文件。
-```
+| 你要完成什么 | 可以这样说 |
+| --- | --- |
+| 从零创建 Skill | `Use $meta-skills 根据 <目标与材料> 创建 <skill-name>，先给出行为合同、目录结构和影响文件，等我确认后实施并验证。` |
+| 只读审计现有 Skill | `Use $meta-skills 审计 <skill-folder>，说明现有能力、主要问题和建议，不修改文件。` |
+| 重写、精简或迁移 Skill | `Use $meta-skills 改造 <skill-folder>，先盘点全部活动能力与运行资源，逐项说明原位保留、迁移保留或退出依据，再给出最终方案。` |
+| 让 Skill 从对话中学习 | `Use $meta-skills 改造 <target-skill>，让它只在我明确要求学习时，把经过验证的经验内化到未来会读取的活动行为；项目事实继续留在项目真源。` |
+| 画出完整运行链路 | `Use $meta-skills 读取 <skill-folder>，画出路由、生产者、真源、边界、消费者、验证回路和用户结果的详细 Mermaid 图，并标出未确认连接。` |
+| 维护、评估或同步 Skill | `Use $meta-skills 检查 <skill-folder> 的触发、路由、输出、默认启用或源码同步问题，并按当前风险给出验证结果。` |
 
-画出一个 Skill 的详细流程与链路图：
+这些入口可以组合，但每个独立结果只保留一条主路径。普通项目任务和“让 Skill 学会以后怎么做”是两个结果；只有你同时要求时，Meta-skills 才会先完成项目结果，再改造目标 Skill。
 
-```text
-Use $meta-skills 读取 <skill-folder> 的全部活动入口和运行资源，画出当前状态、拟议状态或实施后状态的详细 Mermaid 链路图，覆盖路由判断、生产者、真源、边界、消费者、验证回路和用户可见结果，并标出未确认连接；不要修改文件。
-```
+流程图可以表达当前状态、拟议状态或实施后状态。需要详细流程与链路图时，如果一张图不能同时保证完整性与可读性，Meta-skills 会拆成一张总览和必要的局部详图，并把关键节点映射回活动真源。
 
-Meta-skills 对 Skill 活动文件的创建、修改、移动、归档和删除都采用这个确认边界：先把实际行为方案讲清楚，再等待明确批准。纯分析、审计和答疑会直接交付结论，不为了输出报告额外写文件。
+## 从材料到可运行能力
 
-目标 Skill 位于已有 Git 远端仓库时，确认后的创建、改造或迭代默认继续完成本轮获准改动的验证、精确提交、推送和远端 HEAD 核对；用户明确要求只改本地时才停在本地验证。现有工作区中的其它修改不会被夹带，Meta-skills 也不会借此创建远端、改变可见性、删除文件或强制推送。
+<p align="center">
+  <img src="./assets/readme/distillation-workflow.svg" width="100%" alt="材料经过能力缺口判断，被蒸馏为判断、流程、运行资源和验收边界，再接入目标 Skill 并沿正式生产消费链验证">
+</p>
 
-当请求与 [`SKILL.md`](SKILL.md) 中的 description 匹配，并且调用策略没有关闭隐式调用时，Codex 也可以自动选择 Meta-skills。
+“蒸馏”不是摘要材料，也不是复制几条看似通用的原则。Meta-skills 会先确定目标缺少的用户结果，再还原这项结果依赖的判断、步骤、资源与停止位置，最后迁移能够独立产生结果的最小完整能力单元。
 
-## 它怎样工作
+## 自我进化不是另建经验库
 
-```text
-用户请求
-   │
-   ├─ 从材料或现有 Skill 蒸馏并迁移能力
-   ├─ 创建或改进能从对话中自我进化的 Skill
-   ├─ 新建、重写、更新或审计 Skill
-   └─ 维护、评估、分发、默认启用或源码同步
-                      ↓
-        行为合同；修改现有 Skill 时同时建立
-          活动能力与运行资源的改造前台账
-                      ↓
-        为每个独立结果选择唯一主路径
-        再叠加来源、权限、强度与停止条件
-                      ↓
-       只读任务直接交付｜写入任务等待确认
-                      ↓
-          实现 → 结构检查 → 真实行为验收
-                      ↓
-                 用户可见结果
-```
+完成当前项目任务和改变 Skill 未来行为是两个独立结果。学习主体是目标 Skill 时，经过验证的经验会进入它自己的活动规则、方法、资源合同、脚本、元数据或确定性检查；项目事实继续由项目代码、测试和文档负责。
 
-这里的“行为合同”不是额外文档，而是当前任务中的实施依据：什么请求触发、读取什么、允许做什么、默认怎样完成、何时进入按需分支、交付什么以及在哪里停止。任务结束后，它不会作为一次性过程材料写回 Skill。
-
-## 能做什么
-
-- **蒸馏并迁移完整能力**：从文本、现有 Skill、成功经验、纠偏、旧规则、历史对话、仓库或大量外部材料中，提炼目标 Skill 真正缺少的用户价值、操作结构与实现载体；输出是能够进入正式生产链的完整能力，不是材料摘要。
-- **设计自我进化型 Skill**：先确定学习主体、最终真源和正式消费者，再把多项成功或失败经验转成目标 Skill 自身会执行的判断、动作和验收；同一经验中的共同机制与可叠加特殊维度分别落位并由顶层路由共同消费，普通项目任务不会自动触发 Skill 修改。
-- **从零创建 Skill**：确定名称、触发边界、主流程和界面文案，初始化 `SKILL.md` 与 `agents/openai.yaml`，只在确有正式消费者时增加 references、scripts 或 assets。
-- **审计、重写和迁移现有 Skill**：先盘点每项活动能力与运行资源，判断职责是否过窄、过宽或存在冲突入口，再逐项原位保留、迁移保留或按用户明确要求退出，避免重构后只剩一条新流程，旧能力却悄悄消失。
-- **收敛路由与动作边界**：由顶层 `SKILL.md` 一次选择主路径和互斥子类型；下层 reference、script 与 asset 只执行已经选定的职责，不反向改路线。
-- **画出详细流程与链路图**：按当前、拟议或实施后状态展示触发入口、控制流、数据与资源流、生产者、消费者、外部副作用、验证返回位置和用户结果；一张图不能同时保证完整性与可读性时，自动拆成总览图和多张局部详图，总览中每个隐藏实质步骤的聚合节点都要展开，并把关键节点映射回活动真源。
-- **把原则落实为目标行为**：区分哪些原则只约束当前设计与验收，哪些会改变目标 Skill 的长期行为；后者会被转换成具体判断、动作、产物和停止条件，而不是把原则名称原样复制过去。
-- **设计运行资源**：为模板、完整示范、schema、脚本、资产和索引确定生产者、唯一真源、选择条件、正式消费者、注册状态与停止位置。
-- **清洗提示词**：先建立能够独立完成正常请求的正向流程，再沿正式调用点冻结实际提示词输入。治理解释和候选分析只改变上游选择，生产模型只收到完成任务需要的事实、要求、参考与协议；正常使用的完整示范和必要边界不会被一并删掉。
-- **维护与评估**：处理触发偏差、流程未执行、路由冲突、输出不稳定、默认启用、源码同步以及与系统 Skill 重叠等问题。
-- **验证最终行为**：先把检查范围限定在本次改动及其实际消费者，再在其中选择结构可达、真实实例化或端到端消费的证据深度；不会因为仓库提供全量入口就运行无关生产链，也不会用消费端手写假数据冒充正式产物。
+同一项经验可以同时产生共同机制和多个特殊维度。共同机制覆盖性质不同但结果相同的请求；平台、版本、规模、顺序或生命周期确实改变动作时，再叠加特殊维度。共同路径不会被一个醒目的专项症状缩窄，共同机制与可叠加特殊维度分别落位，并由顶层路由共同消费。
 
 ## 四个关键边界
 
 ### 1. 先保全能力，再谈精简
 
-优化现有 Skill 前，Meta-skills 会为每项能力和资源记录触发请求、输入职责、输出合同、生产者、消费者、停止位置与可观察结果。只有这些方面全部等价，才能判定两项实现重复；新链路没有接通并验证前，旧入口不能提前退出。
+优化现有 Skill 前，Meta-skills 会按用户结果盘点触发、输入职责、输出合同、生产者、消费者、停止位置和可观察结果。新入口未接通前不拆旧路径；迁移完成后，兼容层、旧 helper、双重路由和恢复分支退出。
 
 ### 2. 治理证据不等于运行资源
 
-失败输出、纠偏故事、临时提示词和本次核对材料只用于当前任务。模板、完整示范、schema、脚本或资产只有在来源与使用条件明确、具有稳定标识和版本、进入活动索引，并由正式消费者持续读取后，才成为已注册运行资源。资源可以被显式选择，也不代表它自动成为默认。
+失败记录、纠偏和一次性案例只用于当前治理。模板、完整示范、schema、脚本或资产只有进入正式消费链后才成为运行资源。Meta-skills 还会沿正式调用点冻结实际提示词输入，生产模型只收到完成任务需要的事实、要求、参考与协议。
 
 ### 3. 结构通过不等于行为完成
 
-`quick_validate.py` 只检查 Skill 活动资源目录中的结构、元数据、引用和确定性不变量，不扫描项目输出、缓存或运行产物，也不能证明用户结果真的产生。涉及脚本、模板、文件或注册资源时，Meta-skills 会在本次改动实际影响的消费者范围内，继续选择真实实例化或端到端消费；如果只能证明结构可达，也会明确停在哪一层。
+`quick_validate.py` 只检查结构、元数据、引用和确定性不变量。验证会先把检查范围限定在本次改动及其实际消费者，再按结果性质选择证据深度；不会因为仓库提供全量入口就运行无关生产链，也不会用结构通过冒充用户已经拿到结果。
 
 ### 4. 学习主体决定经验落点
 
-目标 Skill 自我进化、当前项目沉淀和独立共享资源是三种不同结果。Meta-skills 会在设计资源前先确定其中哪一种成立：目标 Skill 学习时直接改变它自身的活动行为；项目沉淀停在项目真源；共享资源需要用户明确要求和独立消费者。名称里出现“项目经验”或内容看起来可以通用，都不能替代这个判断。
+目标 Skill 学习时改变它自身的活动行为；项目沉淀停在项目真源；独立共享资源只有在用户明确要求且存在持续消费者时才建立。名称看起来通用，不能替代学习主体、唯一真源和正式消费者的判断。
 
-## 自带工具
+学习其它 Skill 时，Meta-skills 会追溯真正产生被复用内容的原始上游。直接复制或改编代码、模板、示例、数据和资产时，目标项目保留许可证、复用范围与致谢；只学习方法并独立实现时，不把来源伪装成运行依赖。拿到 fork 时，只有确实复用了 fork 的独有改动才另谢 fork。
 
-这些脚本都使用 Python 3 和 PyYAML。当前环境缺少 `yaml` 模块时，可在所使用的 Python 环境中安装 `PyYAML`。
+## 什么时候适合用
+
+适合使用 Meta-skills：
+
+- 目标是一个 Codex/Agent Skill 的身份、路由、能力、资源、验证或维护方式；
+- 需要从文本、对话、仓库、压缩包、示例或另一个 Skill 中迁移完整能力；
+- 需要判断一个 Skill 职能是否过宽、过窄，或者旧架构是否已经完整退出；
+- 需要证明脚本、模板、schema 或资产确实被正式消费者读取并产生结果。
+
+不需要使用 Meta-skills：
+
+- 你只是要完成普通业务任务，而不是改变 Skill；
+- 你只想让项目记住自身事实，没有要求改变 Skill 的未来行为；
+- 你需要的是一次性内容成品，不需要建立可复用的 Skill 能力。
+
+## 维护者入口
+
+活动方法按职责分组，README 不复制它们的完整规则：
+
+- 设计与提示词：[`skill-design-playbook.md`](references/skill-design-playbook.md)、[`instruction-hygiene.md`](references/instruction-hygiene.md)、[`openai-yaml.md`](references/openai-yaml.md)
+- 学习、蒸馏与资源：[`absorption-and-governance.md`](references/absorption-and-governance.md)、[`evidence-distillation.md`](references/evidence-distillation.md)、[`resource-design.md`](references/resource-design.md)
+- 链路图、维护与验收：[`skill-flow-diagram.md`](references/skill-flow-diagram.md)、[`skill-maintenance-and-evaluation.md`](references/skill-maintenance-and-evaluation.md)、[`quality-gate.md`](references/quality-gate.md)
+
+所有活动 reference 都由 [`SKILL.md`](SKILL.md) 直接选择。项目自带四个确定性工具：
 
 | 工具 | 作用 |
 | --- | --- |
-| [`scripts/init_skill.py`](scripts/init_skill.py) | 把名称规范为小写连字符格式（kebab-case），创建新的 Skill 目录；目标已存在时停止，只生成 `SKILL.md` 与 `agents/openai.yaml` |
-| [`scripts/generate_openai_yaml.py`](scripts/generate_openai_yaml.py) | 从最终 Skill 定位生成或更新界面元数据，同时保留已有 `dependencies` 与 `policy` |
-| [`scripts/quick_validate.py`](scripts/quick_validate.py) | 检查 frontmatter、路径、顶层路由、reference 叶节点、活动资源空目录、UI 元数据和 Meta-skills 自身确定性合同；项目输出与运行产物不在扫描范围内 |
-| [`scripts/self-test-quick-validate.py`](scripts/self-test-quick-validate.py) | 回归检查结构校验只扫描活动资源，并继续发现活动资源中的空目录 |
+| [`scripts/init_skill.py`](scripts/init_skill.py) | 规范化 Skill 名称并初始化 `SKILL.md` 与 `agents/openai.yaml` |
+| [`scripts/generate_openai_yaml.py`](scripts/generate_openai_yaml.py) | 从最终 Skill 定位生成或更新 Codex 界面元数据 |
+| [`scripts/quick_validate.py`](scripts/quick_validate.py) | 检查 frontmatter、路由、活动资源、界面元数据和确定性不变量 |
+| [`scripts/self-test-quick-validate.py`](scripts/self-test-quick-validate.py) | 回归验证结构校验器本身的扫描边界 |
 
-初始化新 Skill：
-
-```bash
-python scripts/init_skill.py my-skill --path <parent> --description "<trigger description>" --interface "display_name=My Skill" --interface "short_description=Create and maintain a reliable workflow" --interface 'default_prompt=Use $my-skill to complete this workflow.'
-```
-
-生成或更新 UI 元数据：
-
-```bash
-python scripts/generate_openai_yaml.py <skill-folder> --interface "display_name=My Skill" --interface "short_description=Create and maintain a reliable workflow" --interface 'default_prompt=Use $my-skill to complete this workflow.'
-```
-
-执行确定性结构检查：
-
-```bash
-python scripts/quick_validate.py <skill-folder>
-```
-
-## 方法与资料
-
-- [`SKILL.md`](SKILL.md) 是唯一的顶层路由、动作权限、默认输出和停止条件真源。
-- [`references/skill-design-playbook.md`](references/skill-design-playbook.md) 负责新建、重写、更新和审计时的行为合同、职能边界与实施方法。
-- [`references/instruction-hygiene.md`](references/instruction-hygiene.md) 负责建立正向流程并清洗限制性提示。
-- [`references/absorption-and-governance.md`](references/absorption-and-governance.md) 负责确定学习主体与经验落点，并从多项成功经验、失败、纠偏、旧规则和外部方法中吸收可迁移能力。
-- [`references/evidence-distillation.md`](references/evidence-distillation.md) 负责从仓库、压缩包和大量资料中提炼完整能力单元。
-- [`references/resource-design.md`](references/resource-design.md) 负责模板、完整示范、schema、脚本、资产与索引的身份、生命周期和消费链。
-- [`references/skill-flow-diagram.md`](references/skill-flow-diagram.md) 负责把当前、拟议或实施后的 Skill 路由、生产消费链和验证闭环画成可追溯的 Mermaid 图。
-- [`references/skill-maintenance-and-evaluation.md`](references/skill-maintenance-and-evaluation.md) 负责维护、评估、分发、默认启用和源码同步。
-- [`references/openai-yaml.md`](references/openai-yaml.md) 定义 `agents/openai.yaml` 的界面字段、依赖和调用策略。
-- [`references/quality-gate.md`](references/quality-gate.md) 是交付前的行为、资源、结构和用户结果检查清单。
-
-所有正在使用的 reference 都由 `SKILL.md` 直接选择。reference 之间不互相调用，也不重新选择任务类型或覆盖顶层输出合同。
-
-## 目录
-
-```text
-meta-skills/
-├── SKILL.md
-├── agents/
-│   └── openai.yaml
-├── assets/
-│   └── readme/
-│       ├── hero.svg
-│       └── distillation-workflow.svg
-├── references/
-│   ├── skill-design-playbook.md
-│   ├── instruction-hygiene.md
-│   ├── absorption-and-governance.md
-│   ├── evidence-distillation.md
-│   ├── resource-design.md
-│   ├── skill-flow-diagram.md
-│   ├── skill-maintenance-and-evaluation.md
-│   ├── openai-yaml.md
-│   └── quality-gate.md
-├── scripts/
-│   ├── init_skill.py
-│   ├── generate_openai_yaml.py
-│   ├── quick_validate.py
-│   └── self-test-quick-validate.py
-├── core-principles.lock.json
-├── AGENTS.md
-├── LICENSING.md
-├── NOTICE
-└── LICENSE
-```
-
-## 持续开发与源码同步
-
-如果你在其它目录持续维护 Meta-skills，应当把源码仓库保留为唯一真源，再从 Codex 的用户级 Skill 目录建立联接，不要维护第二份副本。
-
-Windows PowerShell：
-
-```powershell
-New-Item -ItemType Junction -Path "$HOME/.agents/skills/meta-skills" -Target "<source-folder>"
-```
-
-POSIX：
-
-```bash
-ln -s "<source-folder>" "$HOME/.agents/skills/meta-skills"
-```
-
-建立联接前先确认目标位置没有同名目录或错误联接；需要移走或删除旧入口时，先取得相应许可。替代重叠系统 Skill、按真实路径禁用旧入口以及验证源码同步的完整流程见 [`references/skill-maintenance-and-evaluation.md`](references/skill-maintenance-and-evaluation.md#8-本地默认启用与源码同步)。
-
-## 修改本项目
-
-修改 Meta-skills 前后都运行：
+修改本项目前后都运行：
 
 ```bash
 python scripts/quick_validate.py .
 ```
 
-还需要遵守 [`AGENTS.md`](AGENTS.md) 中的仓库规则：
+详细仓库约束见 [`AGENTS.md`](AGENTS.md)。其中，`SKILL.md` 受保护核心默认只读；这类 README 优化不会改动它、锁文件或校验器不变量。贡献流程见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
 
-- `SKILL.md` 中 `META_SKILLS_PROTECTED_CORE_START` 与 `META_SKILLS_PROTECTED_CORE_END` 之间的核心原则默认只读。只有用户在当前任务中明确要求修改核心原则，才同步修改核心内容、`core-principles.lock.json` 和校验器不变量。
-- 优化、精简、重构、迁移或审计前，先盘点全部活动能力与运行资源，并为每项确定原位保留、迁移保留或用户明确退出。
-- 所有分流都留在 `SKILL.md`；正在使用的 reference 保持为叶节点。
-- 结构检查和真实行为验收分别记录，不能用其中一个代替另一个。
+如果你在其它目录持续维护源码，请把这个仓库保留为唯一真源，再从 `$HOME/.agents/skills/meta-skills` 建立目录联接；不要维护第二份副本。具体步骤见 [源码同步说明](references/skill-maintenance-and-evaluation.md#8-本地默认启用与源码同步)。
 
 ## Star History
 

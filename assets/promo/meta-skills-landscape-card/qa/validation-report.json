@@ -1,0 +1,468 @@
+{
+  "manifest": "E:\\Work\\BaiduSyncdisk\\Code\\Cheshire-skill\\meta-skills\\assets\\promo\\meta-skills-landscape-card\\editable-media.json",
+  "checked_at": "2026-08-05T05:16:14.931Z",
+  "structural": {
+    "failures": [],
+    "warnings": []
+  },
+  "targets": [
+    {
+      "variant_id": "landscape-16x9",
+      "scene_id": "promotion-card",
+      "canvas": {
+        "width": 1600,
+        "height": 900,
+        "background_mode": "opaque",
+        "background_color": "#14101f"
+      },
+      "screenshot": "E:\\Work\\BaiduSyncdisk\\Code\\Cheshire-skill\\meta-skills\\assets\\promo\\meta-skills-landscape-card\\exports\\meta-skills-promo-1600x900.png",
+      "key_state_screenshots": [],
+      "failures": [],
+      "warnings": [],
+      "measured_layers": [
+        {
+          "id": "eyebrow",
+          "kind": "text",
+          "text": "META-SKILLS｜智能体技能工程元能力",
+          "visible": true,
+          "bounds": {
+            "x": 72,
+            "y": 62,
+            "width": 760,
+            "height": 32,
+            "right": 832,
+            "bottom": 94
+          },
+          "fontSize": 17,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "title",
+          "kind": "text",
+          "text": "把材料蒸馏成\n真正可运行、可验证的\n智能体能力",
+          "visible": true,
+          "bounds": {
+            "x": 72,
+            "y": 154,
+            "width": 800,
+            "height": 270,
+            "right": 872,
+            "bottom": 424
+          },
+          "fontSize": 74,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "summary",
+          "kind": "text",
+          "text": "保全已有能力，接通唯一主路径，沿真实生产—消费链验证。",
+          "visible": true,
+          "bounds": {
+            "x": 76,
+            "y": 470,
+            "width": 748,
+            "height": 100,
+            "right": 824,
+            "bottom": 570
+          },
+          "fontSize": 27,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "capabilities",
+          "kind": "text",
+          "text": "创建  ·  学习  ·  改造  ·  迁移  ·  审计  ·  可视化",
+          "visible": true,
+          "bounds": {
+            "x": 76,
+            "y": 608,
+            "width": 800,
+            "height": 34,
+            "right": 876,
+            "bottom": 642
+          },
+          "fontSize": 18,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "action-distill",
+          "kind": "text",
+          "text": "01  提炼\n找出结果能力",
+          "visible": true,
+          "bounds": {
+            "x": 76,
+            "y": 710,
+            "width": 178,
+            "height": 68,
+            "right": 254,
+            "bottom": 778
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "action-migrate",
+          "kind": "text",
+          "text": "02  迁移\n接通完整链路",
+          "visible": true,
+          "bounds": {
+            "x": 278,
+            "y": 710,
+            "width": 178,
+            "height": 68,
+            "right": 456,
+            "bottom": 778
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "action-verify",
+          "kind": "text",
+          "text": "03  验证\n检查用户结果",
+          "visible": true,
+          "bounds": {
+            "x": 480,
+            "y": 710,
+            "width": 178,
+            "height": 68,
+            "right": 658,
+            "bottom": 778
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "metadata",
+          "kind": "text",
+          "text": "开源项目  ·  MPL 2.0  ·  2026",
+          "visible": true,
+          "bounds": {
+            "x": 76,
+            "y": 830,
+            "width": 700,
+            "height": 22,
+            "right": 776,
+            "bottom": 852
+          },
+          "fontSize": 12,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "diagram-stage",
+          "kind": "group",
+          "text": "用户结果 / 可观察终点",
+          "visible": true,
+          "bounds": {
+            "x": 904,
+            "y": 54,
+            "width": 624,
+            "height": 792,
+            "right": 1528,
+            "bottom": 846
+          },
+          "fontSize": 16,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "diagram-title",
+          "kind": "text",
+          "text": "从原始材料到可运行能力",
+          "visible": true,
+          "bounds": {
+            "x": 938,
+            "y": 88,
+            "width": 420,
+            "height": 28,
+            "right": 1358,
+            "bottom": 116
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "input-text",
+          "kind": "text",
+          "text": "文本",
+          "visible": true,
+          "bounds": {
+            "x": 940,
+            "y": 210,
+            "width": 116,
+            "height": 56,
+            "right": 1056,
+            "bottom": 266
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "input-skill",
+          "kind": "text",
+          "text": "现有技能",
+          "visible": true,
+          "bounds": {
+            "x": 940,
+            "y": 330,
+            "width": 116,
+            "height": 56,
+            "right": 1056,
+            "bottom": 386
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "input-repo",
+          "kind": "text",
+          "text": "代码仓库",
+          "visible": true,
+          "bounds": {
+            "x": 940,
+            "y": 450,
+            "width": 116,
+            "height": 56,
+            "right": 1056,
+            "bottom": 506
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "core-label",
+          "kind": "text",
+          "text": "能力\n蒸馏",
+          "visible": true,
+          "bounds": {
+            "x": 1134,
+            "y": 352,
+            "width": 156,
+            "height": 60,
+            "right": 1290,
+            "bottom": 412
+          },
+          "fontSize": 19,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "output-route",
+          "kind": "text",
+          "text": "顶层路由",
+          "visible": true,
+          "bounds": {
+            "x": 1350,
+            "y": 204,
+            "width": 136,
+            "height": 54,
+            "right": 1486,
+            "bottom": 258
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "output-flow",
+          "kind": "text",
+          "text": "执行流程",
+          "visible": true,
+          "bounds": {
+            "x": 1350,
+            "y": 319,
+            "width": 136,
+            "height": 54,
+            "right": 1486,
+            "bottom": 373
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "output-resource",
+          "kind": "text",
+          "text": "运行资源",
+          "visible": true,
+          "bounds": {
+            "x": 1350,
+            "y": 434,
+            "width": 136,
+            "height": 54,
+            "right": 1486,
+            "bottom": 488
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "output-verify",
+          "kind": "text",
+          "text": "结果验证",
+          "visible": true,
+          "bounds": {
+            "x": 1350,
+            "y": 549,
+            "width": 136,
+            "height": 54,
+            "right": 1486,
+            "bottom": 603
+          },
+          "fontSize": 14,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "diagram-caption",
+          "kind": "text",
+          "text": "从材料出发，最终落到用户真正能使用的结果。",
+          "visible": true,
+          "bounds": {
+            "x": 940,
+            "y": 748,
+            "width": 540,
+            "height": 46,
+            "right": 1480,
+            "bottom": 794
+          },
+          "fontSize": 16,
+          "constrainedOverflow": {
+            "x": true,
+            "y": true
+          },
+          "scrollOverflow": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "passed": true,
+    "failures": 0,
+    "warnings": 0
+  }
+}

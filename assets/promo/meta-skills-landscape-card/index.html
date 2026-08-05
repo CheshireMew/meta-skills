@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meta-skills 横版宣传卡</title>
+  <style>
+    @font-face {
+      font-family: "Microsoft YaHei UI";
+      src: local("Microsoft YaHei UI");
+      font-style: normal;
+      font-weight: 100 900;
+    }
+
+    @font-face {
+      font-family: "Segoe UI";
+      src: local("Segoe UI");
+      font-style: normal;
+      font-weight: 100 900;
+    }
+
+    :root {
+      --canvas-width: 1600;
+      --canvas-height: 900;
+      --background: #14101f;
+      --surface: #21182e;
+      --text: #fff8f0;
+      --muted: #b9aeca;
+      --line: #493a59;
+      --accent: #a98bff;
+      --signal: #ff6a3d;
+      --font-sans: "Segoe UI", "Microsoft YaHei UI", "PingFang SC", sans-serif;
+      --font-mono: "Cascadia Mono", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      overflow: hidden;
+      color: var(--text);
+      background: #0a0710;
+      font-family: var(--font-sans);
+    }
+
+    .app {
+      width: 100vw;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .viewport {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .canvas-shell { position: relative; }
+
+    .media-canvas {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: calc(var(--canvas-width) * 1px);
+      height: calc(var(--canvas-height) * 1px);
+      overflow: hidden;
+      transform-origin: top left;
+      isolation: isolate;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 72% 38%, rgb(169 139 255 / 14%), transparent 32%),
+        radial-gradient(circle at 93% 9%, rgb(255 106 61 / 10%), transparent 26%),
+        linear-gradient(135deg, #14101f 0%, #171126 55%, #100c19 100%);
+    }
+
+    .media-canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgb(185 174 202 / 3.5%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(185 174 202 / 3.5%) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: linear-gradient(90deg, rgb(0 0 0 / 30%) 0%, #000 58%, #000 100%);
+      z-index: -2;
+    }
+
+    .media-canvas::after {
+      content: "元";
+      position: absolute;
+      left: 540px;
+      top: 110px;
+      color: rgb(255 248 240 / 3.2%);
+      font: 800 610px/.84 var(--font-sans);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    [data-editable-id] { position: absolute; }
+
+    .eyebrow {
+      left: 72px;
+      top: 62px;
+      width: 760px;
+      height: 32px;
+      margin: 0;
+      color: var(--accent);
+      font: 760 17px/32px var(--font-mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 30px;
+      height: 3px;
+      margin: 0 14px 5px 0;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 22px rgb(169 139 255 / 42%);
+    }
+
+    .title {
+      left: 72px;
+      top: 154px;
+      width: 800px;
+      height: 270px;
+      margin: 0;
+      white-space: pre-line;
+      color: var(--text);
+      font-size: 74px;
+      font-weight: 720;
+      line-height: 1.08;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+
+    .title::after {
+      content: "";
+      display: block;
+      width: 94px;
+      height: 9px;
+      margin-top: 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--signal), var(--accent));
+      box-shadow: 0 0 28px rgb(83 198 178 / 20%);
+    }
+
+    .summary {
+      left: 76px;
+      top: 470px;
+      width: 748px;
+      height: 100px;
+      margin: 0;
+      color: #ded5e8;
+      font-size: 27px;
+      font-weight: 520;
+      line-height: 1.62;
+      letter-spacing: -.015em;
+    }
+
+    .capabilities {
+      left: 76px;
+      top: 608px;
+      width: 800px;
+      height: 34px;
+      margin: 0;
+      color: var(--muted);
+      font: 700 18px/34px var(--font-mono);
+      letter-spacing: .08em;
+    }
+
+    .action {
+      top: 710px;
+      width: 178px;
+      height: 68px;
+      margin: 0;
+      padding: 13px 16px 12px;
+      white-space: pre-line;
+      color: #eee5f4;
+      border-top: 1px solid rgb(185 174 202 / 34%);
+      border-bottom: 1px solid rgb(185 174 202 / 14%);
+      background: linear-gradient(90deg, rgb(255 255 255 / 2.2%), transparent);
+      font: 720 14px/1.45 var(--font-mono);
+      letter-spacing: .04em;
+    }
+
+    .action::first-line { color: var(--signal); }
+    .action-distill { left: 76px; }
+    .action-migrate { left: 278px; }
+    .action-verify { left: 480px; }
+
+    .metadata {
+      left: 76px;
+      top: 830px;
+      width: 700px;
+      height: 22px;
+      margin: 0;
+      color: #81758f;
+      font: 700 12px/22px var(--font-mono);
+      letter-spacing: .12em;
+    }
+
+    .diagram-stage {
+      left: 904px;
+      top: 54px;
+      width: 624px;
+      height: 792px;
+      overflow: hidden;
+      border: 1px solid rgb(169 139 255 / 32%);
+      border-radius: 30px;
+      background:
+        linear-gradient(rgb(169 139 255 / 5.5%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(169 139 255 / 5.5%) 1px, transparent 1px),
+        linear-gradient(145deg, rgb(35 25 50 / 97%), rgb(22 16 34 / 99%));
+      background-size: 34px 34px, 34px 34px, auto;
+      box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 4%),
+        0 34px 80px rgb(0 0 0 / 30%),
+        0 0 70px rgb(169 139 255 / 10%);
+    }
+
+    .diagram-stage::before {
+      content: "";
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      left: 145px;
+      top: 168px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgb(169 139 255 / 18%) 0%, rgb(169 139 255 / 5%) 38%, transparent 68%);
+      filter: blur(5px);
+    }
+
+    .diagram-stage::after {
+      content: "META-SKILLS 能力引擎";
+      position: absolute;
+      right: 26px;
+      bottom: 26px;
+      color: rgb(185 174 202 / 34%);
+      font: 700 11px/1 var(--font-sans);
+      letter-spacing: .16em;
+    }
+
+    .diagram-graphics {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .diagram-graphics .path-base {
+      fill: none;
+      stroke: #554765;
+      stroke-width: 2;
+    }
+
+    .diagram-graphics .path-active {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      filter: url(#softGlow);
+    }
+
+    .diagram-graphics .path-signal {
+      fill: none;
+      stroke: var(--signal);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      filter: url(#amberGlow);
+    }
+
+    .diagram-graphics .input-box {
+      fill: #121e28;
+      stroke: #665776;
+      stroke-width: 1.5;
+    }
+
+    .diagram-graphics .output-box {
+      fill: #2a1f3d;
+      stroke: #765fd0;
+      stroke-width: 1.5;
+    }
+
+    .diagram-graphics .core-shell {
+      fill: #251a38;
+      stroke: var(--accent);
+      stroke-width: 2.5;
+      filter: url(#softGlow);
+    }
+
+    .diagram-graphics .core-inner {
+      fill: #302147;
+      stroke: rgb(169 139 255 / 70%);
+      stroke-width: 1.5;
+    }
+
+    .diagram-graphics .orbit {
+      fill: none;
+      stroke: rgb(185 174 202 / 28%);
+      stroke-width: 1.2;
+      stroke-dasharray: 5 10;
+    }
+
+    .diagram-graphics .node { fill: var(--accent); }
+    .diagram-graphics .signal-node { fill: var(--signal); }
+
+    .diagram-title {
+      left: 938px;
+      top: 88px;
+      width: 420px;
+      height: 28px;
+      margin: 0;
+      color: var(--muted);
+      font: 720 14px/28px var(--font-sans);
+      letter-spacing: .06em;
+    }
+
+    .diagram-title::after {
+      content: "";
+      display: inline-block;
+      width: 42px;
+      height: 1px;
+      margin: 0 0 5px 14px;
+      background: var(--signal);
+    }
+
+    .diagram-label {
+      margin: 0;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font: 760 14px/1 var(--font-mono);
+      letter-spacing: .09em;
+      text-align: center;
+    }
+
+    .input-text { left: 940px; top: 210px; width: 116px; height: 56px; }
+    .input-skill { left: 940px; top: 330px; width: 116px; height: 56px; }
+    .input-repo { left: 940px; top: 450px; width: 116px; height: 56px; }
+
+    .core-label {
+      left: 1134px;
+      top: 352px;
+      width: 156px;
+      height: 60px;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      white-space: pre-line;
+      color: var(--text);
+      font: 780 19px/1.38 var(--font-mono);
+      letter-spacing: .08em;
+      text-align: center;
+      text-shadow: 0 0 20px rgb(169 139 255 / 38%);
+    }
+
+    .output-route { left: 1350px; top: 204px; width: 136px; height: 54px; }
+    .output-flow { left: 1350px; top: 319px; width: 136px; height: 54px; }
+    .output-resource { left: 1350px; top: 434px; width: 136px; height: 54px; }
+    .output-verify { left: 1350px; top: 549px; width: 136px; height: 54px; color: var(--signal); }
+
+    .diagram-caption {
+      left: 940px;
+      top: 748px;
+      width: 540px;
+      height: 46px;
+      margin: 0;
+      padding-top: 12px;
+      color: #c7bdd2;
+      border-top: 1px solid rgb(185 174 202 / 24%);
+      font-size: 16px;
+      font-weight: 520;
+      line-height: 1.55;
+      letter-spacing: -.01em;
+    }
+
+    body.capture {
+      width: calc(var(--canvas-width) * 1px);
+      height: calc(var(--canvas-height) * 1px);
+      min-height: 0;
+      display: block;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    body.capture .app,
+    body.capture .viewport {
+      width: calc(var(--canvas-width) * 1px);
+      height: calc(var(--canvas-height) * 1px);
+      display: block;
+      padding: 0;
+      overflow: visible;
+    }
+
+    body.capture .canvas-shell {
+      width: calc(var(--canvas-width) * 1px) !important;
+      height: calc(var(--canvas-height) * 1px) !important;
+    }
+
+    body.capture .media-canvas { transform: none !important; }
+  </style>
+</head>
+<body>
+  <main
+    class="app"
+    data-editable-media-root
+    data-composition-id="editable-media"
+    data-no-timeline
+    data-start="0"
+    data-duration="1"
+    data-width="1600"
+    data-height="900"
+    data-fps="1"
+  >
+    <div class="viewport" id="viewport">
+      <div class="canvas-shell" id="canvasShell">
+        <section class="media-canvas" id="mediaCanvas" aria-label="Meta-skills 横版宣传卡">
+          <p class="eyebrow" data-editable-data="eyebrow" data-editable-id="eyebrow"></p>
+          <h1 class="title" data-editable-data="title" data-editable-id="title"></h1>
+          <p class="summary" data-editable-data="summary" data-editable-id="summary"></p>
+          <p class="capabilities" data-editable-data="capabilities" data-editable-id="capabilities"></p>
+          <p class="action action-distill" data-editable-data="action_distill" data-editable-id="action-distill"></p>
+          <p class="action action-migrate" data-editable-data="action_migrate" data-editable-id="action-migrate"></p>
+          <p class="action action-verify" data-editable-data="action_verify" data-editable-id="action-verify"></p>
+          <p class="metadata" data-editable-data="metadata" data-editable-id="metadata"></p>
+
+          <section class="diagram-stage" data-editable-id="diagram-stage" aria-label="从材料到可运行能力的蒸馏关系图">
+            <svg class="diagram-graphics" viewBox="0 0 624 792" aria-hidden="true">
+              <defs>
+                <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="5" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="amberGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <ellipse class="orbit" cx="308" cy="332" rx="126" ry="168" transform="rotate(-17 308 332)"/>
+              <ellipse class="orbit" cx="308" cy="332" rx="184" ry="106" transform="rotate(24 308 332)"/>
+
+              <path class="path-base" d="M152 184 C200 184 202 270 246 302"/>
+              <path class="path-active" d="M152 304 C198 304 208 315 230 331"/>
+              <path class="path-base" d="M152 424 C200 424 202 394 246 364"/>
+
+              <path class="path-base" d="M390 320 C420 303 426 177 446 177"/>
+              <path class="path-active" d="M390 336 C422 332 428 292 446 292"/>
+              <path class="path-active" d="M390 350 C422 360 428 407 446 407"/>
+              <path class="path-signal" d="M390 366 C422 392 428 522 446 522"/>
+
+              <rect class="input-box" x="36" y="156" width="116" height="56" rx="12"/>
+              <rect class="input-box" x="36" y="276" width="116" height="56" rx="12"/>
+              <rect class="input-box" x="36" y="396" width="116" height="56" rx="12"/>
+
+              <path class="core-shell" d="M310 240 L390 284 L390 372 L310 416 L230 372 L230 284 Z"/>
+              <path class="core-inner" d="M310 266 L366 297 L366 359 L310 390 L254 359 L254 297 Z"/>
+              <circle class="node" cx="310" cy="240" r="5"/>
+              <circle class="node" cx="390" cy="328" r="5"/>
+              <circle class="signal-node" cx="310" cy="416" r="6"/>
+              <circle class="node" cx="230" cy="328" r="5"/>
+
+              <rect class="output-box" x="446" y="150" width="136" height="54" rx="12"/>
+              <rect class="output-box" x="446" y="265" width="136" height="54" rx="12"/>
+              <rect class="output-box" x="446" y="380" width="136" height="54" rx="12"/>
+              <rect class="output-box" x="446" y="495" width="136" height="54" rx="12"/>
+
+              <circle class="node" cx="152" cy="304" r="4"/>
+              <circle class="node" cx="446" cy="292" r="4"/>
+              <circle class="node" cx="446" cy="407" r="4"/>
+              <circle class="signal-node" cx="446" cy="522" r="5"/>
+
+              <path class="path-base" d="M52 632 H572"/>
+              <path class="path-active" d="M52 632 H348"/>
+              <circle class="node" cx="348" cy="632" r="5"/>
+              <text x="52" y="612" fill="#81758f" font-family="Microsoft YaHei UI, PingFang SC, sans-serif" font-size="12" letter-spacing="1.5">用户结果 / 可观察终点</text>
+            </svg>
+          </section>
+
+          <p class="diagram-title" data-editable-data="diagram_title" data-editable-id="diagram-title"></p>
+          <p class="diagram-label input-text" data-editable-data="input_text" data-editable-id="input-text"></p>
+          <p class="diagram-label input-skill" data-editable-data="input_skill" data-editable-id="input-skill"></p>
+          <p class="diagram-label input-repo" data-editable-data="input_repo" data-editable-id="input-repo"></p>
+          <p class="core-label" data-editable-data="core_label" data-editable-id="core-label"></p>
+          <p class="diagram-label output-route" data-editable-data="output_route" data-editable-id="output-route"></p>
+          <p class="diagram-label output-flow" data-editable-data="output_flow" data-editable-id="output-flow"></p>
+          <p class="diagram-label output-resource" data-editable-data="output_resource" data-editable-id="output-resource"></p>
+          <p class="diagram-label output-verify" data-editable-data="output_verify" data-editable-id="output-verify"></p>
+          <p class="diagram-caption" data-editable-data="diagram_caption" data-editable-id="diagram-caption"></p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="editable-media-runtime.js"></script>
+  <script>
+    const captureMode = new URLSearchParams(location.search).get("capture") === "1";
+    const viewport = document.querySelector("#viewport");
+    const canvasShell = document.querySelector("#canvasShell");
+    const mediaCanvas = document.querySelector("#mediaCanvas");
+    let output = { width: 1600, height: 900 };
+
+    if (captureMode) document.body.classList.add("capture");
+
+    function fitCanvas() {
+      if (captureMode) return;
+      const scale = Math.min(
+        viewport.clientWidth / output.width,
+        viewport.clientHeight / output.height,
+        1
+      );
+      const fitted = Math.max(.1, scale);
+      canvasShell.style.width = `${output.width * fitted}px`;
+      canvasShell.style.height = `${output.height * fitted}px`;
+      mediaCanvas.style.transform = `scale(${fitted})`;
+    }
+
+    editableMedia.ready.then(() => {
+      const manifest = editableMedia.getManifest();
+      const state = editableMedia.getState();
+      const variant = manifest.variants.find((item) => item.id === state.variant.id);
+      output = {
+        width: Number(variant.canvas.width),
+        height: Number(variant.canvas.height)
+      };
+      if (!captureMode) new ResizeObserver(fitCanvas).observe(viewport);
+      window.addEventListener("resize", fitCanvas);
+      fitCanvas();
+    });
+  </script>
+</body>
+</html>

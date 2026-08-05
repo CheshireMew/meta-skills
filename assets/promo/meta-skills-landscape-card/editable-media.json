@@ -1,0 +1,397 @@
+{
+  "protocol": "editable-media",
+  "version": 5,
+  "entry": "index.html",
+  "media_sources": "media-sources.json",
+  "playback": {
+    "mode": "manual",
+    "fps": 1,
+    "loop": "none",
+    "controls": {
+      "keyboard": false,
+      "wheel": false,
+      "touch": false,
+      "overview": false
+    }
+  },
+  "accessibility": {
+    "title_data_field": "title",
+    "canvas_selector": "#mediaCanvas"
+  },
+  "production": {
+    "content_unit_id": "meta-skills-promotion-card-2026-08-05",
+    "profile_id": "meta-skills-dark-editorial-technology-cover"
+  },
+  "layers": [
+    {
+      "id": "eyebrow",
+      "name": "Eyebrow",
+      "kind": "text",
+      "selector": "[data-editable-id='eyebrow']",
+      "default_bounds": {"x": 72, "y": 62, "width": 760, "height": 32, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 14, "maximum": 28, "step": 1}}
+    },
+    {
+      "id": "title",
+      "name": "Title",
+      "kind": "text",
+      "selector": "[data-editable-id='title']",
+      "default_bounds": {"x": 72, "y": 154, "width": 800, "height": 270, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 54, "maximum": 96, "step": 1}}
+    },
+    {
+      "id": "summary",
+      "name": "Summary",
+      "kind": "text",
+      "selector": "[data-editable-id='summary']",
+      "default_bounds": {"x": 76, "y": 470, "width": 748, "height": 100, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 20, "maximum": 36, "step": 1}}
+    },
+    {
+      "id": "capabilities",
+      "name": "Capabilities",
+      "kind": "text",
+      "selector": "[data-editable-id='capabilities']",
+      "default_bounds": {"x": 76, "y": 608, "width": 800, "height": 34, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 15, "maximum": 26, "step": 1}}
+    },
+    {
+      "id": "action-distill",
+      "name": "Distill action",
+      "kind": "text",
+      "selector": "[data-editable-id='action-distill']",
+      "default_bounds": {"x": 76, "y": 710, "width": 178, "height": 68, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 14, "maximum": 24, "step": 1}}
+    },
+    {
+      "id": "action-migrate",
+      "name": "Migrate action",
+      "kind": "text",
+      "selector": "[data-editable-id='action-migrate']",
+      "default_bounds": {"x": 278, "y": 710, "width": 178, "height": 68, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 14, "maximum": 24, "step": 1}}
+    },
+    {
+      "id": "action-verify",
+      "name": "Verify action",
+      "kind": "text",
+      "selector": "[data-editable-id='action-verify']",
+      "default_bounds": {"x": 480, "y": 710, "width": 178, "height": 68, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 14, "maximum": 24, "step": 1}}
+    },
+    {
+      "id": "metadata",
+      "name": "Metadata",
+      "kind": "text",
+      "selector": "[data-editable-id='metadata']",
+      "default_bounds": {"x": 76, "y": 830, "width": 700, "height": 22, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 11, "maximum": 20, "step": 1}}
+    },
+    {
+      "id": "diagram-stage",
+      "name": "Capability distillation diagram",
+      "kind": "group",
+      "selector": "[data-editable-id='diagram-stage']",
+      "default_bounds": {"x": 904, "y": 54, "width": 624, "height": 792, "rotation": 0},
+      "editable": ["x", "y", "width", "height", "rotation", "opacity", "z_index", "visible"],
+      "constraints": {}
+    },
+    {
+      "id": "diagram-title",
+      "name": "Diagram title",
+      "kind": "text",
+      "selector": "[data-editable-id='diagram-title']",
+      "default_bounds": {"x": 938, "y": 88, "width": 420, "height": 28, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "input-text",
+      "name": "Text input",
+      "kind": "text",
+      "selector": "[data-editable-id='input-text']",
+      "default_bounds": {"x": 940, "y": 210, "width": 116, "height": 56, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "input-skill",
+      "name": "Skill input",
+      "kind": "text",
+      "selector": "[data-editable-id='input-skill']",
+      "default_bounds": {"x": 940, "y": 330, "width": 116, "height": 56, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "input-repo",
+      "name": "Repository input",
+      "kind": "text",
+      "selector": "[data-editable-id='input-repo']",
+      "default_bounds": {"x": 940, "y": 450, "width": 116, "height": 56, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "core-label",
+      "name": "Core label",
+      "kind": "text",
+      "selector": "[data-editable-id='core-label']",
+      "default_bounds": {"x": 1134, "y": 352, "width": 156, "height": 60, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 15, "maximum": 28, "step": 1}}
+    },
+    {
+      "id": "output-route",
+      "name": "Route output",
+      "kind": "text",
+      "selector": "[data-editable-id='output-route']",
+      "default_bounds": {"x": 1350, "y": 204, "width": 136, "height": 54, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "output-flow",
+      "name": "Flow output",
+      "kind": "text",
+      "selector": "[data-editable-id='output-flow']",
+      "default_bounds": {"x": 1350, "y": 319, "width": 136, "height": 54, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "output-resource",
+      "name": "Resource output",
+      "kind": "text",
+      "selector": "[data-editable-id='output-resource']",
+      "default_bounds": {"x": 1350, "y": 434, "width": 136, "height": 54, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "output-verify",
+      "name": "Verify output",
+      "kind": "text",
+      "selector": "[data-editable-id='output-verify']",
+      "default_bounds": {"x": 1350, "y": 549, "width": 136, "height": 54, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 12, "maximum": 22, "step": 1}}
+    },
+    {
+      "id": "diagram-caption",
+      "name": "Diagram caption",
+      "kind": "text",
+      "selector": "[data-editable-id='diagram-caption']",
+      "default_bounds": {"x": 940, "y": 748, "width": 540, "height": 46, "rotation": 0},
+      "editable": ["content", "color", "font_family", "font_size", "x", "y", "width", "height", "opacity", "z_index", "visible"],
+      "constraints": {"font_size": {"minimum": 13, "maximum": 24, "step": 1}}
+    }
+  ],
+  "component": {
+    "id": "meta-skills-landscape-promotion-card",
+    "name": "Meta-skills landscape promotion card",
+    "category": "covers",
+    "tags": ["meta-skills", "skill-engineering", "editorial", "technology", "diagram", "landscape"]
+  },
+  "theme_variables": [
+    {"id": "background", "name": "Background", "kind": "color", "css_variable": "--background", "default": "#14101f"},
+    {"id": "surface", "name": "Surface", "kind": "color", "css_variable": "--surface", "default": "#21182e"},
+    {"id": "text", "name": "Text", "kind": "color", "css_variable": "--text", "default": "#fff8f0"},
+    {"id": "muted", "name": "Muted", "kind": "color", "css_variable": "--muted", "default": "#b9aeca"},
+    {"id": "line", "name": "Line", "kind": "color", "css_variable": "--line", "default": "#493a59"},
+    {"id": "accent", "name": "Accent", "kind": "color", "css_variable": "--accent", "default": "#a98bff"},
+    {"id": "signal", "name": "Signal", "kind": "color", "css_variable": "--signal", "default": "#ff6a3d"},
+    {"id": "font_sans", "name": "Sans", "kind": "font", "css_variable": "--font-sans", "default": "Segoe UI, Microsoft YaHei UI, PingFang SC, sans-serif"},
+    {"id": "font_mono", "name": "Mono", "kind": "font", "css_variable": "--font-mono", "default": "Cascadia Mono, Consolas, monospace"}
+  ],
+  "parameters": [],
+  "scenes": [
+    {
+      "id": "promotion-card",
+      "name": "Meta-skills landscape promotion card",
+      "page_role": "cover",
+      "content_shape": "claim-and-capability-distillation-diagram",
+      "layout_id": "landscape-claim-diagram-cover",
+      "duration_ms": 1000,
+      "primary_blocks": 2,
+      "steps": [
+        {
+          "id": "complete",
+          "at_ms": 0,
+          "label": "Complete card",
+          "state_kind": "start",
+          "review": false,
+          "description": "静态横版宣传卡一次呈现 Meta-skills 的核心承诺和从材料到可运行能力的关系。"
+        }
+      ],
+      "motion": {
+        "complexity": "static",
+        "driver": "none",
+        "semantic_purpose": "让主张与能力蒸馏关系保持同时可读，不用装饰运动代替内容。",
+        "key_state_review": "none",
+        "camera": null
+      },
+      "parameters": {},
+      "data": {},
+      "asset_slots": {}
+    }
+  ],
+  "layout_contracts": [
+    {
+      "id": "landscape-claim-diagram-cover",
+      "name": "Landscape claim with capability diagram",
+      "page_roles": ["cover"],
+      "content_shapes": ["claim-and-capability-distillation-diagram"],
+      "required_data_fields": [
+        "eyebrow",
+        "title",
+        "summary",
+        "capabilities",
+        "action_distill",
+        "action_migrate",
+        "action_verify",
+        "metadata",
+        "diagram_title",
+        "input_text",
+        "input_skill",
+        "input_repo",
+        "core_label",
+        "output_route",
+        "output_flow",
+        "output_resource",
+        "output_verify",
+        "diagram_caption"
+      ],
+      "required_layer_ids": [
+        "eyebrow",
+        "title",
+        "summary",
+        "capabilities",
+        "action-distill",
+        "action-migrate",
+        "action-verify",
+        "metadata",
+        "diagram-stage",
+        "diagram-title",
+        "input-text",
+        "input-skill",
+        "input-repo",
+        "core-label",
+        "output-route",
+        "output-flow",
+        "output-resource",
+        "output-verify",
+        "diagram-caption"
+      ],
+      "title_layer_ids": ["title"],
+      "content_layer_ids": ["summary", "capabilities", "diagram-stage", "diagram-caption"],
+      "capacity": {"maximum_primary_blocks": 2},
+      "asset_slots": []
+    }
+  ],
+  "variants": [
+    {
+      "id": "landscape-16x9",
+      "name": "Landscape 16:9",
+      "canvas": {
+        "width": 1600,
+        "height": 900,
+        "background_mode": "opaque",
+        "background_color": "#14101f"
+      },
+      "layers": {}
+    }
+  ],
+  "default_variant_id": "landscape-16x9",
+  "data_fields": [
+    {"id": "eyebrow", "name": "Eyebrow", "kind": "string", "default": "META-SKILLS｜智能体技能工程元能力"},
+    {"id": "title", "name": "Title", "kind": "string", "default": "把材料蒸馏成\n真正可运行、可验证的\n智能体能力"},
+    {"id": "summary", "name": "Summary", "kind": "string", "default": "保全已有能力，接通唯一主路径，沿真实生产—消费链验证。"},
+    {"id": "capabilities", "name": "Capabilities", "kind": "string", "default": "创建  ·  学习  ·  改造  ·  迁移  ·  审计  ·  可视化"},
+    {"id": "action_distill", "name": "Distill action", "kind": "string", "default": "01  提炼\n找出结果能力"},
+    {"id": "action_migrate", "name": "Migrate action", "kind": "string", "default": "02  迁移\n接通完整链路"},
+    {"id": "action_verify", "name": "Verify action", "kind": "string", "default": "03  验证\n检查用户结果"},
+    {"id": "metadata", "name": "Metadata", "kind": "string", "default": "开源项目  ·  MPL 2.0  ·  2026"},
+    {"id": "diagram_title", "name": "Diagram title", "kind": "string", "default": "从原始材料到可运行能力"},
+    {"id": "input_text", "name": "Text input", "kind": "string", "default": "文本"},
+    {"id": "input_skill", "name": "Skill input", "kind": "string", "default": "现有技能"},
+    {"id": "input_repo", "name": "Repository input", "kind": "string", "default": "代码仓库"},
+    {"id": "core_label", "name": "Core label", "kind": "string", "default": "能力\n蒸馏"},
+    {"id": "output_route", "name": "Route output", "kind": "string", "default": "顶层路由"},
+    {"id": "output_flow", "name": "Flow output", "kind": "string", "default": "执行流程"},
+    {"id": "output_resource", "name": "Resource output", "kind": "string", "default": "运行资源"},
+    {"id": "output_verify", "name": "Verify output", "kind": "string", "default": "结果验证"},
+    {"id": "diagram_caption", "name": "Diagram caption", "kind": "string", "default": "从材料出发，最终落到用户真正能使用的结果。"}
+  ],
+  "quality": {
+    "canvas_selector": "#mediaCanvas",
+    "roundtrip": {"data_field": "title", "layer_id": "title"},
+    "required_layer_ids": [
+      "eyebrow",
+      "title",
+      "summary",
+      "capabilities",
+      "action-distill",
+      "action-migrate",
+      "action-verify",
+      "metadata",
+      "diagram-stage",
+      "diagram-title",
+      "input-text",
+      "input-skill",
+      "input-repo",
+      "core-label",
+      "output-route",
+      "output-flow",
+      "output-resource",
+      "output-verify",
+      "diagram-caption"
+    ],
+    "bounds_tolerance_px": 1,
+    "safe_area": {"top": 48, "right": 60, "bottom": 42, "left": 60},
+    "content_bounds_layer_ids": ["eyebrow", "title", "summary", "capabilities", "action-distill", "action-migrate", "action-verify", "metadata", "diagram-stage"],
+    "minimum_content_span": 0.8,
+    "minimum_font_px": {
+      "eyebrow": 14,
+      "title": 54,
+      "summary": 20,
+      "capabilities": 15,
+      "action-distill": 14,
+      "action-migrate": 14,
+      "action-verify": 14,
+      "metadata": 11,
+      "diagram-title": 12,
+      "input-text": 12,
+      "input-skill": 12,
+      "input-repo": 12,
+      "core-label": 15,
+      "output-route": 12,
+      "output-flow": 12,
+      "output-resource": 12,
+      "output-verify": 12,
+      "diagram-caption": 13
+    },
+    "minimum_gaps": [
+      {"above": "title", "below": "summary", "min_px": 30},
+      {"above": "summary", "below": "capabilities", "min_px": 24}
+    ],
+    "thumbnail": {
+      "width": 360,
+      "minimum_text_px": 8,
+      "text_layer_ids": ["title"]
+    }
+  },
+  "delivery": {
+    "preview": "local-server",
+    "remote_dependencies": "forbid"
+  },
+  "resources": ["editable-media-runtime.js", "style-profile.json"]
+}

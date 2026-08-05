@@ -1,0 +1,39 @@
+{
+  "profile_id": "meta-skills-dark-editorial-technology-cover",
+  "source": "brand",
+  "applicability": {
+    "shared_visual_core": ["cover", "static-card"],
+    "static_composition": ["cover", "static-card"],
+    "time_motion": [],
+    "interaction": []
+  },
+  "shared_visual_core": {
+    "typography": {
+      "display": "Segoe UI / Microsoft YaHei UI / PingFang SC",
+      "body": "Segoe UI / Microsoft YaHei UI / PingFang SC",
+      "metadata": "Cascadia Mono / Consolas",
+      "display_weight": 720,
+      "body_weight": 520
+    },
+    "color": {
+      "background": "Deep indigo establishes an independent editorial field for this card",
+      "text": "Warm ivory provides the primary reading layer",
+      "accent": "Luminous violet marks the active capability path",
+      "signal": "Orange-red marks distillation checkpoints and observable verification"
+    },
+    "material": "Flat deep-indigo editorial surface with a restrained technical grid and localized violet glow",
+    "shape_and_line": "Rounded outer stage, precise system paths, hexagonal distillation core and four output modules",
+    "image_treatment": "No external imagery; the explanatory object is original HTML and SVG",
+    "hierarchy_and_rhythm": "Large three-line claim on the left, restrained capability line and action strip below, one explanatory capability diagram on the right"
+  },
+  "realizations": {
+    "static_composition": {
+      "structure": "A 16:9 split field with a continuous headline area and one self-contained diagram stage",
+      "variants": "This project delivers one landscape 1600 by 900 composition",
+      "thumbnail": "The main claim remains readable before the diagram labels at 360 pixels wide",
+      "capture": "Capture the single static scene from the editable-media v5 webpage"
+    },
+    "time_motion": null,
+    "interaction": null
+  }
+}
