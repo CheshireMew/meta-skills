@@ -1,4 +1,4 @@
 interface:
   display_name: "Meta-skills"
-  short_description: "创建、学习、改造、迁移、审计并可视化 Skill 的能力与真实运行链路"
-  default_prompt: "Use $meta-skills 完整学习、创建、改造、审计或迁移一个 Skill；需要时画出详细流程与生产—消费链，并按真实来源和验证等级交付。"
+  short_description: "创建前查找现有方案，并创建、改造、迁移、审计和分发 Skill"
+  default_prompt: "Use $meta-skills 先查找现有 Skill 并判断能否满足或提供参考，再创建、改造、迁移、审计或分发目标 Skill。"

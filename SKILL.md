@@ -1,6 +1,6 @@
 ---
 name: meta-skills
-description: 用于完整学习、创建、改造、审计、迁移和评估 Codex/Agent Skill 及其能力的元技能。Use when the user asks to study another Skill end to end and decide what the target should absorb, design or scaffold a new skill, generate its SKILL.md and agents/openai.yaml, refactor or audit an existing skill, infer whether its role is too narrow or broad from available conversation history, create or improve a self-evolving skill that internalizes validated dialogue lessons into its own behavior, transfer a user-result-producing capability across Skills, files, resources, tools, providers, or architectures, draw a detailed workflow, control, data, resource, or verification chain diagram for a Skill, migrate scattered workflow rules into SKILL.md/references/scripts/assets, separate transient diagnostic evidence from persistent runtime examples and resources, absorb reusable mechanisms without retaining correction history, or validate skill routing, boundaries, resources, metadata, and observable behavior.
+description: 用于在创建前查找现有方案，完整学习、创建、改造、审计、迁移、评估和分发 Codex/Agent Skill 及其能力的元技能。Use when the user asks to study another Skill end to end and decide what the target should absorb, design or scaffold a new skill, generate its SKILL.md and agents/openai.yaml, refactor or audit an existing skill, infer whether its role is too narrow or broad from available conversation history, create or improve a self-evolving skill that internalizes validated dialogue lessons into its own behavior, transfer a user-result-producing capability across Skills, files, resources, tools, providers, or architectures, draw a detailed workflow, control, data, resource, or verification chain diagram for a Skill, migrate scattered workflow rules into SKILL.md/references/scripts/assets, separate transient diagnostic evidence from persistent runtime examples and resources, absorb reusable mechanisms without retaining correction history, or validate skill routing, boundaries, resources, metadata, and observable behavior.
 ---
 
 # Meta-skills
@@ -34,7 +34,7 @@ description: 用于完整学习、创建、改造、审计、迁移和评估 Cod
 - **确定性机器产物**：程序会读取的文件、schema、索引、转换结果、固定格式或可重复计算。只有这类阶段需要精确字段、生产者与消费者合同、脚本和真实链路验证。
 - **高风险或外部动作**：发布、发送、删除、付费、账户操作和不可逆写入。先确认权限、目标和可逆性，再执行并核对外部结果。
 
-混合任务逐阶段选择方法。例如“研究后写短帖”只在研究阶段核实来源，写作阶段仍按创作方式工作；“写文案后生成机器可读发布包”只对发布包使用 schema。不得用最严格阶段的规则统治其它阶段。
+混合任务逐阶段选择方法：“研究后写短帖”只在研究阶段核实来源，“文案加机器可读发布包”只对发布包使用 schema；不得让最严格阶段统治其它阶段。
 
 多阶段 Skill、路由修改或执行顺序纠偏先建立临时链路拓扑，把信息与规则分成真实前置、条件输入、生产输入和产物后检查。缺失会使动作无效或副作用不可接受的才是真实前置；条件输入按需加载；生产输入只供当前消费者；后检查等对象存在再返回生产者。“最早”指对象存在且可控制结果的最早合法位置。
 
@@ -71,7 +71,7 @@ description: 用于完整学习、创建、改造、审计、迁移和评估 Cod
 
 设计具有自我进化能力的目标 Skill 时，把这份合同转化到目标 Skill 的顶层路由：普通领域任务独立完成；只有用户明确要求学习、吸收或迭代自身时才进入自我进化路径。材料名称里出现“项目经验”不能替代学习主体和最终消费者判断。
 
-- 新建 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`，完成行为合同、最终目录和实施顺序。
+- 新建 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`；先按其中的轻量查找判断现有 Skill 能否满足或提供参考，再完成行为合同、最终目录和实施顺序。
 - 重写、更新或审计 Skill：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md`，还原现有行为并确定一次性改造范围；用户指出错误行为或本轮会修改目标 Skill 时，同时读取 `references/skill-maintenance-and-evaluation.md`，把诊断决定和验证后的目标仓库发布纳入完成链。
 - 流程与链路图：用户明确要求画出或可视化 Skill 的详细流程、调用、数据、资源或验证链路时，读取 `references/skill-flow-diagram.md`；只读请求画当前状态，方案确认前画拟议状态，实施完成后画最终状态，与创建、改造、审计或迁移组合时在对应主路径还原链路后再生成图。一张图不能同时完整、清楚展示全部实质步骤时，拆成总览图与多张局部详图，并展开总览中的实质聚合节点。
 - 能力迁移：读取 `references/skill-design-playbook.md` 和 `references/instruction-hygiene.md` 建立目标基线与能力迁移图；读取 `references/absorption-and-governance.md` 判断迁移价值和处置；存在来源 Skill、仓库、文档或其它实现材料时读取 `references/evidence-distillation.md`，还原来源真实能力、追溯原始上游，并区分直接复用与独立方法学习，由此决定目标 Skill README 的第三方资源与致谢责任；涉及案例库、配置、数据、模板、脚本、schema、索引或资产时再读取 `references/resource-design.md`。所有资源都由本节直接选择，完成后返回同一条迁移主路径。

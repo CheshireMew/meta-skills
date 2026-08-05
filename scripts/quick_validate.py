@@ -20,6 +20,16 @@ MAX_SKILL_LINES = 220
 MAX_SKILL_CHARACTERS = 14_000
 ACTIVE_RESOURCE_ROOTS = ("agents", "references", "scripts", "assets", "evals")
 IGNORED_RESOURCE_DIR_NAMES = {"archive", ".git", "__pycache__"}
+IGNORED_DISCOVERY_DIR_NAMES = IGNORED_RESOURCE_DIR_NAMES | {
+    "node_modules",
+    ".venv",
+    "venv",
+    "output",
+    "outputs",
+    "artifacts",
+    "dist",
+    "build",
+}
 REFERENCE_BACK_ROUTE_PATTERNS = (
     re.compile(
         r"(?:上层|主流程).{0,16}(?<!不)(?<!不能)(?<!不得)(?:重新选择|重选).{0,16}"
@@ -97,6 +107,21 @@ def find_empty_dirs(root: Path) -> list[Path]:
             if not directories and not files:
                 empty.append(path)
     return empty
+
+
+def find_nested_skill_entrypoints(root: Path) -> list[Path]:
+    nested: list[Path] = []
+    root_entrypoint = root / "SKILL.md"
+    for current, directories, files in os.walk(root):
+        directories[:] = [
+            name for name in directories if name not in IGNORED_DISCOVERY_DIR_NAMES
+        ]
+        if "SKILL.md" not in files:
+            continue
+        candidate = Path(current) / "SKILL.md"
+        if candidate != root_entrypoint:
+            nested.append(candidate)
+    return sorted(nested)
 
 
 def extract_protected_core(text: str) -> tuple[str | None, list[str]]:
@@ -921,6 +946,13 @@ def validate(root: Path) -> list[str]:
     for marker in ("[待填写", "[TODO", "TODO:"):
         if marker in text:
             errors.append(f"SKILL.md contains unfinished placeholder: {marker}")
+
+    for nested_entrypoint in find_nested_skill_entrypoints(root):
+        errors.append(
+            "nested discoverable SKILL.md: "
+            f"{nested_entrypoint.relative_to(root)}; keep only the root SKILL.md "
+            "and rename examples or fixtures"
+        )
 
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))

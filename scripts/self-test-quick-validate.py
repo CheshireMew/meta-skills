@@ -59,8 +59,34 @@ def main() -> int:
                 "empty active resource directory was not reported: " + " | ".join(errors)
             )
 
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "scope-sample"
+        write_minimal_skill(root)
+        nested = root / "examples" / "demo" / "SKILL.md"
+        nested.parent.mkdir(parents=True)
+        nested.write_text("# Demo\n", encoding="utf-8")
+        errors = validate(root)
+        if not any(error.startswith("nested discoverable SKILL.md:") for error in errors):
+            raise AssertionError(
+                "nested active SKILL.md was not reported: " + " | ".join(errors)
+            )
+
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "scope-sample"
+        write_minimal_skill(root)
+        for relative in ("archive/legacy/SKILL.md", "output/run/SKILL.md"):
+            ignored = root / relative
+            ignored.parent.mkdir(parents=True, exist_ok=True)
+            ignored.write_text("# Ignored\n", encoding="utf-8")
+        errors = validate(root)
+        if any(error.startswith("nested discoverable SKILL.md:") for error in errors):
+            raise AssertionError(
+                "inactive directories must stay outside nested entrypoint validation: "
+                + " | ".join(errors)
+            )
+
     print(
-        "quick_validate 范围回归通过：运行产物目录被忽略，活动资源空目录仍会报错"
+        "quick_validate 范围回归通过：活动目录中的嵌套入口会报错，归档和运行产物被忽略"
     )
     return 0
 
