@@ -240,6 +240,35 @@ def validate_reference_leaf_nodes(root: Path) -> list[str]:
     return errors
 
 
+def validate_meta_method_selection_contract(skill_text: str) -> list[str]:
+    """Check the few routing decisions that must remain explicit.
+
+    Behavioral quality still comes from representative use, not phrase-by-phrase
+    locking of every reference file.
+    """
+    errors: list[str] = []
+    required_markers = (
+        "### 1. 按结果性质选方法",
+        "创作与开放判断",
+        "研究与分析",
+        "确定性机器产物",
+        "高风险或外部动作",
+        "### 2. 防止下层架空上层决定",
+        "下层是否扩大了方法、输入、输出、权限或验证强度",
+        "移除同义判断、冲突提示和强制旧流程的校验",
+        "普通优化、纠偏或审计",
+        "不自动加载设计、吸收、资源和总检查方法",
+        "### 3. 先替换，再决定是否增加机制",
+        "上层已经正确时，直接修下层路由或消费者",
+        "混合任务逐阶段验证",
+        "提交、推送、发布、默认启用和其它外部动作只在用户明确要求并授权时执行",
+    )
+    for marker in required_markers:
+        if marker not in skill_text:
+            errors.append(f"meta-skills missing method-selection contract: {marker}")
+    return errors
+
+
 def validate_meta_preservation_contract(root: Path, skill_text: str) -> list[str]:
     errors: list[str] = []
     required_skill_markers = (
@@ -968,15 +997,7 @@ def validate(root: Path) -> list[str]:
 
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
-        errors.extend(validate_meta_preservation_contract(root, text))
-        errors.extend(validate_meta_prompt_input_contract(root, text))
-        errors.extend(validate_meta_write_confirmation_contract(root, text))
-        errors.extend(validate_meta_self_evolution_contract(root, text))
-        errors.extend(validate_meta_third_party_attribution_contract(root, text))
-        errors.extend(validate_meta_diagnostic_resolution_contract(root, text))
-        errors.extend(validate_meta_validation_intensity_contract(root, text))
-        errors.extend(validate_meta_workflow_topology_contract(root, text))
-        errors.extend(validate_meta_target_publication_contract(root, text))
+        errors.extend(validate_meta_method_selection_contract(text))
         errors.extend(validate_meta_public_readme_contract(root))
 
     for raw_reference in sorted(set(REF_RE.findall(text))):
