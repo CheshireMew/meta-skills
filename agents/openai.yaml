@@ -1,4 +1,4 @@
 interface:
   display_name: "Meta-skills"
-  short_description: "创建、审查和改进 Skill，保留用户本意与已有能力"
-  default_prompt: "Use $meta-skills 帮我创建、审查或改进这个 Skill，用人话说明并保留已有的有用能力。"
+  short_description: "查找、创建、审查、改造、迁移、评估和分发 Skill，并保留已有能力"
+  default_prompt: "Use $meta-skills 帮我完整创建、审查、改造、迁移、评估或分发这个 Skill，并用人话说明结果和解决办法。"

@@ -84,7 +84,25 @@ def main() -> int:
                 + " | ".join(errors)
             )
 
-    print("quick_validate 范围回归通过：只检查活动结构，忽略运行产物和归档内容")
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "scope-sample"
+        write_minimal_skill(root)
+        reference_root = root / "references"
+        reference_root.mkdir()
+        first = reference_root / "first.md"
+        second = reference_root / "second.md"
+        first.write_text("Read `second.md`.\n", encoding="utf-8")
+        second.write_text("Complete the selected work.\n", encoding="utf-8")
+        with (root / "SKILL.md").open("a", encoding="utf-8") as skill:
+            skill.write("\nUse `references/first.md` and `references/second.md`.\n")
+        errors = validate(root)
+        expected = "references/first.md -> references/second.md"
+        if not any(expected in error for error in errors):
+            raise AssertionError(
+                "bare sibling reference routes must be reported: " + " | ".join(errors)
+            )
+
+    print("quick_validate 回归通过：活动结构范围和参考说明路由检查正常")
     return 0
 
 

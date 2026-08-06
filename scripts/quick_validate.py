@@ -16,6 +16,7 @@ import yaml
 
 NAME_RE = re.compile(r"^[a-z0-9-]+$")
 PATH_RE = re.compile(r"`((?:references|scripts|assets|evals)/[^`]+)`")
+BACKTICK_RE = re.compile(r"`([^`\r\n]+)`")
 MAX_SKILL_LINES = 220
 MAX_SKILL_CHARACTERS = 14_000
 ACTIVE_RESOURCE_ROOTS = ("agents", "references", "scripts", "assets", "evals")
@@ -222,7 +223,15 @@ def validate_reference_leaf_nodes(root: Path) -> list[str]:
                 f"cannot inspect reference routes in {relative_path.as_posix()}: {error}"
             )
             continue
-        for nested in sorted(referenced_paths(text)):
+        nested_routes = referenced_paths(text)
+        for raw in BACKTICK_RE.findall(text):
+            shorthand = raw.split()[0].replace("\\", "/").split("#", 1)[0]
+            if "/" in shorthand or not shorthand.endswith(".md"):
+                continue
+            candidate = path.parent / shorthand
+            if candidate != path and candidate.is_file():
+                nested_routes.add(candidate.relative_to(root).as_posix())
+        for nested in sorted(nested_routes):
             if nested.startswith("references/"):
                 errors.append(
                     "reference must not route another reference; route it from SKILL.md: "

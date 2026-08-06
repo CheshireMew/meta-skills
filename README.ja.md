@@ -7,7 +7,7 @@
 <!-- readme-header:start -->
 
 <p align="center">
-  <a href="./README.md">中文</a> · <a href="./README.en.md">English</a> · <strong>日本語</strong> | <a href="./SKILL.md">文档</a> | <a href="./CONTRIBUTING.md">贡献</a> | <a href="https://github.com/CheshireMew/meta-skills/issues">反馈</a>
+  <a href="./README.md">中文</a> · <a href="./README.en.md">English</a> · <strong>日本語</strong> | <a href="./SKILL.md">ドキュメント</a> | <a href="./CONTRIBUTING.md">コントリビューション</a> | <a href="https://github.com/CheshireMew/meta-skills/issues">フィードバック</a>
 </p>
 
 <p align="center">
