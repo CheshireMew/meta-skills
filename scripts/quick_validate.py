@@ -34,7 +34,7 @@ IGNORED_DISCOVERY_DIR_NAMES = IGNORED_RESOURCE_DIR_NAMES | {
 
 CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
-PROTECTED_CORE_SHA256 = "37e8997657f524a25a526c13fd16714e12c2dae0242d3409b47bb9366ffee316"
+PROTECTED_CORE_SHA256 = "785d4e26ac263595817a4a784ef0c26d3eb0a999ad51b0146d6b159a2ffb5c70"
 PROTECTED_CORE_TITLES = (
     "所有文本先说人话，并忠实保留用户的意思",
     "用户本意和实际结果决定范围",
@@ -43,10 +43,11 @@ PROTECTED_CORE_TITLES = (
     "处理路径清楚，并只由主文件决定",
     "先写正常怎样成功，再在最早位置防止问题",
     "临时教训、可复用材料和项目事实分开",
+    "蒸馏和迁移同时保留共同做法与必要差异",
     "方法和核对方式跟着结果与风险走",
     "直接交付用户需要的结果，完成后停止",
 )
-CORE_LOCK_VERSION = 11
+CORE_LOCK_VERSION = 12
 
 
 def parse_frontmatter(text: str) -> tuple[dict, list[str]]:
