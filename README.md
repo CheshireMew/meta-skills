@@ -1,7 +1,7 @@
 # Meta-skills
 
 <p align="center">
-  <img src="./assets/readme/hero.svg" width="100%" alt="Meta-skills 将文本、现有 Skill 与仓库材料蒸馏为可运行、可验证的目标 Skill 能力">
+  <img src="./assets/readme/hero.svg" width="100%" alt="Meta-skills 从文本、现有 Skill 与仓库材料中找出有用做法，并写进目标 Skill">
 </p>
 
 <!-- readme-header:start -->
@@ -110,7 +110,7 @@ Use $meta-skills 把这个 Skill 的完整工作流程画出来，并标出哪�
 
 日常使用不需要阅读内部文档。需要维护本项目时，从 [`SKILL.md`](SKILL.md) 查看完整入口，从 [`CONTRIBUTING.md`](CONTRIBUTING.md) 查看贡献流程，从 [`AGENTS.md`](AGENTS.md) 查看仓库规则。
 
-项目提供四个工具：初始化 Skill 的 [`init_skill.py`](scripts/init_skill.py)、生成界面信息的 [`generate_openai_yaml.py`](scripts/generate_openai_yaml.py)、检查 Skill 结构的 [`quick_validate.py`](scripts/quick_validate.py)，以及回归检查校验器的 [`self-test-quick-validate.py`](scripts/self-test-quick-validate.py)。修改后运行：
+项目提供四个工具：初始化 Skill 的 [`init_skill.py`](scripts/init_skill.py)、生成界面信息的 [`generate_openai_yaml.py`](scripts/generate_openai_yaml.py)、检查 Skill 结构的 [`quick_validate.py`](scripts/quick_validate.py)，以及检查这个结构工具本身的 [`self-test-quick-validate.py`](scripts/self-test-quick-validate.py)。修改后运行：
 
 ```bash
 python scripts/quick_validate.py .

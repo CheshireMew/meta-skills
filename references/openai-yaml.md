@@ -1,6 +1,6 @@
 # `agents/openai.yaml` 生成规则
 
-`agents/openai.yaml` 是产品界面和运行环境读取的元数据，Skill 行为以 `SKILL.md` 为真源。创建新 Skill 或修改名称、定位、图标、依赖和调用策略时读取本文件，然后使用 `scripts/generate_openai_yaml.py` 生成。
+`agents/openai.yaml` 保存产品界面和运行环境需要的名称、简介等信息；真正决定 Skill 行为的是 `SKILL.md`。创建新 Skill 或修改名称、定位、图标、依赖和调用方式时读取本文件，然后使用 `scripts/generate_openai_yaml.py` 生成。
 
 ## 必需界面字段
 
