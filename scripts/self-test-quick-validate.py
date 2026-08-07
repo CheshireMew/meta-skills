@@ -6,7 +6,7 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-from quick_validate import validate
+from quick_validate import validate, validate_write_confirmation_invariant
 
 
 def write_minimal_skill(root: Path) -> None:
@@ -35,6 +35,18 @@ Validate the active skill structure and stop.
     )
 
 def main() -> int:
+    flexible_confirmation = """
+Before
+<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_START -->
+这段可以按照需要改写，只要受保护的确认行为没有被整段删除。
+<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_END -->
+After
+"""
+    if validate_write_confirmation_invariant(flexible_confirmation):
+        raise AssertionError("write-confirmation protection must not lock exact wording")
+    if not validate_write_confirmation_invariant("No protected confirmation section here."):
+        raise AssertionError("missing write-confirmation protection was not reported")
+
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary) / "scope-sample"
         write_minimal_skill(root)
@@ -102,7 +114,7 @@ def main() -> int:
                 "bare sibling reference routes must be reported: " + " | ".join(errors)
             )
 
-    print("quick_validate 回归通过：活动结构范围和参考说明路由检查正常")
+    print("quick_validate 回归通过：确认规则保护、活动结构范围和参考说明路由检查正常")
     return 0
 
 

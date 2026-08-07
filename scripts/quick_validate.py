@@ -34,6 +34,8 @@ IGNORED_DISCOVERY_DIR_NAMES = IGNORED_RESOURCE_DIR_NAMES | {
 
 CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
+WRITE_CONFIRMATION_START = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_START -->"
+WRITE_CONFIRMATION_END = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_END -->"
 PROTECTED_CORE_SHA256 = "785d4e26ac263595817a4a784ef0c26d3eb0a999ad51b0146d6b159a2ffb5c70"
 PROTECTED_CORE_TITLES = (
     "所有文本先说人话，并忠实保留用户的意思",
@@ -165,6 +167,24 @@ def validate_protected_core(root: Path, text: str) -> list[str]:
     if lock.get("change_policy") != "explicit-user-authorization-required":
         errors.append("meta-skills core lock change policy is incorrect")
     return errors
+
+
+def validate_write_confirmation_invariant(text: str) -> list[str]:
+    """Keep the protected confirmation section present without locking its wording."""
+    normalized = text.replace("\r\n", "\n")
+    if (
+        normalized.count(WRITE_CONFIRMATION_START) != 1
+        or normalized.count(WRITE_CONFIRMATION_END) != 1
+    ):
+        return [
+            "meta-skills protected write-confirmation markers must each appear exactly once"
+        ]
+
+    before, remainder = normalized.split(WRITE_CONFIRMATION_START, 1)
+    confirmation, after = remainder.split(WRITE_CONFIRMATION_END, 1)
+    if not before or not after or not confirmation.strip():
+        return ["meta-skills protected write-confirmation section cannot be empty"]
+    return []
 
 
 def referenced_paths(text: str) -> set[str]:
@@ -399,6 +419,7 @@ def validate(root: Path) -> list[str]:
 
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
+        errors.extend(validate_write_confirmation_invariant(text))
 
     errors.extend(validate_referenced_paths(root, text))
     errors.extend(validate_direct_reference_routes(root, text))
