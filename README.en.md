@@ -25,7 +25,7 @@
 
 <!-- readme-header:end -->
 
-Meta-skills is a Skill for creating and improving Codex/Agent Skills. Give it an idea, some source material, or an existing Skill. It can build a complete new Skill, explain why an old one behaves badly, or move a proven way of working into the target without discarding features that still matter.
+When the delivery approach is not yet decided, Meta-skills can determine whether a capability should be a direct result, a reusable prompt or template, a Skill, a CLI, existing software, or a combination. When a Skill is the right carrier, it can build or improve a complete Codex/Agent Skill, explain why an old one behaves badly, or move a proven way of working into the target without discarding features that still matter.
 
 If Skills are new to you, think of a Skill as a set of instructions that Codex keeps using for a particular kind of work. Meta-skills helps you write, inspect, and upgrade those instructions.
 
@@ -33,7 +33,8 @@ If Skills are new to you, think of a Skill as a set of instructions that Codex k
 
 | Your situation | What Meta-skills delivers |
 | --- | --- |
-| You have an idea but no Skill yet | A usable Skill with its required files and a clear way to invoke it |
+| You have a goal but have not chosen how to implement it | A recommendation to use a direct result, prompt, Skill, CLI, software, or a combination, with the reasons |
+| You have decided that you need a Skill | A usable Skill with its required files and a clear way to invoke it |
 | A Skill works sometimes but misses steps or misunderstands requests | A diagnosis, a proposed fix, and an implementation after you approve it |
 | A Skill has become hard to maintain | The useful behavior is kept, duplicate rules are combined, and replaced paths are retired |
 | Another Skill or project contains a useful method | The result-producing parts are moved over, with licensing and attribution handled correctly |
@@ -61,6 +62,10 @@ Meta-skills first reads the current Skill and explains the plan in ordinary lang
 If the target already lives in a remote Git repository, it normally commits and pushes the approved change as part of the same job. Say “local changes only” if you do not want that.
 
 ## Common requests
+
+```text
+Use $meta-skills to decide whether this capability should be a prompt, Skill, CLI, existing application, or a combination. Explain the reasons and the next step.
+```
 
 ```text
 Use $meta-skills to create a new Skill from these materials. Show me how it will behave before writing files.
@@ -108,7 +113,7 @@ You do not need to learn this diagram. The process is simple: understand what th
 
 ## When you do not need it
 
-If you only want to complete a one-off task—write an article, analyze data, or fix one function—and you are not creating or changing a Skill, use the Skill for that domain or ask Codex directly.
+If you already know that you only need a one-off result—write an article, analyze data, or fix one function—and you do not need to compare delivery options or create or change a Skill, use the Skill for that domain or ask Codex directly.
 
 ## For maintainers
 
