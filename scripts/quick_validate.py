@@ -36,19 +36,19 @@ CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
 WRITE_CONFIRMATION_START = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_START -->"
 WRITE_CONFIRMATION_END = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_END -->"
-PROTECTED_CORE_SHA256 = "772cb6788d34a4a2633ac4b372f91127e81e5254d24d2806d328836f5700b7ec"
+PROTECTED_CORE_SHA256 = "e541b28f3de265c027fe9287bf0d27900bd71a7d3cd080d4350fefb58f6c02c8"
 PROTECTED_CORE_TITLES = (
     "先理解用户的完整意思",
-    "能力由用户结果定义，不由内部结构定义",
+    "用户结果、明确决定和内部实现分开",
     "默认使用最简单但完整的方法",
-    "默认行为直接写，创作判断交给 AI",
-    "根据真实问题决定修复层级",
+    "创作判断交给 AI，系统选择由用户决定",
+    "根据真实问题和可归因证据决定修复层级",
     "有用材料与纠错过程分开",
-    "核对方式服从结果和风险",
-    "用户控制写入和高风险动作",
+    "核对方式服从结果和证据边界",
+    "一次确认控制写入、行为变化和高风险动作",
     "直接交付结果，完成后停止",
 )
-CORE_LOCK_VERSION = 15
+CORE_LOCK_VERSION = 17
 
 
 def parse_frontmatter(text: str) -> tuple[dict, list[str]]:
@@ -168,8 +168,8 @@ def validate_protected_core(root: Path, text: str) -> list[str]:
     return errors
 
 
-def validate_write_confirmation_invariant(text: str) -> list[str]:
-    """Keep the protected confirmation section present without locking its wording."""
+def validate_write_confirmation_section(text: str) -> list[str]:
+    """Keep exactly one non-empty protected confirmation section."""
     normalized = text.replace("\r\n", "\n")
     if (
         normalized.count(WRITE_CONFIRMATION_START) != 1
@@ -183,6 +183,7 @@ def validate_write_confirmation_invariant(text: str) -> list[str]:
     confirmation, after = remainder.split(WRITE_CONFIRMATION_END, 1)
     if not before or not after or not confirmation.strip():
         return ["meta-skills protected write-confirmation section cannot be empty"]
+
     return []
 
 
@@ -418,7 +419,7 @@ def validate(root: Path) -> list[str]:
 
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
-        errors.extend(validate_write_confirmation_invariant(text))
+        errors.extend(validate_write_confirmation_section(text))
 
     errors.extend(validate_referenced_paths(root, text))
     errors.extend(validate_direct_reference_routes(root, text))
