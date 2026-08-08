@@ -36,20 +36,19 @@ CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
 WRITE_CONFIRMATION_START = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_START -->"
 WRITE_CONFIRMATION_END = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_END -->"
-PROTECTED_CORE_SHA256 = "6d77fc8af6754fa508511e35aab3e06e8376a7cb47f81a5d8137d6a9a34ceccf"
+PROTECTED_CORE_SHA256 = "772cb6788d34a4a2633ac4b372f91127e81e5254d24d2806d328836f5700b7ec"
 PROTECTED_CORE_TITLES = (
-    "所有文本先说人话，并忠实保留用户的意思",
-    "用户本意和实际结果决定范围",
-    "先用最简单但完整的方法，复杂度必须证明价值",
-    "改造时完整保留已有的有用能力",
-    "处理路径清楚，并只由主文件决定",
-    "先写正常怎样成功，再在最早位置防止问题",
-    "临时教训、可复用材料和项目事实分开",
-    "蒸馏和迁移同时保留共同做法与必要差异",
-    "方法和核对方式跟着结果与风险走",
-    "直接交付用户需要的结果，完成后停止",
+    "先理解用户的完整意思",
+    "能力由用户结果定义，不由内部结构定义",
+    "默认使用最简单但完整的方法",
+    "默认行为直接写，创作判断交给 AI",
+    "根据真实问题决定修复层级",
+    "有用材料与纠错过程分开",
+    "核对方式服从结果和风险",
+    "用户控制写入和高风险动作",
+    "直接交付结果，完成后停止",
 )
-CORE_LOCK_VERSION = 13
+CORE_LOCK_VERSION = 15
 
 
 def parse_frontmatter(text: str) -> tuple[dict, list[str]]:

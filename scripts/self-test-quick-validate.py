@@ -114,7 +114,7 @@ After
                 "bare sibling reference routes must be reported: " + " | ".join(errors)
             )
 
-    print("quick_validate 回归通过：确认规则保护、活动结构范围和参考说明路由检查正常")
+    print("quick_validate 回归通过：确认规则保护、活动结构范围和参考说明引用检查正常")
     return 0
 
 

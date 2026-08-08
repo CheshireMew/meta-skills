@@ -1,6 +1,6 @@
 # Contributing to Meta-skills
 
-感谢你改进 Meta-skills。这个仓库把“用户最终能得到什么”放在实现形式之前；提交应当让现有能力完整保留、活动真源保持唯一，并提供与改动风险相称的验证证据。
+感谢你改进 Meta-skills。这个仓库把“用户最终能得到什么”放在实现形式之前；提交应当保留真实的用户能力和必要材料，同时允许多余的分类、路径、步骤和检查退出，并提供与改动风险相称的验证证据。
 
 Thank you for improving Meta-skills. Contributions should preserve every supported user result, keep one active source of truth for each decision, and include verification proportionate to the change.
 
