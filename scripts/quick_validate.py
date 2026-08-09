@@ -36,7 +36,10 @@ CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
 WRITE_CONFIRMATION_START = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_START -->"
 WRITE_CONFIRMATION_END = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_END -->"
-PROTECTED_CORE_SHA256 = "e541b28f3de265c027fe9287bf0d27900bd71a7d3cd080d4350fefb58f6c02c8"
+PROTECTED_CORE_SHA256 = "9ce255c6604221810ca8f819f21cf25ac9e968f541dca8b7abe8b781d656c50d"
+PROTECTED_WRITE_CONFIRMATION_SHA256 = (
+    "55af0d60d1b26d9465c6937ea069e8219512f9a7a6d913be2d89dedfd6fb86ee"
+)
 PROTECTED_CORE_TITLES = (
     "先理解用户的完整意思",
     "用户结果、明确决定和内部实现分开",
@@ -45,10 +48,10 @@ PROTECTED_CORE_TITLES = (
     "根据真实问题和可归因证据决定修复层级",
     "有用材料与纠错过程分开",
     "核对方式服从结果和证据边界",
-    "一次确认控制写入、行为变化和高风险动作",
-    "直接交付结果，完成后停止",
+    "一次确认只覆盖同一方案",
+    "交付真实状态并停止",
 )
-CORE_LOCK_VERSION = 17
+CORE_LOCK_VERSION = 18
 
 
 def parse_frontmatter(text: str) -> tuple[dict, list[str]]:
@@ -168,23 +171,61 @@ def validate_protected_core(root: Path, text: str) -> list[str]:
     return errors
 
 
-def validate_write_confirmation_section(text: str) -> list[str]:
-    """Keep exactly one non-empty protected confirmation section."""
+def extract_write_confirmation(text: str) -> tuple[str | None, list[str]]:
+    """Extract exactly one non-empty protected confirmation section."""
     normalized = text.replace("\r\n", "\n")
     if (
         normalized.count(WRITE_CONFIRMATION_START) != 1
         or normalized.count(WRITE_CONFIRMATION_END) != 1
     ):
-        return [
+        return None, [
             "meta-skills protected write-confirmation markers must each appear exactly once"
         ]
 
     before, remainder = normalized.split(WRITE_CONFIRMATION_START, 1)
     confirmation, after = remainder.split(WRITE_CONFIRMATION_END, 1)
     if not before or not after or not confirmation.strip():
-        return ["meta-skills protected write-confirmation section cannot be empty"]
+        return None, ["meta-skills protected write-confirmation section cannot be empty"]
 
-    return []
+    return confirmation.strip("\n") + "\n", []
+
+
+def validate_write_confirmation_section(text: str) -> list[str]:
+    """Keep exactly one non-empty protected confirmation section."""
+    _, errors = extract_write_confirmation(text)
+    return errors
+
+
+def validate_protected_write_confirmation(root: Path, text: str) -> list[str]:
+    confirmation, errors = extract_write_confirmation(text)
+    if confirmation is None:
+        return errors
+
+    lock_path = root / "core-principles.lock.json"
+    if not lock_path.is_file():
+        return errors + ["meta-skills missing core-principles.lock.json"]
+
+    try:
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        return errors + [f"meta-skills core lock is invalid: {error}"]
+
+    digest = hashlib.sha256(confirmation.encode("utf-8")).hexdigest()
+    lock_digest = lock.get("write_confirmation_sha256")
+    if digest != PROTECTED_WRITE_CONFIRMATION_SHA256:
+        errors.append(
+            "meta-skills protected write confirmation changed without updating its fixed fingerprint"
+        )
+    if lock_digest != PROTECTED_WRITE_CONFIRMATION_SHA256:
+        errors.append(
+            "meta-skills write-confirmation lock does not match the fixed fingerprint"
+        )
+    if digest != lock_digest:
+        errors.append(
+            "meta-skills protected write confirmation does not match core-principles.lock.json"
+        )
+
+    return errors
 
 
 def referenced_paths(text: str) -> set[str]:
@@ -419,7 +460,7 @@ def validate(root: Path) -> list[str]:
 
     if name == "meta-skills":
         errors.extend(validate_protected_core(root, text))
-        errors.extend(validate_write_confirmation_section(text))
+        errors.extend(validate_protected_write_confirmation(root, text))
 
     errors.extend(validate_referenced_paths(root, text))
     errors.extend(validate_direct_reference_routes(root, text))
@@ -445,12 +486,12 @@ def main(argv: list[str]) -> int:
     root = Path(args.skill_folder).resolve()
     errors = validate(root)
     if errors:
-        print("FAIL")
+        print("STRUCTURE FAIL")
         for error in errors:
             print(f"- {error}")
         return 1
 
-    print(f"PASS {root}")
+    print(f"STRUCTURE PASS {root}")
     return 0
 
 

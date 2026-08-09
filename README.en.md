@@ -59,7 +59,7 @@ Use $meta-skills to inspect <skill-folder> and explain why it is not working wel
 
 Meta-skills first reads the current Skill and explains the plan in ordinary language. It does not change active files before you approve the plan. After approval, it makes the change and runs the relevant checks.
 
-If the target already lives in a remote Git repository, it normally commits and pushes the approved change as part of the same job. Say “local changes only” if you do not want that.
+If the target tracks a remote Git branch, Meta-skills normally validates, commits, and pushes the entire local worktree as one unit, including changes that were already present. It does not selectively leave local changes behind. Say “local changes only” if you do not want any commit or push.
 
 ## Common requests
 

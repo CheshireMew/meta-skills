@@ -8,6 +8,7 @@ from pathlib import Path
 
 from quick_validate import (
     validate,
+    validate_protected_write_confirmation,
     validate_write_confirmation_section,
 )
 
@@ -57,6 +58,28 @@ After
 """
     if not validate_write_confirmation_section(empty_confirmation):
         raise AssertionError("empty write-confirmation protection was not reported")
+
+    source_root = Path(__file__).resolve().parent.parent
+    source_text = (source_root / "SKILL.md").read_text(encoding="utf-8")
+    if validate_protected_write_confirmation(source_root, source_text):
+        raise AssertionError("current protected write confirmation must match its lock")
+    mutated_confirmation = source_text.replace(
+        "任一项改变都停止写入",
+        "任一项改变都可以继续写入",
+        1,
+    )
+    if mutated_confirmation == source_text:
+        raise AssertionError("write-confirmation mutation fixture did not change the text")
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "meta-skills"
+        root.mkdir()
+        (root / "core-principles.lock.json").write_text(
+            (source_root / "core-principles.lock.json").read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        errors = validate_protected_write_confirmation(root, mutated_confirmation)
+        if not errors:
+            raise AssertionError("modified protected write confirmation was not reported")
 
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary) / "scope-sample"
