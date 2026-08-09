@@ -96,6 +96,19 @@ After
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary) / "scope-sample"
         write_minimal_skill(root)
+        starter = root / "assets" / "react-starter"
+        (starter / "node_modules" / ".vite-temp").mkdir(parents=True)
+        (starter / "package.json").write_text("{}\n", encoding="utf-8")
+        errors = validate(root)
+        if errors:
+            raise AssertionError(
+                "ignored dependency directories must stay outside structure validation: "
+                + " | ".join(errors)
+            )
+
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "scope-sample"
+        write_minimal_skill(root)
         (root / "references" / "unused").mkdir(parents=True)
         errors = validate(root)
         expected = "empty directory: references\\unused"

@@ -20,9 +20,8 @@ BACKTICK_RE = re.compile(r"`([^`\r\n]+)`")
 MAX_SKILL_LINES = 220
 MAX_SKILL_CHARACTERS = 14_000
 ACTIVE_RESOURCE_ROOTS = ("agents", "references", "scripts", "assets", "evals")
-IGNORED_RESOURCE_DIR_NAMES = {"archive", ".git", "__pycache__"}
+IGNORED_RESOURCE_DIR_NAMES = {"archive", ".git", "__pycache__", "node_modules"}
 IGNORED_DISCOVERY_DIR_NAMES = IGNORED_RESOURCE_DIR_NAMES | {
-    "node_modules",
     ".venv",
     "venv",
     "output",
