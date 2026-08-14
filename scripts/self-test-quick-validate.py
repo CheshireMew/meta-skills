@@ -8,6 +8,7 @@ from pathlib import Path
 
 from quick_validate import (
     validate,
+    validate_protected_core,
     validate_protected_write_confirmation,
     validate_write_confirmation_section,
 )
@@ -61,6 +62,44 @@ After
 
     source_root = Path(__file__).resolve().parent.parent
     source_text = (source_root / "SKILL.md").read_text(encoding="utf-8")
+    if validate_protected_core(source_root, source_text):
+        raise AssertionError("current protected core must match its lock")
+    mutated_core = source_text.replace(
+        "实际交接只能有一份",
+        "实际交接可以有多份",
+        1,
+    )
+    if mutated_core == source_text:
+        raise AssertionError("protected-core mutation fixture did not change the text")
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "meta-skills"
+        root.mkdir()
+        (root / "core-principles.lock.json").write_text(
+            (source_root / "core-principles.lock.json").read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        errors = validate_protected_core(root, mutated_core)
+        if not errors:
+            raise AssertionError("modified AI handoff principle was not reported")
+
+    mutated_heavy_work = source_text.replace(
+        "必须在真正执行前展示具体目标",
+        "可以在执行之后再展示具体目标",
+        1,
+    )
+    if mutated_heavy_work == source_text:
+        raise AssertionError("heavy-work mutation fixture did not change the text")
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "meta-skills"
+        root.mkdir()
+        (root / "core-principles.lock.json").write_text(
+            (source_root / "core-principles.lock.json").read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        errors = validate_protected_core(root, mutated_heavy_work)
+        if not errors:
+            raise AssertionError("modified heavy-work principle was not reported")
+
     if validate_protected_write_confirmation(source_root, source_text):
         raise AssertionError("current protected write confirmation must match its lock")
     mutated_confirmation = source_text.replace(
