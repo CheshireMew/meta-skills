@@ -13,6 +13,8 @@ from pathlib import Path
 
 import yaml
 
+from file_budget import validate_file_budgets
+
 
 NAME_RE = re.compile(r"^[a-z0-9-]+$")
 PATH_RE = re.compile(r"`((?:references|scripts|assets|evals)/[^`]+)`")
@@ -466,6 +468,7 @@ def validate(root: Path) -> list[str]:
     errors.extend(validate_referenced_paths(root, text))
     errors.extend(validate_direct_reference_routes(root, text))
     errors.extend(validate_reference_leaf_nodes(root))
+    errors.extend(validate_file_budgets(root))
 
     for empty_dir in find_empty_dirs(root):
         errors.append(f"empty directory: {empty_dir.relative_to(root)}")

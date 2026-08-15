@@ -6,6 +6,7 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
+from file_budget import MAX_OUTER_TOOL_TOKENS, validate_file_budgets
 from quick_validate import (
     validate,
     validate_protected_core,
@@ -200,7 +201,41 @@ After
                 "bare sibling reference routes must be reported: " + " | ".join(errors)
             )
 
-    print("quick_validate 回归通过：确认区结构、活动资源范围和参考说明引用检查正常")
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "scope-sample"
+        write_minimal_skill(root)
+        scripts = root / "scripts"
+        scripts.mkdir()
+        oversized = scripts / "oversized.py"
+        oversized.write_text("x" * (MAX_OUTER_TOOL_TOKENS * 4 + 1), encoding="utf-8")
+        errors = validate_file_budgets(root)
+        if not any("scripts/oversized.py" in error for error in errors):
+            raise AssertionError("oversized active text file was not reported")
+
+        oversized.unlink()
+        (scripts / "within-budget.py").write_text(
+            "x" * (MAX_OUTER_TOOL_TOKENS * 4),
+            encoding="utf-8",
+        )
+        ignored = root / "archive" / "legacy.md"
+        ignored.parent.mkdir()
+        ignored.write_text("x" * (MAX_OUTER_TOOL_TOKENS * 8), encoding="utf-8")
+        promo = root / "assets" / "promo" / "runtime.js"
+        promo.parent.mkdir(parents=True)
+        promo.write_text("x" * (MAX_OUTER_TOOL_TOKENS * 8), encoding="utf-8")
+        if validate_file_budgets(root):
+            raise AssertionError("budget boundary or inactive resources were misclassified")
+
+        structured_asset = root / "assets" / "catalog.json"
+        structured_asset.write_text(
+            "x" * (MAX_OUTER_TOOL_TOKENS * 4 + 1),
+            encoding="utf-8",
+        )
+        errors = validate_file_budgets(root)
+        if not any("assets/catalog.json" in error for error in errors):
+            raise AssertionError("oversized model-readable asset was not reported")
+
+    print("quick_validate 回归通过：确认区、活动资源、引用和文件预算检查正常")
     return 0
 
 
