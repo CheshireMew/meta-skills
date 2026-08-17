@@ -66,8 +66,8 @@ After
     if validate_protected_core(source_root, source_text):
         raise AssertionError("current protected core must match its lock")
     mutated_core = source_text.replace(
-        "用户结果定义工作",
-        "用户结果定义任务",
+        "实际交接只能有一份",
+        "实际交接可以有多份",
         1,
     )
     if mutated_core == source_text:
@@ -81,13 +81,31 @@ After
         )
         errors = validate_protected_core(root, mutated_core)
         if not errors:
-            raise AssertionError("modified protected core was not reported")
+            raise AssertionError("modified AI handoff principle was not reported")
+
+    mutated_heavy_work = source_text.replace(
+        "必须在真正执行前展示具体目标",
+        "可以在执行之后再展示具体目标",
+        1,
+    )
+    if mutated_heavy_work == source_text:
+        raise AssertionError("heavy-work mutation fixture did not change the text")
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary) / "meta-skills"
+        root.mkdir()
+        (root / "core-principles.lock.json").write_text(
+            (source_root / "core-principles.lock.json").read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        errors = validate_protected_core(root, mutated_heavy_work)
+        if not errors:
+            raise AssertionError("modified heavy-work principle was not reported")
 
     if validate_protected_write_confirmation(source_root, source_text):
         raise AssertionError("current protected write confirmation must match its lock")
     mutated_confirmation = source_text.replace(
-        "用户确认方案后进入写入",
-        "用户确认方案后开始写入",
+        "任一项改变都停止写入",
+        "任一项改变都可以继续写入",
         1,
     )
     if mutated_confirmation == source_text:
