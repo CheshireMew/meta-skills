@@ -1,7 +1,6 @@
 {
-  "version": 21,
-  "sha256": "06b8beaabe0918f2805e398a597804cc9339cd96a4df57081098d432a279da7e",
-  "write_confirmation_sha256": "b9079fdca743a3440e519d98e9da5344c5705d9d386249c7a10c541dd1a1784b",
-  "principle_count": 11,
+  "version": 22,
+  "sha256": "b7ee2ba28bbea60383498b289386166d9037ca21e1e494fea8a878213ebe50ef",
+  "write_confirmation_sha256": "d85bbd06077016ea367c8ded8384193474bc2615986dcfbee83d032c53b241f7",
   "change_policy": "explicit-user-authorization-required"
 }

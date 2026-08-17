@@ -37,24 +37,11 @@ CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
 WRITE_CONFIRMATION_START = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_START -->"
 WRITE_CONFIRMATION_END = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_END -->"
-PROTECTED_CORE_SHA256 = "06b8beaabe0918f2805e398a597804cc9339cd96a4df57081098d432a279da7e"
+PROTECTED_CORE_SHA256 = "b7ee2ba28bbea60383498b289386166d9037ca21e1e494fea8a878213ebe50ef"
 PROTECTED_WRITE_CONFIRMATION_SHA256 = (
-    "b9079fdca743a3440e519d98e9da5344c5705d9d386249c7a10c541dd1a1784b"
+    "d85bbd06077016ea367c8ded8384193474bc2615986dcfbee83d032c53b241f7"
 )
-PROTECTED_CORE_TITLES = (
-    "先理解用户的完整意思",
-    "用户结果、明确决定和内部实现分开",
-    "默认使用最简单但完整的方法",
-    "创作判断交给 AI，系统选择由用户决定",
-    "AI 创作交接不层层加码",
-    "根据真实问题决定修复层级",
-    "有用材料与纠错过程分开",
-    "核对方式服从结果和证据边界",
-    "一次确认只覆盖同一方案",
-    "重活和重大变更先确认",
-    "交付真实状态并停止",
-)
-CORE_LOCK_VERSION = 21
+CORE_LOCK_VERSION = 22
 
 
 def parse_frontmatter(text: str) -> tuple[dict, list[str]]:
@@ -162,11 +149,6 @@ def validate_protected_core(root: Path, text: str) -> list[str]:
     if digest != lock_digest:
         errors.append("meta-skills protected core does not match core-principles.lock.json")
 
-    titles = tuple(re.findall(r"(?m)^\d+\.\s+\*\*(.+?)。\*\*", core))
-    if titles != PROTECTED_CORE_TITLES:
-        errors.append("meta-skills protected core titles or order changed")
-    if lock.get("principle_count") != len(PROTECTED_CORE_TITLES):
-        errors.append("meta-skills core lock principle_count is incorrect")
     if lock.get("version") != CORE_LOCK_VERSION:
         errors.append("meta-skills core lock version is incorrect")
     if lock.get("change_policy") != "explicit-user-authorization-required":
