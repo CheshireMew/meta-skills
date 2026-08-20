@@ -37,14 +37,14 @@ CORE_START = "<!-- META_SKILLS_PROTECTED_CORE_START -->"
 CORE_END = "<!-- META_SKILLS_PROTECTED_CORE_END -->"
 WRITE_CONFIRMATION_START = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_START -->"
 WRITE_CONFIRMATION_END = "<!-- META_SKILLS_PROTECTED_WRITE_CONFIRMATION_END -->"
-PROTECTED_CORE_SHA256 = "06b8beaabe0918f2805e398a597804cc9339cd96a4df57081098d432a279da7e"
+PROTECTED_CORE_SHA256 = "4ccd26953871a7807cf20af09630af8044007d78507c4db34cfb9bb3790a740b"
 PROTECTED_WRITE_CONFIRMATION_SHA256 = (
     "b9079fdca743a3440e519d98e9da5344c5705d9d386249c7a10c541dd1a1784b"
 )
 PROTECTED_CORE_TITLES = (
     "先理解用户的完整意思",
     "用户结果、明确决定和内部实现分开",
-    "默认使用最简单但完整的方法",
+    "默认使用直接而充分的方法",
     "创作判断交给 AI，系统选择由用户决定",
     "AI 创作交接不层层加码",
     "根据真实问题决定修复层级",
@@ -54,7 +54,7 @@ PROTECTED_CORE_TITLES = (
     "重活和重大变更先确认",
     "交付真实状态并停止",
 )
-CORE_LOCK_VERSION = 21
+CORE_LOCK_VERSION = 22
 
 
 def parse_frontmatter(text: str) -> tuple[dict, list[str]]:
