@@ -204,16 +204,16 @@ After
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary) / "scope-sample"
         write_minimal_skill(root)
-        scripts = root / "scripts"
-        scripts.mkdir()
-        oversized = scripts / "oversized.py"
+        references = root / "references"
+        references.mkdir()
+        oversized = references / "oversized.md"
         oversized.write_text("x" * (MAX_OUTER_TOOL_TOKENS * 4 + 1), encoding="utf-8")
         errors = validate_file_budgets(root)
-        if not any("scripts/oversized.py" in error for error in errors):
-            raise AssertionError("oversized active text file was not reported")
+        if not any("references/oversized.md" in error for error in errors):
+            raise AssertionError("oversized active Markdown file was not reported")
 
         oversized.unlink()
-        (scripts / "within-budget.py").write_text(
+        (references / "within-budget.md").write_text(
             "x" * (MAX_OUTER_TOOL_TOKENS * 4),
             encoding="utf-8",
         )
@@ -223,19 +223,25 @@ After
         promo = root / "assets" / "promo" / "runtime.js"
         promo.parent.mkdir(parents=True)
         promo.write_text("x" * (MAX_OUTER_TOOL_TOKENS * 8), encoding="utf-8")
+        for relative in (
+            "scripts/oversized.py",
+            "scripts/oversized.mjs",
+            "assets/catalog.json",
+            "assets/package-lock.json",
+            "agents/oversized.yaml",
+        ):
+            non_markdown = root / relative
+            non_markdown.parent.mkdir(parents=True, exist_ok=True)
+            non_markdown.write_text(
+                "x" * (MAX_OUTER_TOOL_TOKENS * 4 + 1),
+                encoding="utf-8",
+            )
         if validate_file_budgets(root):
-            raise AssertionError("budget boundary or inactive resources were misclassified")
+            raise AssertionError(
+                "budget boundary, inactive resources, or non-Markdown files were misclassified"
+            )
 
-        structured_asset = root / "assets" / "catalog.json"
-        structured_asset.write_text(
-            "x" * (MAX_OUTER_TOOL_TOKENS * 4 + 1),
-            encoding="utf-8",
-        )
-        errors = validate_file_budgets(root)
-        if not any("assets/catalog.json" in error for error in errors):
-            raise AssertionError("oversized model-readable asset was not reported")
-
-    print("quick_validate 回归通过：确认区、活动资源、引用和文件预算检查正常")
+    print("quick_validate 回归通过：确认区、活动资源、引用和 Markdown 文件预算检查正常")
     return 0
 
 

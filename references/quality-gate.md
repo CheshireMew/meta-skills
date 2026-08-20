@@ -6,7 +6,7 @@
 
 主入口已经负责用户原意、确认范围、一次实施和失败停止。本文件不再复述这些共同规则；只选择与本次高风险结果直接相关的一节。若检查暴露新的根因、输入边界、系统路线、活动资源、文件范围或验收方法，停止目标写入，把差异交回新的方案确认。
 
-交付前先确认 `SKILL.md`、直接引用和 `agents/openai.yaml` 可读，并运行 `scripts/quick_validate.py <skill-folder>` 与 `scripts/file_budget.py <skill-folder>`。前者输出只能称为结构与静态文件预算结果，后者必须列出全部纳入门槛的活动文本。修改 Meta-skills 核心或检查器时，再运行 `scripts/self-test-quick-validate.py`。
+交付前先确认 `SKILL.md`、直接引用和 `agents/openai.yaml` 可读，并运行 `scripts/quick_validate.py <skill-folder>` 与 `scripts/file_budget.py <skill-folder>`。前者输出只能称为结构与 Markdown 文件预算结果，后者必须列出全部纳入门槛的活动 Markdown。修改 Meta-skills 核心或检查器时，再运行 `scripts/self-test-quick-validate.py`。
 
 ## 用户结果与开放判断
 
@@ -60,7 +60,7 @@
 
 ## 程序必须读取的产物和长期资源
 
-- 每个纳入范围的活动 UTF-8 文本是否都不超过 9,000 tokens 的外层工具估算；归档、运行产物和媒体运行资源是否只因真实职责被排除，而不是为了隐藏超限？
+- 每个纳入范围的活动 Markdown 是否都不超过 9,000 tokens 的外层工具估算；非 Markdown 是否继续由实际生产者、消费者和项目验证负责，没有被提示词预算越权管理？
 - 发生拆分时，用户能力、必要方法、完整示例、协议精度、公共入口、正式消费者和测试身份是否都有迁移证据；预算通过是否没有被冒充为语义完整？
 - 目标 Skill 自行维护的内容是否属于其既定职能内、正常工作会读取的领域资源；触发边界、职责、路由、权限和长期规则的变化是否仍由 Meta-skills 根据用户结果和证据处理？
 - 固定字段、格式、创建者、读取者和错误处理是否只有一套明确约定？

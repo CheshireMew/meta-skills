@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Measure active Skill text against the outer-tool output budget."""
+"""Measure active Skill Markdown against the outer-tool output budget."""
 
 from __future__ import annotations
 
@@ -27,22 +27,9 @@ IGNORED_DIRECTORY_NAMES = {
     "outputs",
     "venv",
 }
-TEXT_ASSET_SUFFIXES = {
-    ".csv",
-    ".json",
-    ".md",
-    ".toml",
-    ".tsv",
-    ".txt",
-    ".xml",
-    ".yaml",
-    ".yml",
-}
-
-
 @dataclass(frozen=True)
 class FileBudget:
-    """One active UTF-8 text file and its outer-tool estimate."""
+    """One active Markdown file and its outer-tool estimate."""
 
     path: Path
     byte_count: int
@@ -63,13 +50,11 @@ def _is_budgeted_path(root: Path, path: Path) -> bool:
     relative = path.relative_to(root)
     if any(part in IGNORED_DIRECTORY_NAMES for part in relative.parts[:-1]):
         return False
-    if relative.parts and relative.parts[0] == "assets":
-        return path.suffix.lower() in TEXT_ASSET_SUFFIXES
-    return True
+    return path.suffix.lower() == ".md"
 
 
 def collect_file_budgets(root: Path) -> list[FileBudget]:
-    """Collect every active UTF-8 text file covered by the Skill budget.
+    """Collect every active Markdown file covered by the Skill budget.
 
     @param root: Skill directory to inspect.
     @returns: Stable path-sorted file budget records.
@@ -113,7 +98,7 @@ def validate_file_budgets(root: Path) -> list[str]:
         if record.estimated_tokens <= MAX_OUTER_TOOL_TOKENS:
             continue
         errors.append(
-            "active text file exceeds the outer-tool budget: "
+            "active Markdown file exceeds the outer-tool budget: "
             f"{record.path.as_posix()} "
             f"({record.estimated_tokens} estimated tokens, "
             f"{record.byte_count} UTF-8 bytes, limit {MAX_OUTER_TOOL_TOKENS})"
