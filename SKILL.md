@@ -27,7 +27,7 @@ description: 用于判断一项能力应由模型或 Agent、确定性程序、�
 
 ## 按本次工作读取说明
 
-- **审查、纠偏或优化现有 Skill**：读取目标 `SKILL.md`、仓库规则和直接影响问题的文件。用户原意已经被改写、输入需要跨阶段交接，或者涉及开放创作和参考材料时，再读 `references/instruction-hygiene.md`；涉及历史反复、旧版本比较、复杂维护、默认启用或发布时，再读 `references/skill-maintenance-and-evaluation.md`。只有用户要求重新确定整体职能时，才读 `references/skill-design-playbook.md`。
+- **审查、纠偏或优化现有 Skill**：读取目标 `SKILL.md`、仓库规则和直接影响问题的文件。用户原意已经被改写、输入需要跨阶段交接，或者涉及开放创作和参考材料时，再读 `references/instruction-hygiene.md`；涉及完整会话或完整历史读取、历史反复、旧版本比较、复杂维护、默认启用或发布时，再读 `references/skill-maintenance-and-evaluation.md`。只有用户要求重新确定整体职能时，才读 `references/skill-design-playbook.md`。
 - **选择能力载体、新建 Skill 或重做整体职能**：读取 `references/skill-design-playbook.md`。需要设计跨阶段输入交接，或者涉及开放创作和参考材料时，再读 `references/instruction-hygiene.md`；涉及确定性程序、Agent 宿主、外部软件或服务、CLI/API/GUI/插件入口、本机配置或长期资源时，再读 `references/resource-design.md`。创建前先按实际执行者、包装和入口查找已有方案。
 - **让 Skill 从经验中学习或设计自我维护**：只有用户明确要求改变未来行为时，读取 `references/absorption-and-governance.md`，先区分目标 Skill 职能内的领域资源维护与由 Meta-skills 负责的架构变化；涉及程序读取或长期更新的资源时，再读 `references/resource-design.md`。
 - **蒸馏或迁移外部能力**：读取 `references/skill-design-playbook.md` 和 `references/absorption-and-governance.md`；材料很多或需要还原来源做法时，再读 `references/evidence-distillation.md`。
@@ -44,7 +44,7 @@ description: 用于判断一项能力应由模型或 Agent、确定性程序、�
 
 完整读取用户指定的会话、项目、结果和活动文件。用人话写清用户以后要得到什么、哪些结果和明确决定继续保留、什么问题必须退出，以及当前证据为什么支持本次修复层级。单次结果的局部瑕疵先直接处理；没有受控证据时只报告猜想，不修改长期 Skill。
 
-用户明确要求查看完整会话或完整历史时，使用当前宿主提供的原生历史读取入口，连续读取到最早记录或明确返回没有更多内容。当前上下文、自动摘要、最近几轮和模型记忆都不能代替这一步。读完后按时间顺序还原“用户要求—实际结果—用户反馈—后续修改—下一次结果”，区分每次表面问题和能够共同解释反复失败的最早原因；不能只围绕最后一次投诉制定长期修改。
+用户明确要求查看完整会话或完整历史时，先按 `references/skill-maintenance-and-evaluation.md` 关闭记录层与覆盖账本，再开始归纳。当前上下文、自动摘要、最近几轮、顶层回合已经翻完或模型记忆都不能代替完整的公开对话；原生入口显示没有下一页，也只证明它返回的那一层已经结束。完整性成立后才按时间顺序还原“用户要求—实际结果—用户反馈—后续修改—下一次结果”，不能只围绕最后一次投诉制定长期修改。
 
 形成方案前分别写清已经由结果或链路证明的原因、用户已经确认的未来结果和仍然未知的部分。未经证明的原因可以继续调查或如实保留为未知，但不能直接用来拆分职能、建立路由、增加长期资源或改写验收方法。
 
